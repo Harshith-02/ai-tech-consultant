@@ -1,0 +1,73 @@
+{
+  "article_id": "5000677699-what-access-do-i-get-with-my-b",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000677699-what-access-do-i-get-with-my-brilliant-directories-license-",
+  "title": "What Access Do I Get With My Brilliant Directories License?",
+  "category": "Section: Developer Hub >> Additional Tips & Tutorials >> What Access Do I Get With My Brilliant Directories License?",
+  "content_hash": "a779b311757e9cb82d1e07ea8d58bbadfa7f292c8e91f04404689079bcb29227",
+  "raw_text": "What Access Do I Get With My Brilliant Directories License?\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000677699\nOne of the most common questions during the pre-sales process is whether Brilliant Directories is a SaaS (Software as a Service) platform or a self-hosted solution.\nMany website owners want to know how much control they will have over the functionality, design, and data behind their website. While many SaaS platforms limit access to core functionality and server-level settings, Brilliant Directories provides significantly more flexibility than a traditional SaaS solution.\nAlthough Brilliant Directories is delivered as a managed SaaS platform, website owners receive extensive access to their website's data, hosting environment, and customizable functionality.\nThis article highlights four key areas where Brilliant Directories provides that flexibility.\n\n## 1. Access to the Website Database\nEvery Brilliant Directories license includes full access to the website's database.\nThe database stores website content, member information, custom widgets, design settings, and other data unique to the website. As members interact with the website\u2014such as updating profiles, publishing posts, uploading media, or sending messages\u2014that information is stored within the database.\nDatabase access allows developers to:\n\u2022 Read stored data\n\u2022 Create custom integrations\n\u2022 Build APIs\n\u2022 Insert, update, or delete records\n\u2022 Interact directly with website data using standard database tools\n\n## 2. Access to the cPanel Account\nEach website includes direct access to its cPanel account.\nThis provides access to many of the same hosting tools typically available with traditional self-hosted environments, including:\n\u2022 Email account management\n\u2022 DNS Zone Editor (A, CNAME, MX, TXT, SPF, etc.)\n\u2022 Subdomain creation\n\u2022 Additional database users\n\u2022 Website backups\n\u2022 Other cPanel management tools\nThis level of access gives website owners greater control over their hosting configuration while still benefiting from a managed platform.\n\n## 3. Access to Website Widgets\nBrilliant Directories provides access to nearly all of the website's widget code.\nBy enabling Show Widgets , administrators can inspect and edit the widgets used throughout the website. For example, editing the Member Results widget allows developers to customize both the appearance and functionality of member search results.\nMost widgets support custom development using:\n\u2022 PHP\n\u2022 HTML\n\u2022 CSS\n\u2022 JavaScript\nA small portion of the core software remains protected to ensure platform stability, security, and compatibility across future updates.\n\n## 4. Lifetime Software Updates\nEvery active Brilliant Directories license includes ongoing software and security updates.\nNew features, improvements, bug fixes, and security enhancements are continuously released without requiring manual upgrades or plugin maintenance.\nThis allows websites to remain current with the latest platform improvements while avoiding the maintenance commonly associated with self-hosted software.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000677699",
+        "One of the most common questions during the pre-sales process is whether Brilliant Directories is a SaaS (Software as a Service) platform or a self-hosted solution.",
+        "Many website owners want to know how much control they will have over the functionality, design, and data behind their website. While many SaaS platforms limit access to core functionality and server-level settings, Brilliant Directories provides significantly more flexibility than a traditional SaaS solution.",
+        "Although Brilliant Directories is delivered as a managed SaaS platform, website owners receive extensive access to their website's data, hosting environment, and customizable functionality.",
+        "This article highlights four key areas where Brilliant Directories provides that flexibility."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5042681481/original/blob1445386851116.png?1445390483",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5042682002/original/blob1445387658693.png?1445391290",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "1. Access to the Website Database",
+      "paragraphs": [
+        "Every Brilliant Directories license includes full access to the website's database.",
+        "The database stores website content, member information, custom widgets, design settings, and other data unique to the website. As members interact with the website\u2014such as updating profiles, publishing posts, uploading media, or sending messages\u2014that information is stored within the database.",
+        "Database access allows developers to:",
+        "\u2022 Read stored data\n\u2022 Create custom integrations\n\u2022 Build APIs\n\u2022 Insert, update, or delete records\n\u2022 Interact directly with website data using standard database tools"
+      ],
+      "images": []
+    },
+    {
+      "heading": "2. Access to the cPanel Account",
+      "paragraphs": [
+        "Each website includes direct access to its cPanel account.",
+        "This provides access to many of the same hosting tools typically available with traditional self-hosted environments, including:",
+        "\u2022 Email account management\n\u2022 DNS Zone Editor (A, CNAME, MX, TXT, SPF, etc.)\n\u2022 Subdomain creation\n\u2022 Additional database users\n\u2022 Website backups\n\u2022 Other cPanel management tools",
+        "This level of access gives website owners greater control over their hosting configuration while still benefiting from a managed platform."
+      ],
+      "images": []
+    },
+    {
+      "heading": "3. Access to Website Widgets",
+      "paragraphs": [
+        "Brilliant Directories provides access to nearly all of the website's widget code.",
+        "By enabling Show Widgets , administrators can inspect and edit the widgets used throughout the website. For example, editing the Member Results widget allows developers to customize both the appearance and functionality of member search results.",
+        "Most widgets support custom development using:",
+        "\u2022 PHP\n\u2022 HTML\n\u2022 CSS\n\u2022 JavaScript",
+        "A small portion of the core software remains protected to ensure platform stability, security, and compatibility across future updates."
+      ],
+      "images": []
+    },
+    {
+      "heading": "4. Lifetime Software Updates",
+      "paragraphs": [
+        "Every active Brilliant Directories license includes ongoing software and security updates.",
+        "New features, improvements, bug fixes, and security enhancements are continuously released without requiring manual upgrades or plugin maintenance.",
+        "This allows websites to remain current with the latest platform improvements while avoiding the maintenance commonly associated with self-hosted software."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 2
+}

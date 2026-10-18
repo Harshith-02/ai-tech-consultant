@@ -1,0 +1,41 @@
+{
+  "article_id": "5000682652-how-to-edit-the-seo-elements-o",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682652-how-to-edit-the-seo-elements-of-an-individual-member-profile-page",
+  "title": "How To Edit The SEO Elements Of An Individual Member Profile Page",
+  "category": "Section: My Content >> SEO Templates >> How To Edit The SEO Elements Of An Individual Member Profile Page",
+  "content_hash": "46d4ce4076a10b60898ad7dc39317204eff518e01921f8445f4bd0a98bd73be2",
+  "raw_text": "How To Edit The SEO Elements Of An Individual Member Profile Page\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682652\n\n## Steps\n\u2022 Log in to theAdmin Area.\n\u2022 Navigate toMy Members>Search Members.\n\u2022 Locate the member profile to update.\n\u2022 Hover over theActionsmenu for that member, then clickQuick Edit.\n\u2022 Click theAdvanced Optionstab.\n\u2022 Scroll down until the SEO options become visible.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682652"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628044/original/G0CMFRMvl4LKLN84ZAWQdT7LqqYCb7WFwA.png?1788421581",
+          "alt": "",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'theAdvanced Optionstab'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628088/original/Rc3bIeypqF-ievkRb0X00ZEyRg1pCKbRiA.png?1788421624",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184627877/original/sJ7L6NC6fzeu1GorNfEqVYajfNEeYRIGJw.png?1788421455",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Steps",
+      "paragraphs": [
+        "\u2022 Log in to theAdmin Area.\n\u2022 Navigate toMy Members>Search Members.\n\u2022 Locate the member profile to update.\n\u2022 Hover over theActionsmenu for that member, then clickQuick Edit.\n\u2022 Click theAdvanced Optionstab.\n\u2022 Scroll down until the SEO options become visible."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 3
+}

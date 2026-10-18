@@ -1,0 +1,52 @@
+{
+  "article_id": "5000682651-how-to-edit-the-seo-social-med",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682651-how-to-edit-the-seo-social-media-elements-of-a-static-web-page",
+  "title": "How To Edit The SEO & Social Media Elements Of A Static Web Page",
+  "category": "Section: My Content >> Web Page Builder >> How To Edit The SEO & Social Media Elements Of A Static Web Page",
+  "content_hash": "048d66fbe67e658483415168e86c45dad51b6d37fec07ed5e73b11ac2d11b55a",
+  "raw_text": "How To Edit The SEO & Social Media Elements Of A Static Web Page\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682651\nTo edit the SEO and Social Media elements of a static Page, follow these steps.\nNavigate to My Content - Web Page Builder. Find the static page and click the Edit button to make changes.\n\n## SEO Meta Tags\nAdd the Page Meta Title, Meta Description, and Meta Keywords for a custom page. Keep in mind that default pages will already have optimized SEO, including Default SEO Variables .\n\n## S earch Snippet Preview\nProvides a preview of how the page will appear in search engine results, such as on Google. This helps illustrate how the page is displayed to others when it shows up in search results\n\n## Social Media Sharing\nIn this section, it is possible to define the Social Media Title , Description, and Shared Image to display when the page is shared on social media. These details are already optimized on default pages, except for the image.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682651",
+        "To edit the SEO and Social Media elements of a static Page, follow these steps.",
+        "Navigate to My Content - Web Page Builder. Find the static page and click the Edit button to make changes."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12172239939/original/oq2ucTyGlHRVix7_zDeP0aX4sXj90l0E3g.png?1766198634",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12172239977/original/lsSU3zSSDGq96hA073JMujP2ddE-0R_zLg.png?1766198902",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "SEO Meta Tags",
+      "paragraphs": [
+        "Add the Page Meta Title, Meta Description, and Meta Keywords for a custom page. Keep in mind that default pages will already have optimized SEO, including Default SEO Variables ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "S earch Snippet Preview",
+      "paragraphs": [
+        "Provides a preview of how the page will appear in search engine results, such as on Google. This helps illustrate how the page is displayed to others when it shows up in search results"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Social Media Sharing",
+      "paragraphs": [
+        "In this section, it is possible to define the Social Media Title , Description, and Shared Image to display when the page is shared on social media. These details are already optimized on default pages, except for the image."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 2
+}

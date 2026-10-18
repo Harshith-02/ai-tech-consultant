@@ -1,0 +1,104 @@
+{
+  "article_id": "5000649894-what-does-each-ticket-status-m",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000649894-what-does-each-ticket-status-mean",
+  "title": "What Does Each Ticket Status Mean",
+  "category": "Get Started Here >> Using The Support Center >> What Does Each Ticket Status Mean",
+  "content_hash": "d28872dcec90810903419c3e34bdf3a2c3221e2d61cecd085283827de6d5412c",
+  "raw_text": "What Does Each Ticket Status Mean\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000649894\nIn the My Support Tickets module, each ticket includes a Status label so it\u2019s easy to see where the request stands at a glance.\nUse the All Statuses dropdown above the ticket list to filter by status and quickly focus on the tickets that matter right now.\n\u2022 Open\n\u2022 In Progress\n\u2022 Responded\n\u2022 Resolved\n\u2022 Closed\n\n## Open\nYour ticket has been sent, and is currently being worked on.\n\n## In Progress\nThis status is placed on a ticket when the development team is working on the resolution to what was reported in the ticket.\n\n## Responded\nOur support team has replied with a resolution or follow up questions.\n\n## Resolved\nOnce a ticket is marked Resolved , the issue is considered ready to close out. If anything is still pending, reply to the ticket and it will automatically reopen; after 48 hours in Resolved , the ticket will move to Closed .\n\n## Closed\nThe original issues that was submitted has been resolved and the ticket closed.\n\n## Pending\nPending means the ticket is currently on hold while additional information or next steps are needed before it can move forward.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000649894",
+        "In the My Support Tickets module, each ticket includes a Status label so it\u2019s easy to see where the request stands at a glance.",
+        "Use the All Statuses dropdown above the ticket list to filter by status and quickly focus on the tickets that matter right now.",
+        "\u2022 Open\n\u2022 In Progress\n\u2022 Responded\n\u2022 Resolved\n\u2022 Closed"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887591/original/g-D4OjOqfUM6-Pl7JhZ9Cahy_XCQvrvD1g.png?1771466322",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174888087/original/ZJK74-rq-cZ0dU9-AHrveKQaQxTEAO3RDQ.png?1771467551",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887772/original/PAoe5u_dx5lLEcau91sL9Sf2gCVUZOo-5w.png?1771466862",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887823/original/zRofBGkZGA8MpiV6XLs7UJTn0Da-JTYqQQ.png?1771467010",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887808/original/NdwOu56LesyePHwI7-hgvhpXafj7m2ArHw.png?1771466921",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887799/original/JdeDZASMAaRqQKJearnyR4aTCx8tll_eYQ.png?1771466906",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887801/original/X9fF02eC_UaLGDc-ijpCULSd3A2FdVK03Q.png?1771466911",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12174887775/original/9vlMThQdrmg8n7DWICYCeyVpXJDAJlA29w.png?1771466873",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Open",
+      "paragraphs": [
+        "Your ticket has been sent, and is currently being worked on."
+      ],
+      "images": []
+    },
+    {
+      "heading": "In Progress",
+      "paragraphs": [
+        "This status is placed on a ticket when the development team is working on the resolution to what was reported in the ticket."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Responded",
+      "paragraphs": [
+        "Our support team has replied with a resolution or follow up questions."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Resolved",
+      "paragraphs": [
+        "Once a ticket is marked Resolved , the issue is considered ready to close out. If anything is still pending, reply to the ticket and it will automatically reopen; after 48 hours in Resolved , the ticket will move to Closed ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Closed",
+      "paragraphs": [
+        "The original issues that was submitted has been resolved and the ticket closed."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Pending",
+      "paragraphs": [
+        "Pending means the ticket is currently on hold while additional information or next steps are needed before it can move forward."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 8
+}

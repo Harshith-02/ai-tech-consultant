@@ -1,0 +1,118 @@
+{
+  "article_id": "5000673830-finance-payment-settings-setti",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673830-finance-payment-settings-setting-up-a-payment-gateway",
+  "title": "Finance \u00bb Payment Settings - Setting Up A Payment Gateway",
+  "category": "Section: Finance >> Payment Settings >> Finance \u00bb Payment Settings - Setting Up A Payment Gateway",
+  "content_hash": "0350d654c8465b5b91503aa8d02fa4dfa87eb8df6235659c82e92258758494b2",
+  "raw_text": "Finance \u00bb Payment Settings - Setting Up A Payment Gateway\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673830\nSee the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...).\n\n## 1. Set Up An Account\nIf the website does not already have an account with a supported payment gateway, set one up.\nTo see a list of all supported payment gateways, refer to this documentation.: Supported Payment Gateways\n\n## 2. Add New Payment Gateway\nAfter selecting a payment gateway, create an account with the chosen payment gateway if one does not already exist. Navigate to Finance \u00bb Payment Settings, where a list of available gateways is displayed. Click the \"Add New Payment Gateway\" drop-down and select the desired gateway.\nNOTE: Stripe and PayPal are the most commonly used payment gateways. However, before selecting either option, review this article \"Stripe or PayPal Standard?\"\n\n## 3. Account Credentials\nEach gateway requires different credentials to connect it to Brilliant Directories.\nKeep in mind that the payment gateway will use the Website Currency selected under Settings \u00bb General Settings \u00bb Localization .\nImportant Note: When adding credentials for the Stripe gateway, there will be additional validation on each key field as the valid credentials should be between 25 and 255 characters, and the key cannot include dots (ex: ....).\nIn the \"Secret or Restricted Key\" field, it is possible to enter either a standard Secret Key (beginning with sk_) or a Restricted Key (beginning with rk_).\nStripe Credentials - How To Roll Key\n\n## 4. Verify \" Active \" Status\nComplete a test transaction by signing up as a new member on the front-end of the website.\n\n## Updating a Payment Gateway\nWhen adding an additional payment gateway, a notification will show indicating that making the new gateway active will not migrate active subscriptions to the new gateway and that the other gateways need to be deleted for the migration to occur:\nNote that if the previous payment gateway was an on-site payment gateway and the update is to another on-site gateway (Authorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro) the billing database will keep the member's billing information on file and if there are any past due invoices the system will still attempt to bill the card on file using the new payment gateway.\nThis does not apply when the payment gateway update is from an off-site payment gateway to an on-site or another off-site, from Stripe to another on-site, from Stripe to another off-site gateway, or any other payment gateway to Stripe. The table below describes this information in detail:\nCurrent Payment Gateway | New Payment Gateway | Billing Information on File \u00a0Automatically Transferred\nAuthorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | Stripe | No\nAuthorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | Authorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | Yes\nStripe | Authorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | No\nStripe | PayPal Express / Standard, PayFast, Verifone | No\nAuthorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | PayPal Express / Standard, PayFast, Verifone | No\nPayPal Express / Standard, PayFast, Verifone, Razorpay | PayPal Express / Standard, PayFast, Verifone | No\nPayPal Express / Standard, PayFast, Verifone, Razorpay | Authorize.net, \u00a0PayPal Website Payments Pro, PayPal PayFlow pro, Stripe, Eway | No\nFor more details on which payment gateways are on-site or off-site, refer to this article: Supported Payment Gateways\nImportant Note :\nStripe Customer ID's can be imported during the member import process . This is helpful when migrating from another platform and needing to associate existing Stripe customers with imported members, allowing subscriptions and payment records to remain linked.\nTo import the Stripe Customer ID, use the following variable name in the import file: stripe_customer_id\nThe accepted value must match the following format:\ncus_ followed by alphanumeric characters only (eg: cus_ABC123xyz789)\n\n## Deleting a Payment Gateway\nIf a payment gateway needs to be deleted, make sure to set up a new one and then make it \" Active \". After that, try to delete the old one. Trying to delete the active one will make this message appear:\nWhen there is more than one payment gateway, the one that is not active can be deleted:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000673830",
+        "See the steps below for connecting a payment gateway (Stripe, PayPal Standard, 2Checkout, PayPal Payments Pro, Authorize.net...)."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12159945105/original/bFrhPSZcRKGsJXG8FDL-Y4No-Zk7myrhLg.png?1744725847",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12160605908/original/p9GdBmMEh-cb6ZoAKpZAlKu1bL9TmeZ91A.png?1745948869",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12160605958/original/xh7aAjBGxIP60qlVW0UjZaob4biooqwGrw.png?1745948915",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12100659351/original/-zLf9Vo_OSNIzCBnsgzaLqT8Zzz9qdUUxA.png?1636383524",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12124215885/original/aYpeYrgwqAT8aGS8KML0oHnYZZog2dNVXA.png?1681820894",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12087649731/original/076Pne3PE0tmYWBNlcbLQOkD_Q1kV_owNQ.png?1611065625",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12087649756/original/OwGd5eEZM4Du2Y_b3OPJT5WP6NTxeGQTwA.png?1611065662",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12081936076/original/_pPq628fqDI17pChIBx2pSacf1eYgwqewA.png?1599098813",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "1. Set Up An Account",
+      "paragraphs": [
+        "If the website does not already have an account with a supported payment gateway, set one up.",
+        "To see a list of all supported payment gateways, refer to this documentation.: Supported Payment Gateways"
+      ],
+      "images": []
+    },
+    {
+      "heading": "2. Add New Payment Gateway",
+      "paragraphs": [
+        "After selecting a payment gateway, create an account with the chosen payment gateway if one does not already exist. Navigate to Finance \u00bb Payment Settings, where a list of available gateways is displayed. Click the \"Add New Payment Gateway\" drop-down and select the desired gateway.",
+        "NOTE: Stripe and PayPal are the most commonly used payment gateways. However, before selecting either option, review this article \"Stripe or PayPal Standard?\""
+      ],
+      "images": []
+    },
+    {
+      "heading": "3. Account Credentials",
+      "paragraphs": [
+        "Each gateway requires different credentials to connect it to Brilliant Directories.",
+        "Keep in mind that the payment gateway will use the Website Currency selected under Settings \u00bb General Settings \u00bb Localization .",
+        "Important Note: When adding credentials for the Stripe gateway, there will be additional validation on each key field as the valid credentials should be between 25 and 255 characters, and the key cannot include dots (ex: ....).",
+        "In the \"Secret or Restricted Key\" field, it is possible to enter either a standard Secret Key (beginning with sk_) or a Restricted Key (beginning with rk_).",
+        "Stripe Credentials - How To Roll Key"
+      ],
+      "images": []
+    },
+    {
+      "heading": "4. Verify \" Active \" Status",
+      "paragraphs": [
+        "Complete a test transaction by signing up as a new member on the front-end of the website."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Updating a Payment Gateway",
+      "paragraphs": [
+        "When adding an additional payment gateway, a notification will show indicating that making the new gateway active will not migrate active subscriptions to the new gateway and that the other gateways need to be deleted for the migration to occur:",
+        "Note that if the previous payment gateway was an on-site payment gateway and the update is to another on-site gateway (Authorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro) the billing database will keep the member's billing information on file and if there are any past due invoices the system will still attempt to bill the card on file using the new payment gateway.",
+        "This does not apply when the payment gateway update is from an off-site payment gateway to an on-site or another off-site, from Stripe to another on-site, from Stripe to another off-site gateway, or any other payment gateway to Stripe. The table below describes this information in detail:",
+        "Current Payment Gateway | New Payment Gateway | Billing Information on File \u00a0Automatically Transferred\nAuthorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | Stripe | No\nAuthorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | Authorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | Yes\nStripe | Authorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | No\nStripe | PayPal Express / Standard, PayFast, Verifone | No\nAuthorize.net, or PayPal Website Payments Pro or PayPal PayFlow pro | PayPal Express / Standard, PayFast, Verifone | No\nPayPal Express / Standard, PayFast, Verifone, Razorpay | PayPal Express / Standard, PayFast, Verifone | No\nPayPal Express / Standard, PayFast, Verifone, Razorpay | Authorize.net, \u00a0PayPal Website Payments Pro, PayPal PayFlow pro, Stripe, Eway | No",
+        "For more details on which payment gateways are on-site or off-site, refer to this article: Supported Payment Gateways",
+        "Important Note :",
+        "Stripe Customer ID's can be imported during the member import process . This is helpful when migrating from another platform and needing to associate existing Stripe customers with imported members, allowing subscriptions and payment records to remain linked.",
+        "To import the Stripe Customer ID, use the following variable name in the import file: stripe_customer_id",
+        "The accepted value must match the following format:",
+        "cus_ followed by alphanumeric characters only (eg: cus_ABC123xyz789)"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Deleting a Payment Gateway",
+      "paragraphs": [
+        "If a payment gateway needs to be deleted, make sure to set up a new one and then make it \" Active \". After that, try to delete the old one. Trying to delete the active one will make this message appear:",
+        "When there is more than one payment gateway, the one that is not active can be deleted:"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 8
+}

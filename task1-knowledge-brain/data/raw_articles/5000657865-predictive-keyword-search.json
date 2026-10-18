@@ -1,0 +1,109 @@
+{
+  "article_id": "5000657865-predictive-keyword-search",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000657865-predictive-keyword-search",
+  "title": "Predictive Keyword Search",
+  "category": "Add-On Documentation >> Predictive Keyword Search >> Predictive Keyword Search",
+  "content_hash": "a81ca1f6819214799cafbd75829d1574606d12e87d7039b7e4329416c0708f68",
+  "raw_text": "Predictive Keyword Search\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000657865\nSearch functionality is a key element of any directory website\u2026 It\u2019s how the users are able to find the information they need.\nThe Predictive Keyword Search add-on can help users find information on the website even faster. With this add-on, as a user begins typing their search term into the website\u2019s search field they will instantly be presented with potential search results.\n\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Predictive Keyword Search Add-On\n\n## Enabling the Add-On\nTo customize the auto-suggest on the website please follow these steps:\n\u2022 Go to Developers Tools:\n\u2022 Click on Autosuggest Settings:\nThese are the default options that we provide:\nWhen any of the default options is being edited or created, they all have the same setting options:\nUse a Class or ID: It is always recommend to select \"Class\".\nEnable Auto-Suggest After How Many Characters: This is the number of characters a website visitor needs to enter before the auto-suggest starts to show options.\nMaximum Auto-Suggest Limit: The total number allowed to be shown. If there area total of 25 possible results, but the limit is 10, only ten lines will show(1 header and 9 results), respected the order that it was set in the \"Select the features the admin would like to be searched in the autosuggest rule\" section. Keep in mind that the number set here includes the heading of each section.\nExample: If the maximum Autosuggest limit is set to 2\nIt will show the Header and just one listing.\nAuto-Suggest Rule Settings\nEnable Listings: This decides whether or not listings will appear in the auto-suggest. The same setting is available for all features and categories as well.\nLimit: The amount of listings that will display so long as the max limit has not already been reached.\nPhoto: This allows the admin to decide whether or not a photo will display in the auto-suggest. We suggest turning this on for Listings and all features.\nLink: Turning this on will automatically take the visitor to the next page. Turning this off will auto-fill the box with that entry, but still allow the visitor to add a location. We suggest setting categories to \"no\" and the rest \"yes\".\nShow Header: The \"Header\" is the main title for that section. The following image shows three features that have \"Show Header\" as \"Yes\".\nLocation: If \"Yes\" is selected, the location for that member or data post will show in the auto-suggest. In the image above, \"Listings\" have this set to \"yes\".\nDetails : This will add a second line of information in the auto-suggest. The details vary on the item selected:\n\u2022 Listing Details = The top-level category\n\u2022 Sub-Categories Details = The top-level category. If it is a sub-sub, it will show the parent category (sub-level)\n\u2022 All Feature Details = They will show the name of the Feature. Some customers prefer to use this instead of the \"Show Header\" option.\nThe highlighted modules are the ones active on the rule that's being edited:\nThis tool will reset all the settings to their default version and delete any updates the admin have completed so far.\nTo learn more about this add-on, please read this article: How To Edit Keyword Search Autosuggest Settings For Member Searches",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000657865",
+        "Search functionality is a key element of any directory website\u2026 It\u2019s how the users are able to find the information they need.",
+        "The Predictive Keyword Search add-on can help users find information on the website even faster. With this add-on, as a user begins typing their search term into the website\u2019s search field they will instantly be presented with potential search results.",
+        "\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Predictive Keyword Search Add-On"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447705/original/MO8UE9DMqNGpwPTxPv8dkNZFpJk0G2PQLA.png?1630107474",
+          "alt": "",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'on Autosuggest Settings'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447698/original/XMwffWbkT0Xvo432CfqzoKzjXazkabyUOQ.png?1630107427",
+          "alt": "",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'on Autosuggest Settings'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5033775196/original/blob1440439599892.gif?1440439611",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447732/original/bF9iJ6eZ4D05RwuPrj6_edS7Yfjs3W2-zg.png?1630107528",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12118956367/original/CUjAROnYyA7KyAp4ZQuTGUGcgo3K3IiMCA.png?1671733677",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12119086796/original/5vl4aYAaUQPLKu8LNaGZHXl0W_WOenZBsg.png?1672168400",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12119087135/original/x7M723z0wlml-JNdQmoPDxLeUCpHRMIeyA.png?1672168781",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12086685851/original/xoFeXeZl7NF5oAFIn53s-JHs5P6GYN_3VA.png?1608734906",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447784/original/--FhxQfia9JAahVz2ug664v1yzZdGLv_-A.png?1630107934",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12075252347/original/ylWjmcI79liIL7FiexS-0UPUdchDT4_S2A.gif?1584457149",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12075252142/original/Sv_4CP7qAeFT8Kv1yy94Jt8fdXOYp-dC-w.png?1584456928",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447789/original/3H4ZnzpcTByfTgvm-ZLImGevpBGK41Qg3g.png?1630107990",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Enabling the Add-On",
+      "paragraphs": [
+        "To customize the auto-suggest on the website please follow these steps:",
+        "\u2022 Go to Developers Tools:\n\u2022 Click on Autosuggest Settings:",
+        "These are the default options that we provide:",
+        "When any of the default options is being edited or created, they all have the same setting options:",
+        "Use a Class or ID: It is always recommend to select \"Class\".",
+        "Enable Auto-Suggest After How Many Characters: This is the number of characters a website visitor needs to enter before the auto-suggest starts to show options.",
+        "Maximum Auto-Suggest Limit: The total number allowed to be shown. If there area total of 25 possible results, but the limit is 10, only ten lines will show(1 header and 9 results), respected the order that it was set in the \"Select the features the admin would like to be searched in the autosuggest rule\" section. Keep in mind that the number set here includes the heading of each section.",
+        "Example: If the maximum Autosuggest limit is set to 2",
+        "It will show the Header and just one listing.",
+        "Auto-Suggest Rule Settings",
+        "Enable Listings: This decides whether or not listings will appear in the auto-suggest. The same setting is available for all features and categories as well.",
+        "Limit: The amount of listings that will display so long as the max limit has not already been reached.",
+        "Photo: This allows the admin to decide whether or not a photo will display in the auto-suggest. We suggest turning this on for Listings and all features.",
+        "Link: Turning this on will automatically take the visitor to the next page. Turning this off will auto-fill the box with that entry, but still allow the visitor to add a location. We suggest setting categories to \"no\" and the rest \"yes\".",
+        "Show Header: The \"Header\" is the main title for that section. The following image shows three features that have \"Show Header\" as \"Yes\".",
+        "Location: If \"Yes\" is selected, the location for that member or data post will show in the auto-suggest. In the image above, \"Listings\" have this set to \"yes\".",
+        "Details : This will add a second line of information in the auto-suggest. The details vary on the item selected:",
+        "\u2022 Listing Details = The top-level category\n\u2022 Sub-Categories Details = The top-level category. If it is a sub-sub, it will show the parent category (sub-level)\n\u2022 All Feature Details = They will show the name of the Feature. Some customers prefer to use this instead of the \"Show Header\" option.",
+        "The highlighted modules are the ones active on the rule that's being edited:",
+        "This tool will reset all the settings to their default version and delete any updates the admin have completed so far.",
+        "To learn more about this add-on, please read this article: How To Edit Keyword Search Autosuggest Settings For Member Searches"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 12
+}

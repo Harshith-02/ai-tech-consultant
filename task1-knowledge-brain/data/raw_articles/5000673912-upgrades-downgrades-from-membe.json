@@ -1,0 +1,82 @@
+{
+  "article_id": "5000673912-upgrades-downgrades-from-membe",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673912-upgrades-downgrades-from-members-perspective",
+  "title": "Upgrades/Downgrades From Members Perspective",
+  "category": "Section: Finance >> General Billing >> Upgrades/Downgrades From Members Perspective",
+  "content_hash": "b5ccaf3a1e3f26392e58713c5557bca688abbd51abbe9160570aec38cc6bcf4a",
+  "raw_text": "Upgrades/Downgrades From Members Perspective\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673912\nThe following steps outline the steps members follow to upgrade to a higher membership level or downgrade from a paid to a free membership plan:\n1. Click \"Change My Plan\" in the Member Dashboard:\n2. Here, the members can select the preferred membership plan and click \"Click to Continue\":\n3. The members will then be able to select which plan they would like to upgrade to:\n4. The billing module will confirm the payment amount. The system will not attempt to prorate the upgrade price in any way, it will charge the full amount of the new membership plan (In this case, the Premium plan is $19.99) and will start a new subscription.\nExample: If a member purchased a Basic Membership for $1 on 03/15/2021 and 15 days later (03/30/2021), they upgrade to the Premium Membership which is $19.99, the system will start a new subscription for $19.99 on 02/30/2021 and the old subscription for the Basic Membership will be canceled. The system will not refund the unused portion of the old membership. \u00a0However, an admin of the site can issue a partial refund from the payment gateway account (Stripe, 2Checkout, Authorize.net, PayPal Payments Pro, etc), if necessary.\n5. A success message will appear if the transaction is processed successfully.:\n6. If the member is moved to a membership plan that does not have upgrade/downgrade options available, the Change My Plan button will no longer appear:\n7. Under the billing section on the member dashboard, if the Downloadable PDF Invoices add-on is active on the site, the members can view or download their invoices.\n\n## From the Owner's Perspective\nThe transaction will appear in the member's \"Transaction History\". *To locate this section, search for the member and click Actions \u00bb Payment History \u00bb Transactions tab:\nThe payment will also appear on Finance \u00bb Transaction History :\nTo learn how to \"set up upgrade options\" in every Membership Plan, please read this article: Setup Upgrade Options in Membership Levels .",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000673912",
+        "The following steps outline the steps members follow to upgrade to a higher membership level or downgrade from a paid to a free membership plan:",
+        "1. Click \"Change My Plan\" in the Member Dashboard:",
+        "2. Here, the members can select the preferred membership plan and click \"Click to Continue\":",
+        "3. The members will then be able to select which plan they would like to upgrade to:",
+        "4. The billing module will confirm the payment amount. The system will not attempt to prorate the upgrade price in any way, it will charge the full amount of the new membership plan (In this case, the Premium plan is $19.99) and will start a new subscription.",
+        "Example: If a member purchased a Basic Membership for $1 on 03/15/2021 and 15 days later (03/30/2021), they upgrade to the Premium Membership which is $19.99, the system will start a new subscription for $19.99 on 02/30/2021 and the old subscription for the Basic Membership will be canceled. The system will not refund the unused portion of the old membership. \u00a0However, an admin of the site can issue a partial refund from the payment gateway account (Stripe, 2Checkout, Authorize.net, PayPal Payments Pro, etc), if necessary.",
+        "5. A success message will appear if the transaction is processed successfully.:",
+        "6. If the member is moved to a membership plan that does not have upgrade/downgrade options available, the Change My Plan button will no longer appear:",
+        "7. Under the billing section on the member dashboard, if the Downloadable PDF Invoices add-on is active on the site, the members can view or download their invoices."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097512042/original/X9YiyS5mijtp6G5ue0peykgXd588ky-OCQ.png?1630332091",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097512140/original/lMsKKHKpZ3Jq3ky_222AL-tmksgICk0Oyw.png?1630332198",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097512452/original/75f_uIElwCvR3p0cikdTJm3MDO03U_FoVg.png?1630332570",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097512467/original/M2lKoZSo0b_ffJzkfBKLULvJVHzmseLUog.png?1630332599",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097512507/original/LW9B01qPPaTZ4SRjs8efWxDVu99oJYE04A.png?1630332656",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097512954/original/aUsR7bv1dyPMwroaMFhX8Wc_lkG2SXWQLA.png?1630333162",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089848159/original/VW206j9zlcLRr38XBSDjEoglfWmM2weJ9A.png?1615420985",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089848171/original/-d7t7m54O3X6gG0fhBOmNApLUNwBv5qSbw.png?1615421024",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12140003274/original/JkpEDYqBcQfsYeYia-m4jewr3T8JWmDMWg.png?1710177551",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "From the Owner's Perspective",
+      "paragraphs": [
+        "The transaction will appear in the member's \"Transaction History\". *To locate this section, search for the member and click Actions \u00bb Payment History \u00bb Transactions tab:",
+        "The payment will also appear on Finance \u00bb Transaction History :",
+        "To learn how to \"set up upgrade options\" in every Membership Plan, please read this article: Setup Upgrade Options in Membership Levels ."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 9
+}

@@ -1,0 +1,174 @@
+{
+  "article_id": "5000673365-toolbox-sidebar-manager",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673365-toolbox-sidebar-manager",
+  "title": "Toolbox \u00bb Sidebar Manager",
+  "category": "Section: Toolbox >> Sidebar Manager >> Toolbox \u00bb Sidebar Manager",
+  "content_hash": "9e936564977e783b107f2ee0ad85900ded5f0dbb0af041d69dd0ec165e974e99",
+  "raw_text": "Toolbox \u00bb Sidebar Manager\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673365\n\n## Where Can I Access This Tool?\nAccess this tool from the admin section by navigating to Toolbox \u00bb Sidebar Manager .\nAll sites come with 4 default sidebars. Two of them, Global Website Search and Personal Post Feed , are only available when their add-ons are active on the site:\n\n## How To Edit These Sidebars\nDefault sidebars can be edited by clicking Customize in the Actions drop-down. Custom sidebars can be edited by clicking Edit :\nOnce the sidebar has been selected, search through the available widgets and drag and drop the desired module into position on the sidebar.\nFor this example, we located the \"Bootstrap Theme - Search Module - Local Radius Search\" widget for the Member Search Results sidebar:\nIt is also possible to delete unwanted widgets from the sidebar by clicking the X :\nThe front end before saving these changes:\nWith the new sidebar changes:\nImportant note: Only one dropdown search module will work properly per sidebar.\n\n## Other Options For The Sidebar Manager\nIn addition to the standard features, there are several other options available that allow for further modification.\n\n## Actions For Custom Sidebars\nRight next to the \" Edit \" button is the \" Actions \" option:\nUnder Actions, it is possible to:\n\u2022 Disable: Disables the sidebar if it is being used on the site. The system will use the default version of the sidebar instead.\n\u2022 Clone: The recommended way to create a new sidebar.\n\u2022 Copy Shortcode: Copies the sidebar's shortcode, which is helpful when the sidebar needs to be called on a web page or inside a widget.\n\u2022 Delete: Permanently removes the entire sidebar from the site.\n\n## Bulk Actions\nUse the checkboxes to individually select each sidebar, or use the main checkbox to select all:\nThen choose one of the available bulk actions and click Apply :\nThe selected bulk action is applied to the sidebars:\n\n## New Sidebar\nThe last option is to create a new sidebar manually by clicking the button on the far right:\n\n## Additional Information\n\u2022 How To Create A Sidebar\n\u2022 Popular Sidebar Widgets\n\n## Notes\n\u2022 The widgets that are allowed for use are those with \"Module\", \"Dynamic Category Filter\", and \"Banner\" in their names, as well as any custom widgets.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000673365"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356608/original/2QK8Y4XJVCfiRU_joLVwjJ3DUR5hxlhRrw.png?1781307295",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356622/original/RSVbH3WNVZmZFGeDpaDEx_vxttAksz9lWA.png?1781307390",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356645/original/MeT0MxFbv1Z1_MokIsjENtpYykZhtj-2kg.png?1781307595",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356650/original/0Qm0zn4-paHnkiCyaztxIA1jIuChutTrKQ.png?1781307636",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356655/original/ddpt9GyhqR1tq-jrvxDoQDX7Tb6ty_G2bw.png?1781307673",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356680/original/ek31o01dq-iAJI88NSSqQRqlsL9cN0me8w.png?1781307698",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12156737485/original/513tYSyK2VZ_p2JgrTBvM_yzN9M-vdye4Q.png?1739208342",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12156737663/original/SvTohRtLpeiHSZVttlEkNsKERcGIxb5BqA.png?1739208487",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356728/original/miYU7PhaUbxZ0E3ZFQYJUyghzvBvJNmZmA.png?1781307832",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356743/original/QwMhNuiQK2dkgLBBmEqN2Bz5Bhj5kHgd4Q.png?1781307874",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356791/original/N3PumzZGjX0mL4NvEFw4cBji-bSGufTqRg.png?1781307993",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356754/original/FOtybLqAgtVh2PnMfx_mQUi3O30zTAuiSQ.png?1781307904",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356793/original/NKVvRxot3XD4D-12_zIP8JkcZEw67UfkxQ.png?1781308024",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356801/original/OS-JH54atFsOgMqfMFY6AXLXkqHBp-wgzQ.png?1781308085",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356850/original/NID8wovkgjyD8qlNhAq2rqz-R05tgfVn6g.png?1781308115",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12093127668/original/cOjMbGxER98an-7fKGkg1S72hQCAGl-8gg.png?1621958872",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12093127716/original/w4UZXOwuY6DoT8umTq-wAiPyodcYiEkZcA.png?1621958910",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Where Can I Access This Tool?",
+      "paragraphs": [
+        "Access this tool from the admin section by navigating to Toolbox \u00bb Sidebar Manager .",
+        "All sites come with 4 default sidebars. Two of them, Global Website Search and Personal Post Feed , are only available when their add-ons are active on the site:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "How To Edit These Sidebars",
+      "paragraphs": [
+        "Default sidebars can be edited by clicking Customize in the Actions drop-down. Custom sidebars can be edited by clicking Edit :",
+        "Once the sidebar has been selected, search through the available widgets and drag and drop the desired module into position on the sidebar.",
+        "For this example, we located the \"Bootstrap Theme - Search Module - Local Radius Search\" widget for the Member Search Results sidebar:",
+        "It is also possible to delete unwanted widgets from the sidebar by clicking the X :",
+        "The front end before saving these changes:",
+        "With the new sidebar changes:",
+        "Important note: Only one dropdown search module will work properly per sidebar."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Other Options For The Sidebar Manager",
+      "paragraphs": [
+        "In addition to the standard features, there are several other options available that allow for further modification."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Actions For Custom Sidebars",
+      "paragraphs": [
+        "Right next to the \" Edit \" button is the \" Actions \" option:",
+        "Under Actions, it is possible to:",
+        "\u2022 Disable: Disables the sidebar if it is being used on the site. The system will use the default version of the sidebar instead.",
+        "\u2022 Clone: The recommended way to create a new sidebar.",
+        "\u2022 Copy Shortcode: Copies the sidebar's shortcode, which is helpful when the sidebar needs to be called on a web page or inside a widget.",
+        "\u2022 Delete: Permanently removes the entire sidebar from the site."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Bulk Actions",
+      "paragraphs": [
+        "Use the checkboxes to individually select each sidebar, or use the main checkbox to select all:",
+        "Then choose one of the available bulk actions and click Apply :",
+        "The selected bulk action is applied to the sidebars:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "New Sidebar",
+      "paragraphs": [
+        "The last option is to create a new sidebar manually by clicking the button on the far right:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Additional Information",
+      "paragraphs": [
+        "\u2022 How To Create A Sidebar\n\u2022 Popular Sidebar Widgets"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Notes",
+      "paragraphs": [
+        "\u2022 The widgets that are allowed for use are those with \"Module\", \"Dynamic Category Filter\", and \"Banner\" in their names, as well as any custom widgets."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 17
+}

@@ -1,0 +1,79 @@
+{
+  "article_id": "5000681551-search-layouts-the-difference-",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681551-search-layouts-the-difference-between-list-grid-and-map-view",
+  "title": "Search Layouts - The Difference Between List, Grid And Map View",
+  "category": "Section: Settings >> Design Settings >> Search Layouts - The Difference Between List, Grid And Map View",
+  "content_hash": "60f1f34aa7f8a917192e7152f48800a9a66adf5932e13c4ad45eff9fbcf9c8aa",
+  "raw_text": "Search Layouts - The Difference Between List, Grid And Map View\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681551\n\n## It is possible to control whether the member search result pages, and post types pages display results in list, grid or map view. This is done to personalize the website and to provide better user experience. Here are the different type of views visitors can select:\nIt is possible to control whether the member search result pages, and post types pages display results in list, grid or map view. This is done to personalize the website and to provide better user experience. Here are the different type of views visitors can select:\n- Grid View ( Grid View Search Results )\nList View\n\n## Member Search Layout\nThis setting applies to Member Search Results. There are 3 options:\n\u2022 Starts in List View\n\u2022 Starts in Grid View\n\u2022 Starts in Map View Add-on\n\n## Post Search Layout\nThis setting applies to Post Types Search Results. There are 2 options:\n\u2022 Starts in List View\n\u2022 Starts in Grid View",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681551"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12036130540/original/6GUkRQRtTGRejUMo3Sv9tu5Ilt-tUTHRqw?1530196452",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12036130560/original/0XHXwv4DlcI6dWms3cBU8rAqHuyaP-3Pgw?1530196476",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12036130604/original/jpPA2Wo89hvjqqrpUv-RG9_uS5lSNP3gLg?1530196502",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089358167/original/kmEhRWdKelIkAE832ZKbEVOqsNOW_xbAgQ.png?1614435528",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089358182/original/AKcbca_VP_hgC6BLQZ416TE87wAcwM0NyQ.png?1614435593",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089358199/original/q4hUB4SnEGEtyHz-6i6rsJHayLNwQ1-ghg.png?1614435635",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089358206/original/VpH6iYSqsKW8RLo8EKfRbM-u0JtJ8HLW4g.png?1614435698",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "It is possible to control whether the member search result pages, and post types pages display results in list, grid or map view. This is done to personalize the website and to provide better user experience. Here are the different type of views visitors can select:",
+      "paragraphs": [
+        "It is possible to control whether the member search result pages, and post types pages display results in list, grid or map view. This is done to personalize the website and to provide better user experience. Here are the different type of views visitors can select:",
+        "- Grid View ( Grid View Search Results )",
+        "List View"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Member Search Layout",
+      "paragraphs": [
+        "This setting applies to Member Search Results. There are 3 options:",
+        "\u2022 Starts in List View\n\u2022 Starts in Grid View\n\u2022 Starts in Map View Add-on"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Post Search Layout",
+      "paragraphs": [
+        "This setting applies to Post Types Search Results. There are 2 options:",
+        "\u2022 Starts in List View\n\u2022 Starts in Grid View"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 7
+}

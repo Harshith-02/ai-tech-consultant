@@ -1,0 +1,104 @@
+{
+  "article_id": "5000567728-how-do-i-cancel-payment-subscr",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000567728-how-do-i-cancel-payment-subscriptions-orders",
+  "title": "How Do I Cancel Payment Subscriptions - Orders",
+  "category": "Section: Finance >> General Billing >> How Do I Cancel Payment Subscriptions - Orders",
+  "content_hash": "8e7dc6070e565d0e57f89158edb79e7fc765c808d5f35ff532faa82a83e36fb5",
+  "raw_text": "How Do I Cancel Payment Subscriptions - Orders\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000567728\nAn admin can end (cancel) a member's subscription from three places in the admin area. Ending a subscription stops all future payments for it and cancels its unpaid invoices. Each route asks for confirmation first and offers an optional box to record why the subscription is being cancelled.\n\u2022 Transaction History\n\u2022 The member's Payment History, Subscriptions tab\n\u2022 The member's Payment History, Transactions tab\nImportant: Ending a subscription from the admin dashboard does not deactivate the member\u2019s account. To completely remove a member so they no longer appear on the website\u2019s front end, the site admin must manually update the member\u2019s status. Quick edit to modify member status .\n\n## Transaction History\n1. In the admin area, go to Finance \u00bb Transaction History .\n2. Search for the member by name or ID in the Search User Name or ID # field (1 in the image below), then open the tab that holds the member's invoice: Payments Received , Upcoming Payments , Past Due , Refunded or Stopped (2).\n3. On the invoice's row, hover over Actions and click End Subscription . The option only appears when the invoice belongs to an active subscription.\n4. The Confirm End Subscription window opens. Optionally type the reason for the cancellation in the Reason for cancelling box (see Recording a Reason for Cancelling below), then click Yes, continue . Click No, cancel to close the window without ending the subscription.\nThe subscription ends, its unpaid invoices are cancelled, and no further payments are collected for it.\n\n## Member's Payment History: \"Subscriptions\" Tab\nSubscriptions can also be ended from the member's own billing page.\n1. Go to My Members \u00bb Search Members and find the member. Hover over Actions on the member's row and click Payment History .\n2. Open the Subscriptions tab (1). On the subscription's row, hover over Actions (2) and click End Subscription (3).\n3. The Cancel Subscription? window opens. Optionally type the reason in the Reason for cancelling box, then click Yes, continue . Click No, cancel to close the window without ending the subscription.\nThis is the same window that opens from Actions \u00bb End Subscription on the Finance \u00bb Search Subscriptions page. After the subscription ends, its row shows Ended , and any reason entered appears as a Reason: line in the History column.\n\n## Member's Payment History: \"Transactions\" Tab\nThe member's Transactions tab lists the same invoices as Finance \u00bb Transaction History , filtered to that member. Ending a subscription from here also cancels its unpaid invoices, including an unpaid invoice the system has already created for the next due date (invoices are created 13 days before the due date).\n1. Go to My Members \u00bb Search Members , find the member, hover over Actions and click Payment History (as in the previous section).\n2. Open the Transactions tab (1) and the tab that holds the invoice, then hover over Actions on the invoice's row (2) and click End Subscription .\n3. The Confirm End Subscription window opens, the same one used on the Transaction History page. Optionally type the reason in the Reason for cancelling box, then click Yes, continue .\nTo refund a payment instead, open the same Actions menu on a paid invoice and click Refund Payment :\n\n## Recording a Reason for Cancelling\nBoth End Subscription windows include a Reason for cancelling box, so the admin team can keep a record of why each subscription was ended (for example, \"Member asked to cancel by phone\" or \"Switched to an annual plan\").\n\u2022 The reason is optional. Leaving the box blank ends the subscription exactly as before.\n\u2022 The box accepts up to 1,000 characters (Limit: 1000 charactersis shown under it). Plain text only; emoji are not supported.\n\u2022 The reason is saved with the cancellation and appears in theHistorycolumn ofFinance \u00bb Search Subscriptionsand the member'sSubscriptionstab, as aReason:line next to theEndeddetails.\n\u2022 The reason is also added to the activity notification the website records when an admin ends a subscription.\n\u2022 If the subscription is ended but the reason cannot be saved, the window showsCancelled, but the reason was NOT saved. The subscription is still ended; only the reason is missing.\nRead this article to learn how to create a new order (subscription): How To Manually Bill A Member / Create A Subscription For A Member .",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000567728",
+        "An admin can end (cancel) a member's subscription from three places in the admin area. Ending a subscription stops all future payments for it and cancels its unpaid invoices. Each route asks for confirmation first and offers an optional box to record why the subscription is being cancelled.",
+        "\u2022 Transaction History\n\u2022 The member's Payment History, Subscriptions tab\n\u2022 The member's Payment History, Transactions tab",
+        "Important: Ending a subscription from the admin dashboard does not deactivate the member\u2019s account. To completely remove a member so they no longer appear on the website\u2019s front end, the site admin must manually update the member\u2019s status. Quick edit to modify member status ."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186415526/original/6ia92V_iAr9stLWFZGKpJ-Igx1mBxwfjjg.png?1791392557",
+          "alt": "Transaction History search field and the five invoice tabs",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186358465/original/x0KIu3Mkw5nhf779Sj6UtCxpn8jzkX9q1g.png?1791318465",
+          "alt": "Actions menu on a Transaction History invoice with End Subscription highlighted",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367603/original/zoF3RqoBiu3SUDOk8fQn1QIDUS4NpWdcwQ.png?1791330199",
+          "alt": "Confirm End Subscription window with the optional Reason for cancelling box",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186358466/original/6IhJvZ-OBJwLg2nrMNrFSNgQGYAsebgRaw.png?1791318466",
+          "alt": "Search Members Actions menu with Payment History highlighted",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186358467/original/LlQlUPvwvTJgj1yUIcq9Oek-cv707XGzAw.png?1791318467",
+          "alt": "Member Payment History Subscriptions tab with the Actions menu and End Subscription highlighted",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367604/original/N8rd9uJLNgY7VOJ-Mn6jOq8rHG_IjBWDjw.png?1791330200",
+          "alt": "Cancel Subscription window with the optional Reason for cancelling box",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186358468/original/oEmrHUSlyp8UPTN0di6cYXdY6xL2prRg-g.png?1791318468",
+          "alt": "Member Payment History Transactions tab with the invoice Actions button highlighted",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186358469/original/e9IK4SZ9OfDUiS898iCeaJQUdNh4Wslpzw.png?1791318469",
+          "alt": "Invoice Actions menu with Refund Payment highlighted",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Transaction History",
+      "paragraphs": [
+        "1. In the admin area, go to Finance \u00bb Transaction History .",
+        "2. Search for the member by name or ID in the Search User Name or ID # field (1 in the image below), then open the tab that holds the member's invoice: Payments Received , Upcoming Payments , Past Due , Refunded or Stopped (2).",
+        "3. On the invoice's row, hover over Actions and click End Subscription . The option only appears when the invoice belongs to an active subscription.",
+        "4. The Confirm End Subscription window opens. Optionally type the reason for the cancellation in the Reason for cancelling box (see Recording a Reason for Cancelling below), then click Yes, continue . Click No, cancel to close the window without ending the subscription.",
+        "The subscription ends, its unpaid invoices are cancelled, and no further payments are collected for it."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Member's Payment History: \"Subscriptions\" Tab",
+      "paragraphs": [
+        "Subscriptions can also be ended from the member's own billing page.",
+        "1. Go to My Members \u00bb Search Members and find the member. Hover over Actions on the member's row and click Payment History .",
+        "2. Open the Subscriptions tab (1). On the subscription's row, hover over Actions (2) and click End Subscription (3).",
+        "3. The Cancel Subscription? window opens. Optionally type the reason in the Reason for cancelling box, then click Yes, continue . Click No, cancel to close the window without ending the subscription.",
+        "This is the same window that opens from Actions \u00bb End Subscription on the Finance \u00bb Search Subscriptions page. After the subscription ends, its row shows Ended , and any reason entered appears as a Reason: line in the History column."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Member's Payment History: \"Transactions\" Tab",
+      "paragraphs": [
+        "The member's Transactions tab lists the same invoices as Finance \u00bb Transaction History , filtered to that member. Ending a subscription from here also cancels its unpaid invoices, including an unpaid invoice the system has already created for the next due date (invoices are created 13 days before the due date).",
+        "1. Go to My Members \u00bb Search Members , find the member, hover over Actions and click Payment History (as in the previous section).",
+        "2. Open the Transactions tab (1) and the tab that holds the invoice, then hover over Actions on the invoice's row (2) and click End Subscription .",
+        "3. The Confirm End Subscription window opens, the same one used on the Transaction History page. Optionally type the reason in the Reason for cancelling box, then click Yes, continue .",
+        "To refund a payment instead, open the same Actions menu on a paid invoice and click Refund Payment :"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Recording a Reason for Cancelling",
+      "paragraphs": [
+        "Both End Subscription windows include a Reason for cancelling box, so the admin team can keep a record of why each subscription was ended (for example, \"Member asked to cancel by phone\" or \"Switched to an annual plan\").",
+        "\u2022 The reason is optional. Leaving the box blank ends the subscription exactly as before.\n\u2022 The box accepts up to 1,000 characters (Limit: 1000 charactersis shown under it). Plain text only; emoji are not supported.\n\u2022 The reason is saved with the cancellation and appears in theHistorycolumn ofFinance \u00bb Search Subscriptionsand the member'sSubscriptionstab, as aReason:line next to theEndeddetails.\n\u2022 The reason is also added to the activity notification the website records when an admin ends a subscription.\n\u2022 If the subscription is ended but the reason cannot be saved, the window showsCancelled, but the reason was NOT saved. The subscription is still ended; only the reason is missing.",
+        "Read this article to learn how to create a new order (subscription): How To Manually Bill A Member / Create A Subscription For A Member ."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 8
+}

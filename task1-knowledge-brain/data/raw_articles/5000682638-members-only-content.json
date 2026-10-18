@@ -1,0 +1,143 @@
+{
+  "article_id": "5000682638-members-only-content",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682638-members-only-content",
+  "title": "Members-Only Content",
+  "category": "Add-On Documentation >> Members-Only Content >> Members-Only Content",
+  "content_hash": "9729fcaf915d93c9b59e21626d673d33458ccd3ba8dda9c177e22ca7a5829d34",
+  "raw_text": "Members-Only Content\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682638\nDistributing information online has never been easier. But with technology comes new challenges, such as protecting the premium content or confidential information.\nThis add-on provides full control over who can access the website\u2019s content by requiring designated \u201cmembers\u201d to log in before being able to view the premium and protected content.\n\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Members-Only Content Add-On\n\n## Enabling the Add-On\nWeb Pages / Display Options / Members-Only Page Member Posts / Always Show Content\n\u2022 Web Pages/Display Options / Members-Only Page\n\u2022 Member Posts/ Always Show Content\nFind out below how to activate these settings for different needs.\n\n## Web Pages / Display Options / Members-Only Page\nGo to: My Content - Web Page Builder and Select the page that will only be available to members:\nNow select which type of members are allowed to see this certain page:\nThe pages that are already members only will have this show up:\nImportant Note: If a page is \"Members Only\" by default the Advanced Option \"Apply NoIndex, NoFollow\" will always be selected, search engines can only crawl publicly available pages.\n\n## Member Posts / Always Show Content\nGo to: CONTENT >> EDIT POST SETTINGS >> Select the member post that will only be available to members:\nOn the first tab \"General Settings\" choose the option that best fits for the website:\n\u2022 No Selection- This is the default option, it will show the complete content to everyone.\n\u2022 Protect Search Results- This option will not allow members that do not have access to this feature see the results or the details of the post.\n\u2022 Protect Detail Pages- This option will show the search results and on the member's profile but if they wanted to see the details of the post it will not allow them unless signed in.\nImportant: The Member Listings Post Type only shows one option: Protect Search Result Pages. To protect the rest of the pages the Members Only options can be found in the Membership Plans section.\nWhen a post is set to members only, they are easy to identify:\n\n## Member Listings / Profile Page / Contact Page / Review Page\nThe Member Listings Member's Only settings are available per Membership Plan, to find these settings go to:\nFinance > Membership Plans > (select the plan you want to set up) > Edit > Search Visibility > Member's Only Access:\n\u2022 Protect Profile Page-This option will show the search results but it will not allow non signed-in members to see the member's profile page.\n\u2022 Protect Contact Page- This option will make the contact page a members-only page, members will need to be logged in to contact a member within the website.\n\u2022 Protect Write a Review Page- This option will make the submit a review option for a member's profile a members-only page.\nNOTE: If the profile pages are protected, but the search results are available for non-registered users, the phone number will also be hidden from the search results to protect the member information on this page as well.\nThe phone number will also be hidden from search results pages for Inactive or Past Due members :\nAlso, if the Contact Page is protected for a member, when a unregistered user tries to contact the member through a post post they will see this message:\nImportant : The membership level \" Can Unregistered Visitors View These Members? \" will override the settings above:\nIf there is a custom widget preventing this setting from working properly, the system will display the name of the custom widget:\nAlso, if a visitor or a restricted member goes to a members-only page they will get this warning which will have a link for them to sign in:\nIf the member is registered, but their status is Not Active, this will be the message that will display:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682638",
+        "Distributing information online has never been easier. But with technology comes new challenges, such as protecting the premium content or confidential information.",
+        "This add-on provides full control over who can access the website\u2019s content by requiring designated \u201cmembers\u201d to log in before being able to view the premium and protected content.",
+        "\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Members-Only Content Add-On"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949772/original/vbWMMXp0AcWdFwsMYSthTQg6tBXC5n_sag.png?1631143518",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949779/original/dsM2-Up0ZqbnKfYv_6bW7BKkXsHpoPxJHQ.png?1631143539",
+          "alt": "",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'which type of members are allo'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949261/original/3tX_l7tsSBs6ho-hz2NM9t-BJx34xuh0yg.png?1631142177",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949278/original/30LDmCFoQXVLAxgDGo7j9SkLoC3z7oKZHg.png?1631142290",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12102359178/original/Phlx8qLll1F0UXdM60IuNhkCbvHyz6QDsg.png?1639499892",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949442/original/ns1OuK0TjmJv-mvrwKrm4URXtKQybpn5BA.png?1631142842",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949431/original/_QpitTOLc_5n530zw2VQ73fOHLEnW-xaoQ.png?1631142800",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949586/original/ZoDWNOIehzDz8Jhfz2FO8n49tWAN3ku1iA.png?1631143156",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097948665/original/Dhq0qGZz2dkwv2dnxV8UUpoW7cNHPoSu6g.png?1631140581",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12110618256/original/UN9kiOCAffBci14-Lv1ZosjMN-bnUmcsjw.png?1655821307",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12111061792/original/R4Lt0_uaEF-1q7wavdq3WBtAxyC57IV3vQ.png?1656609568",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097949477/original/x0mpQef9RlUgjiOPPD_F0skpVldDkPaZXA.png?1631142921",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12098194566/original/KEmP4_0EOR9vKcHX_53MR7dqUP24TsxwUQ.png?1631639616",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12066712375/original/kt6xCClOiROZ1ilUTzxwZiUunhVjHw8xcw.png?1577199370",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12066712391/original/xXQ9ug3SRQS1ivUJ3FyB0xlSlhQZkh0yNw.png?1577199399",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Enabling the Add-On",
+      "paragraphs": [
+        "Web Pages / Display Options / Members-Only Page Member Posts / Always Show Content",
+        "\u2022 Web Pages/Display Options / Members-Only Page\n\u2022 Member Posts/ Always Show Content",
+        "Find out below how to activate these settings for different needs."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Web Pages / Display Options / Members-Only Page",
+      "paragraphs": [
+        "Go to: My Content - Web Page Builder and Select the page that will only be available to members:",
+        "Now select which type of members are allowed to see this certain page:",
+        "The pages that are already members only will have this show up:",
+        "Important Note: If a page is \"Members Only\" by default the Advanced Option \"Apply NoIndex, NoFollow\" will always be selected, search engines can only crawl publicly available pages."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Member Posts / Always Show Content",
+      "paragraphs": [
+        "Go to: CONTENT >> EDIT POST SETTINGS >> Select the member post that will only be available to members:",
+        "On the first tab \"General Settings\" choose the option that best fits for the website:",
+        "\u2022 No Selection- This is the default option, it will show the complete content to everyone.\n\u2022 Protect Search Results- This option will not allow members that do not have access to this feature see the results or the details of the post.\n\u2022 Protect Detail Pages- This option will show the search results and on the member's profile but if they wanted to see the details of the post it will not allow them unless signed in.",
+        "Important: The Member Listings Post Type only shows one option: Protect Search Result Pages. To protect the rest of the pages the Members Only options can be found in the Membership Plans section.",
+        "When a post is set to members only, they are easy to identify:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Member Listings / Profile Page / Contact Page / Review Page",
+      "paragraphs": [
+        "The Member Listings Member's Only settings are available per Membership Plan, to find these settings go to:",
+        "Finance > Membership Plans > (select the plan you want to set up) > Edit > Search Visibility > Member's Only Access:",
+        "\u2022 Protect Profile Page-This option will show the search results but it will not allow non signed-in members to see the member's profile page.\n\u2022 Protect Contact Page- This option will make the contact page a members-only page, members will need to be logged in to contact a member within the website.\n\u2022 Protect Write a Review Page- This option will make the submit a review option for a member's profile a members-only page.",
+        "NOTE: If the profile pages are protected, but the search results are available for non-registered users, the phone number will also be hidden from the search results to protect the member information on this page as well.",
+        "The phone number will also be hidden from search results pages for Inactive or Past Due members :",
+        "Also, if the Contact Page is protected for a member, when a unregistered user tries to contact the member through a post post they will see this message:",
+        "Important : The membership level \" Can Unregistered Visitors View These Members? \" will override the settings above:",
+        "If there is a custom widget preventing this setting from working properly, the system will display the name of the custom widget:",
+        "Also, if a visitor or a restricted member goes to a members-only page they will get this warning which will have a link for them to sign in:",
+        "If the member is registered, but their status is Not Active, this will be the message that will display:"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 15
+}

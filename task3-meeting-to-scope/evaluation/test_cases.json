@@ -1,0 +1,150 @@
+[
+  {
+    "id": "TC-SC-001",
+    "category": "requirement_extraction",
+    "name": "Meeting A: Extract multi-tier category filtering",
+    "expected_text": "category tiers",
+    "expected_type": "requirement"
+  },
+  {
+    "id": "TC-SC-002",
+    "category": "requirement_extraction",
+    "name": "Meeting A: Extract location radius search (5, 10, 25 miles)",
+    "expected_text": "radius",
+    "expected_type": "requirement"
+  },
+  {
+    "id": "TC-SC-003",
+    "category": "requirement_extraction",
+    "name": "Meeting A: Extract mobile swipeable pill cards",
+    "expected_text": "swipeable pill",
+    "expected_type": "requirement"
+  },
+  {
+    "id": "TC-SC-004",
+    "category": "requirement_extraction",
+    "name": "Meeting A: Extract performance speed requirement (< 1.5s)",
+    "expected_text": "1.5",
+    "expected_type": "requirement"
+  },
+  {
+    "id": "TC-SC-005",
+    "category": "requirement_extraction",
+    "name": "Meeting A: Extract initial target deadline (November 20th)",
+    "expected_text": "November 20",
+    "expected_type": "metadata"
+  },
+  {
+    "id": "TC-SC-006",
+    "category": "feasibility_check",
+    "name": "Feasibility: Category structure configuration (BD Setting)",
+    "expected_classification": "existing_configuration",
+    "expected_evidence_contains": "support.brilliantdirectories.com"
+  },
+  {
+    "id": "TC-SC-007",
+    "category": "feasibility_check",
+    "name": "Feasibility: WordPress native hosting (BD Limitation)",
+    "expected_classification": "existing_feature_limitation",
+    "expected_evidence_contains": "limitation"
+  },
+  {
+    "id": "TC-SC-008",
+    "category": "feasibility_check",
+    "name": "Feasibility: Custom Twilio SMS Webhook (Custom Code)",
+    "expected_classification": "custom_development",
+    "expected_evidence_contains": "custom"
+  },
+  {
+    "id": "TC-SC-009",
+    "category": "feasibility_check",
+    "name": "Feasibility: Stripe Connect marketplace splits (Custom Code)",
+    "expected_classification": "custom_development",
+    "expected_evidence_contains": "custom"
+  },
+  {
+    "id": "TC-SC-010",
+    "category": "estimation_logic",
+    "name": "Estimation: Config task hours are lower than custom engineering",
+    "expected_comparison": "config_likely_lt_custom_likely"
+  },
+  {
+    "id": "TC-SC-011",
+    "category": "estimation_logic",
+    "name": "Estimation: 3-point ordering constraint (low <= likely <= high)",
+    "expected_comparison": "monotonic_ordering"
+  },
+  {
+    "id": "TC-SC-012",
+    "category": "estimation_logic",
+    "name": "Estimation: Total cost matches likely_hours * hourly_rate",
+    "expected_comparison": "cost_formula_exact"
+  },
+  {
+    "id": "TC-SC-013",
+    "category": "scope_diff",
+    "name": "Diff Engine: Meeting C detects Twilio SMS as Added Requirement",
+    "expected_diff_type": "added",
+    "expected_keyword": "sms"
+  },
+  {
+    "id": "TC-SC-014",
+    "category": "scope_diff",
+    "name": "Diff Engine: Meeting C detects AI Search as Removed Requirement",
+    "expected_diff_type": "removed",
+    "expected_keyword": "ai"
+  },
+  {
+    "id": "TC-SC-015",
+    "category": "scope_diff",
+    "name": "Diff Engine: Meeting C detects timeline compression to Nov 13",
+    "expected_diff_type": "delivery_change",
+    "expected_new_date": "November 13"
+  },
+  {
+    "id": "TC-SC-016",
+    "category": "scope_diff",
+    "name": "Diff Engine: Meeting C flags 20k MySQL migration as Out of Scope",
+    "expected_diff_type": "out_of_scope",
+    "expected_keyword": "mysql"
+  },
+  {
+    "id": "TC-SC-017",
+    "category": "scope_diff",
+    "name": "Diff Engine: Computes net hour delta between baseline & followup",
+    "expected_comparison": "net_delta_calculated"
+  },
+  {
+    "id": "TC-SC-018",
+    "category": "governance_approval",
+    "name": "Governance: Proposal defaults to is_client_ready = False",
+    "expected_value": false
+  },
+  {
+    "id": "TC-SC-019",
+    "category": "governance_approval",
+    "name": "Governance: Human consultant approval unlocks client-ready status",
+    "expected_value": true
+  },
+  {
+    "id": "TC-SC-020",
+    "category": "e2e_meeting_b",
+    "name": "Meeting B: E-commerce direct purchase extraction",
+    "expected_text": "purchase",
+    "expected_type": "requirement"
+  },
+  {
+    "id": "TC-SC-021",
+    "category": "e2e_meeting_b",
+    "name": "Meeting B: Budget range extraction ($7,000 - $9,000)",
+    "expected_text": "7,000",
+    "expected_type": "metadata"
+  },
+  {
+    "id": "TC-SC-022",
+    "category": "e2e_meeting_b",
+    "name": "Meeting B: Stripe Connect marketplace payout extraction",
+    "expected_text": "stripe",
+    "expected_type": "requirement"
+  }
+]

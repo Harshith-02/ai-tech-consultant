@@ -1,0 +1,21 @@
+[MEETING TRANSCRIPT - PROJECT APEX (FOLLOW-UP & CHANGE REQUESTS)]
+Date: October 17, 2026
+Participants:
+- Mark Sterling (Founder, Apex Directories - Client)
+- Maya Lin (Senior AI Tech Consultant - Agency)
+- Dave Miller (Technical Lead - Agency)
+
+[00:00:04] Maya Lin: Good afternoon Mark. Glad to reconnect. We reviewed the initial Scope of Work based on our meeting on the 14th. You mentioned you had a few adjustments and updates from your board meeting yesterday?
+[00:00:18] Mark Sterling: Yes Maya, thanks for getting on the call quickly. We reviewed the SOW internally and need to make three critical changes to the plan.
+[00:00:30] Dave Miller: Go ahead, Mark. What are the adjustments?
+[00:00:35] Mark Sterling: First: we discussed the AI natural-language semantic search feature with our finance team. Given the ongoing OpenAI/Claude API token costs and implementation timeline, we decided to REMOVE the AI natural-language search overlay from this milestone. We want to stick purely to robust multi-attribute filters (category tiers, radius, verified badges).
+[00:01:05] Maya Lin: Got it. Removing AI semantic natural-language search from Phase 1 scope. That will reduce hours and eliminate API dependency risks.
+[00:01:16] Mark Sterling: Second: in place of AI search, our contractor members strongly requested a NEW requirement: Instant SMS Lead Notifications. When a customer submits an inquiry on a contractor's profile, we want an automated SMS sent to the contractor's mobile phone using Twilio.
+[00:01:40] Dave Miller: That's a great feature and high conversion value. We can hook Twilio SMS dispatch into the lead form submission event. Added to scope.
+[00:01:52] Mark Sterling: Third: our trade expo organizers just notified us that the conference dates were moved UP by one week! We now need the platform live by November 13th instead of November 20th. That compresses our delivery window by 7 days.
+[00:02:14] Maya Lin: Noted on the accelerated launch date of November 13th. We will need client design sign-off by October 25th to maintain this schedule.
+[00:02:26] Mark Sterling: Understood. One more thing: our IT guy mentioned we have a 10-year-old legacy MySQL database with 20,000 messy customer emails and paper survey scans. Can your team also clean that database, deduplicate it, and write custom Python migration scripts to merge it into Brilliant Directories as part of this sprint?
+[00:02:55] Dave Miller: Mark, legacy data cleaning and 20,000-record custom database ETL is a major undertaking with unknown schema variance. That falls outside the agreed website search and mobile UX scope. We can write a separate quotation and discovery statement for database migration, but it cannot be lumped into this search milestone without jeopardizing the November 13th deadline.
+[00:03:22] Mark Sterling: That makes total sense. Flag that as out of scope and send a separate quote for the database migration later. Let's focus on the search, mobile pills, and Twilio SMS leads for the November 13th launch.
+[00:03:36] Maya Lin: Perfect. We will update the scope diff, recalculate task hours, and generate the revised proposal for your approval.
+[00:03:45] Mark Sterling: Thanks team!

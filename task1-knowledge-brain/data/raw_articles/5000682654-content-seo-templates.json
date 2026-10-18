@@ -1,0 +1,110 @@
+{
+  "article_id": "5000682654-content-seo-templates",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682654-content-seo-templates",
+  "title": "Content \u00bb SEO Templates",
+  "category": "Section: My Content >> SEO Templates >> Content \u00bb SEO Templates",
+  "content_hash": "78dcc8f69f7717b9a6dd16fb1ca3066465ea2dd7e6a0463c3e00dd9e59261bcb",
+  "raw_text": "Content \u00bb SEO Templates\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682654\n\n## Overview\nSEO settings, variables, and related data can be managed across both dynamic and static features of the site. All SEO settings are optimized by default, but the system supports customization at multiple levels to adapt SEO behavior to specific needs.\nNot all SEO variables apply to every page, some are only available on specific page types (e.g., content pages, category pages, profile pages), since availability depends on the page type. Because of this, tracking which variables apply to which pages, membership features, content pages, or profiles can be complex. This article outlines the three levels at which SEO can be managed.\n\n## The Three Levels of SEO Management\nNOTE \u2014 Priority order: When settings overlap, more specific levels override more general ones. Member SEO settings take priority over Page SEO settings, and Page SEO settings take priority over the SEO Template .\nNOTE \u2014 Priority order: When settings overlap, more specific levels override more general ones. Member SEO settings take priority over Page SEO settings, and Page SEO settings take priority over the SEO Template .\n\n## 1st Level: SEO Template\nThe broadest level. Changes made here affect the overall SEO template for all members, categories, pages, and other dynamic content system-wide.\nFurther detail is available in the \" How To Edit The SEO Settings Of Dynamic (Search Results) Pages \" article.\n\n## 2nd Level: SEO Pages (Web Page SEO Settings)\nAffects the SEO of a specific static page and its contents. Web Page SEO settings have higher priority than the SEO Template.\nFurther detail is available in the \" How To Edit The SEO & Social Media Elements Of A Static Web Page \" article.\n\n## 3rd Level: SEO Members (Member SEO Settings)\nAffects only the specified member \u2014 for example, how a profile page displays, which SEO settings are enabled or disabled for that profile, and the member's custom URL. Member SEO settings have higher priority than both Page SEO and the SEO Template.\nTo access these settings:\n\u2022 Navigate toMy Members>Search Members.\n\u2022 Locate the member.\n\u2022 Hover overActions, then clickQuick Edit.\nFurther detail is available in the \" How To Edit The SEO & Social Media Elements Of A Member's Profile Page \" article.\n\n## Troubleshooting: Changes Not Taking Effect\nIf changes do not appear to work correctly after being made, clearing the site cache is recommended:\nHow To Refresh The Cache Of The Website\n\n## SEO Variable Syntax\nCRITICAL: All SEO variables must be wrapped in percent signs. A variable written as %variable_name% is read correctly by the system. The same text written as variable_name , without the percent signs, is treated as plain text and will not function as a variable.\nCRITICAL: All SEO variables must be wrapped in percent signs. A variable written as %variable_name% is read correctly by the system. The same text written as variable_name , without the percent signs, is treated as plain text and will not function as a variable.\nPercent signs are reserved exclusively for SEO variables. Custom text that is not a variable should not be wrapped in percent signs.\n\n## Related Reading\nAdditional detail on available variables is covered in the \" Understanding SEO Variables \" article.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682654"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184632272/original/-x2Mdfp0o0FOCGb9R58YsIN_pm2IxRbjpg.jpeg?1788428140",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184632286/original/xctz7ZOQHv7Hyg9hBiXDzvFryH3v5xlDHQ.jpeg?1788428156",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184632340/original/pntY18JDYxwJ0himhtKKo-UcaL2VVItZNg.jpeg?1788428224",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184632352/original/8CcsNtGQNpemAdXuzJoB5zssXtWf5gflIA.jpeg?1788428235",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184632420/original/rvYveDs2o1X8zNSseJYbOxja_qDkJZcajA.jpeg?1788428288",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "SEO settings, variables, and related data can be managed across both dynamic and static features of the site. All SEO settings are optimized by default, but the system supports customization at multiple levels to adapt SEO behavior to specific needs.",
+        "Not all SEO variables apply to every page, some are only available on specific page types (e.g., content pages, category pages, profile pages), since availability depends on the page type. Because of this, tracking which variables apply to which pages, membership features, content pages, or profiles can be complex. This article outlines the three levels at which SEO can be managed."
+      ],
+      "images": []
+    },
+    {
+      "heading": "The Three Levels of SEO Management",
+      "paragraphs": [
+        "NOTE \u2014 Priority order: When settings overlap, more specific levels override more general ones. Member SEO settings take priority over Page SEO settings, and Page SEO settings take priority over the SEO Template .",
+        "NOTE \u2014 Priority order: When settings overlap, more specific levels override more general ones. Member SEO settings take priority over Page SEO settings, and Page SEO settings take priority over the SEO Template ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "1st Level: SEO Template",
+      "paragraphs": [
+        "The broadest level. Changes made here affect the overall SEO template for all members, categories, pages, and other dynamic content system-wide.",
+        "Further detail is available in the \" How To Edit The SEO Settings Of Dynamic (Search Results) Pages \" article."
+      ],
+      "images": []
+    },
+    {
+      "heading": "2nd Level: SEO Pages (Web Page SEO Settings)",
+      "paragraphs": [
+        "Affects the SEO of a specific static page and its contents. Web Page SEO settings have higher priority than the SEO Template.",
+        "Further detail is available in the \" How To Edit The SEO & Social Media Elements Of A Static Web Page \" article."
+      ],
+      "images": []
+    },
+    {
+      "heading": "3rd Level: SEO Members (Member SEO Settings)",
+      "paragraphs": [
+        "Affects only the specified member \u2014 for example, how a profile page displays, which SEO settings are enabled or disabled for that profile, and the member's custom URL. Member SEO settings have higher priority than both Page SEO and the SEO Template.",
+        "To access these settings:",
+        "\u2022 Navigate toMy Members>Search Members.\n\u2022 Locate the member.\n\u2022 Hover overActions, then clickQuick Edit.",
+        "Further detail is available in the \" How To Edit The SEO & Social Media Elements Of A Member's Profile Page \" article."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Troubleshooting: Changes Not Taking Effect",
+      "paragraphs": [
+        "If changes do not appear to work correctly after being made, clearing the site cache is recommended:",
+        "How To Refresh The Cache Of The Website"
+      ],
+      "images": []
+    },
+    {
+      "heading": "SEO Variable Syntax",
+      "paragraphs": [
+        "CRITICAL: All SEO variables must be wrapped in percent signs. A variable written as %variable_name% is read correctly by the system. The same text written as variable_name , without the percent signs, is treated as plain text and will not function as a variable.",
+        "CRITICAL: All SEO variables must be wrapped in percent signs. A variable written as %variable_name% is read correctly by the system. The same text written as variable_name , without the percent signs, is treated as plain text and will not function as a variable.",
+        "Percent signs are reserved exclusively for SEO variables. Custom text that is not a variable should not be wrapped in percent signs."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Reading",
+      "paragraphs": [
+        "Additional detail on available variables is covered in the \" Understanding SEO Variables \" article."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 5
+}

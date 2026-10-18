@@ -1,0 +1,217 @@
+{
+  "article_id": "5000558475-how-to-import-members-via-csv-",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000558475-how-to-import-members-via-csv-file",
+  "title": "How To Import Members Via CSV File",
+  "category": "Section: My Members >> Import Members >> How To Import Members Via CSV File",
+  "content_hash": "d52dce51369c2c56e8cb60a0d331a787b219e88b75a97bd88827edc94090de41",
+  "raw_text": "How To Import Members Via CSV File\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000558475\n\n## Overview\nImporting members can be a bit of a tricky process due to the fact that all of the data entered must be simple, clean text (no formatting, line breaks, or other things that can break a CSV file), and the data must all be in the proper columns in order to import properly.\nTo start, here are some files that will help with understanding how the import process works:\n\u2022 Import template with ALL fields and explanations of each field\n\u2022 Import template with only the simple / basic required fields\n\u2022 Example of a completed import file with ALL fields\n\u2022 Example of a completed simple / basic import file\nThe template and example files that have \" ALL fields \" included show all of the different fields that can be filled out for a member during import.\nHowever, not all imports will need to make use of all of these fields, so we also included a simple / basic version of each that has the most commonly used fields. Importing custom variables is also possible.\n\n## Downloading the File\n\u2022 Download one of the CSV import templates shown above.Inrow 1of this file, one will see all of the headers required to import the data.Make sure not to edit the spelling of any of these headers, as doing so will cause the import to fail. Inrows 2 to 4of this file, one will see an explanation of what kind of text should be added into each column (in thelisting_typecolumn, rows 2 and 3 show its only two values,CompanyandIndividual).\n\u2022 Once the required content for each column is understood,delete rows 2 to 4from the spreadsheet (if they are not removed, the explanations will be imported as members of the site!)\n\u2022 Enter all of the member data into the correct columns\n\u2022 Delete any empty columns from the spreadsheet - for example, if no data is entered in the Twitter column, that column can be deleted from the spreadsheet completely. This will reduce the size of the import file and speed up the import process.\n\n## Add Categories to a CSV Import Spreadsheet\nCategories go in 2 columns near the right side of the spreadsheet (columns AM and AN in the template with ALL fields) - \" profession_name \" and \" services \":\n\n## Top Categories\nUnder \" profession_name \" put the Top Level Category for the listing to be imported into. For example, if we were doing this for the Local Dessert Shops Directory then I could add \u201c Ice Cream Shop \u201d in this column.\nThe Membership Plan Settings also allow to pre-assign the Top level category to all profiles in that membership plan. For more information on how to do this, refer to step 2 in the following article .\n\n## Sub Categories + Sub-Sub Categories\nIn the \" services \" column, add a comma-separated list of Sub Level Categories and Sub-Sub Level Categories one would like the listing added into.\nFor example, for the listing added into the Top Level Category \u201cIce Cream Shop\u201d, one could add the Sub Level Categories \"Ice Cream,Ice Cream Cake,Ice Cream Cupcake\" (since these are all Sub Level Categories of \u201cIce Cream Shop\u201d that apply to this listing). If one would like a listing imported into ALL Sub Level Categories under the Top Level Category it is being imported into (as designated in the profession_name column), then one could simply put \"all\" under the services column.\n\n## Helpful Tips\nAutomatically generated member URLs use the current name-formatting rules. Straight or curly apostrophes are removed, most other punctuation and spaces become hyphens, and underscores are preserved. For example, a member name of Ruby\u2019s Clay Studio produces rubys-clay-studio in the name portion of the URL. These rules format the generated URL; the CSV file must still meet the import requirements in this article. See How To Customize The Member Profile URL Structure for the complete URL structure.\n\u2022 If any columns are blank in the import file, it is always best to delete the entire column. This is also mentioned above, but is a very common issue that people run into! For example, if none of the members which are going to import have any data for the \"fees\" column, it is best to delete this column entirely before import.\n\u2022 Some US zip codes begin with a zero or multiple zeros, which Excel and other spreadsheet programs sometimes remove automatically. Make sure all of the zip_codes are formatted as text and have all of the required 0\u2019s at the beginning of the zipcode\n\u2022 If one is entering data for the logo, profile_photo, website, twitter, facebook, linkedin, or google_plus fields, be sure to use full URLs including the http:// (EG: http://www.google.com/image.jpg)\n\u2022 Make sure all listings have something entered into either the company or name field (or first_name and last_name fields) to insure that there will be a title for each listing.\n\u2022 Make sure to enter eitherCompanyorIndividualinto thelisting_typefield for each listing (Entering \"Company\" will make the company name more prominent in the listing; entering \"Individual\" will make the name of the person more prominent in the listing) *Our variables are case sensitive so make sure to capitalize the first letter for these.\n\u2022 Add the Top Level category for each listing into the profession_name column. Note that this must be spelled exactly the same as the category is spelled in the directory, or they will not import correctly. (See the section of this article above titled \"How to Add Categories to a CSV Import Spreadsheet\" for more tips)\n\u2022 (OPTIONAL) Add a comma-separated list of Sub Level Categories in each listing imported into in the services column (See the section of this article above titled \"How to Add Categories to a CSV Import Spreadsheet\" for more tips).\n\u2022 For best results, it is recommended to first create the Category Structure in your site before importing your members into these categories. For more information on how to create categories for members.\n\n## Import Existing Subscription & Billing Information\nMPORTANT: These fields are not required for standard member imports. However, if importing subscription information, both subscription_start_date and billing_cycle must be included together.\nThe billing_cycle and subscription_start_date fields allow the Billing Cycle and Start Billing On information to be included during the member import, removing the need to manually create this subscription information for each imported member.\nSubscription Start Date Field Variable: subscription_start_date This field defines the subscription start date for the imported member. It is available for paid membership plans only and must be provided together with the billing_cycle field. Accepted date formats:\n\u2022 YYYY-MM-DD (example: 2024-06-15)\n\u2022 YYYYMMDD (example: 20240615)\n\u2022 The website's configured date format (e.g. MM/DD/YYYY or DD/MM/YYYY)The subscription start date cannot be more than one billing cycle in the past or more than 10 years in the future.\n\n## Billing Cycle\nField Variable: billing_cycle\nThis field defines the billing cycle for the imported member's subscription. It is available for paid membership plans only and must be provided together with the subscription_start_date field.\nThe corresponding billing amount in the selected Membership Plan must be greater than 0. For example, if the billing cycle is Monthly, the plan's monthly amount must be greater than 0.\nAvailable billing cycles depend on the billing options and prices configured for the selected Membership Plan.\n\n## Import the File\n\u2022 Navigate to the Search Members section of the admin. On the right side of the page, open theList Actionsmenu and selectImport Members via CSV File. The import page opens; the numbers in the second screenshot below match the steps that follow.\n\u2022 The Import settings will allow the user to select the membership plan the new listings will belong to. This is required to begin the import.\n\u2022 A second option will allow the admin to determine the status of the listings upon import:Set as ACTIVE MembersorSet as NOT ACTIVE Members.\n\u2022 An option to create aMember Tag and assign a Tag Groupwill show, the system will automatically fill out the tag name with the date and time of the import, the information can be edited and the tag can be assigned to any of the available Tag Groups:\n\u2022 The Advanced Options will allow the import to:- Pass unique email checks- Create new categories from the file if they have not been added to the admin yet.- Geocode the users based on the location added to the CSV file. To use this function, add the \"Pretty URLS API Key\":Set Up Pretty URLs with Google Maps. A status line under the Geocode option shows whether the server key works, with aTestbutton to check it again and a button to add or fix the key (Add a server keyorFix the server key); a key Google refuses there is not saved.- Auto import profile photo and logo images -Member Images: Importing Members with Profile Photos, Logos & Cover Photos\n\u2022 \"Step 2. Upload CSV File Here\" will allow the user to select a CSV import file from the computer.\n\u2022 Once the file is selected, simply select \"Begin File Import\" for the upload to begin.\n\u2022 TheImport Members Data Mapwill display on screen, listing each column header from the file with a preview of its first value and the directory property it will be imported into (1). When using the default import templates without any type of variable modification, we recommend to perform the import as is and clickContinue with Import(2).\n\u2022 If the import file includes custom variables which may have been added to forms prior to the import, the same module will display them on the left side of the columns with an example of a value next to it. A column that does not match an existing property showsChoose or create a propertyin itsDirectory Propertydropdown (1). Click that dropdown to choose the property the column should be imported into:The dropdown lists the existing properties (1): every standard member field, plus any custom field that already has a value saved for at least one member. Should the new variable be missing from the list, clickCreate new property(2) at the bottom of the dropdown to create the variable name for a successful import:Type the new property name and clickAdd(1) to add it to the dropdown. Use lowercase letters, numbers, underscores or hyphens: uppercase letters are changed to lowercase and spaces to underscores, and a name with any other character, or one already in the list, is not accepted:Then open the dropdown again, type the new property name in the search box at the top, and click it to choose it for the column.\n\u2022 To leave a column out of the import, open its dropdown and clickDon't import column(1):\n\u2022 ClickContinue with Import. One last verification asks \"Are you sure you want to run this Import Members File?\": clickYes, Continue(1) for the file to be imported.\nImportant Note: An error message titled Import File Exceeds Member Limi t will display in place of the Data Map when the number of members in the file plus the members already on the site is more than the site's member limit:\nOnce the import is completed a message is going to pop up to Sync the members with Google Maps :\n\"It is recommended to sync all newly imported members with Google Maps so they are searchable by location. Sync members now?\"\u00a0Click Sync Members (1) to open the geocoding page now, or Cancel to do it later.\nTo learn more information regarding member limits, refer to the article down below:\n100,000 Member Limit Boost\n\n## Import Profile Images (optional)\nMember Images: Importing Members With Profile Photos, Logos & Cover Photos\nFor the Cover Photo to appear on the profile this Add-on must be active on the website Profile Cover Photo .\n\n## Get Personal Assistance\nWe understand that this can be a challenging process, even for some users that are more technically inclined. If one would prefer that someone on our team assists with the import of the members, we have Training Sessions covering importing members. Use the link below to purchase this service: Training Sessions\n\n## Important Notes\n\u2022 The files below should be downloaded to the computer and viewed in a spreadsheet application like Microsoft Excel, Google Sheets or another similar application.\n\u2022 Service Areascan't be imported at this time, this might be something we add in the future.\n\u2022 The system checks default URL fields (website, booking link, social, etc) and only imports them if they\u2019re in a valid URL format - otherwise, they\u2019re skipped. Valid formats are: https://website.com or https://www.website.com.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000558475"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186415571/original/RZeo352MqabGoEI0c8gTg14iv2wFXZtSLQ.png?1791392587",
+          "alt": "The ALL fields member import template open in Google Sheets with row 1, the column headers, highlighted.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186415566/original/_lApz_l-6xTA4OMVw-a-80IKNpAkVY4kRA.png?1791392586",
+          "alt": "The member import template in Google Sheets with rows 2 to 4, the explanation rows to delete before importing, highlighted.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186370587/original/V8jnRipUli7if57-q0dRCo0NYYElXfiTNQ.png?1791335039",
+          "alt": "Columns AM and AN of the member import template in Google Sheets, profession_name and services, highlighted.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186370639/original/OcC1SJc3czBgn6AkYOQRZiOlP7NcjIvdrQ.png?1791335128",
+          "alt": "The Conflicting Data Error pop-up shown when an import file has both a name column and first_name/last_name columns.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367408/original/Q1tgsJhsckMplXJJmPHj6pnH4hjem-v97w.png?1791329939",
+          "alt": "A member's Create New Order form with the Billing Cycle (1) and Start Billing On (2) fields highlighted.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367409/original/7jHFR6x9c1zD9ALuOHV4OI6N73nMIVCF3w.png?1791329940",
+          "alt": "The Search Members List Actions menu (1) open with Import Members via CSV File (2) highlighted.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367411/original/Jsm0YQlCBZicGy7Zbx1Pt4_66HNnfQoRhQ.png?1791329943",
+          "alt": "The Import Members with .CSV File Upload page with numbered badges matching steps 2 to 7.",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'the membership plan the new li'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367412/original/FuVSBrUA54k44PTOXSx37yF89lifH1JLqQ.png?1791329944",
+          "alt": "The Assign Membership Plan list open on the import page, showing the site's membership plans.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367415/original/2p-3KIZZE4cW9ElGGGyzdgGFujUhj7G1tA.png?1791329945",
+          "alt": "The import status option, set to Set as ACTIVE Members, highlighted on the import page.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186367410/original/RZ-uVOsXakfPS00Zn9Ami1HqFXFhLzyZUA.png?1791329941",
+          "alt": "The Create Member Tag fields: the tag name filled with the import date and time (1) and the tag group menu (2).",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186366524/original/-5LSZqaX1__qj8L6DqsEolmu__eltnQxmA.png?1791327983",
+          "alt": "Import Members Advanced Options with the server key status line under the Geocode option, showing Test and Add a server key.",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'a CSV import file from the com'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186370641/original/eNn_0kzkFRl9HVUy3V78Dy9CiTdThiZngA.png?1791335129",
+          "alt": "The Import Members Data Map listing each column from the file, its preview value and directory property (1), with the Continue with Import button (2).",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'or create a propertyin itsDire'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186725075/original/quteFAsvvESYqTaexfZ7clKAUKXH-BPGdg.png?1791920520",
+          "alt": "The Import Members Data Map with an unmatched favorite_color column whose Directory Property dropdown shows Choose or create a property (1).",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186725076/original/ozc7OaPIZ5FACx06nbxl1KRH6D3EhzvmAQ.png?1791920521",
+          "alt": "The Directory Property dropdown open in front of the Data Map, listing existing properties (1) with the Create new property link (2) below them.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186725077/original/aKMc1OrOnOd4LhTdLU4rW1kolmgKnobzYw.png?1791920523",
+          "alt": "The new property name field with color typed in and the Add button (1) at the bottom of the dropdown.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186725081/original/Vy9V-6fCmgxwhX-IW46Ilx4O-9yHGv3B8A.png?1791920524",
+          "alt": "The open Directory Property dropdown with the Don't import column link (1) at the bottom.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186370642/original/o2WUbMVG0fVQx5Y2EdK6occ-Xb22wxlMKg.png?1791335130",
+          "alt": "The Import Members confirmation asking Are you sure you want to run this Import Members File?, with Yes, Continue (1).",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186370643/original/pCssIp1esFX8TiUYS5KGs5_5Fh60Zv9ing.png?1791335131",
+          "alt": "The Import File Exceeds Member Limit message with the site's total members, member limit and Upgrade Limit button.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186370644/original/fx059EnXpWrsE9kYLsxBWwl6yZRqh4bKSA.png?1791335132",
+          "alt": "The Important pop-up after an import, recommending a Google Maps sync, with the Sync Members button (1).",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Importing members can be a bit of a tricky process due to the fact that all of the data entered must be simple, clean text (no formatting, line breaks, or other things that can break a CSV file), and the data must all be in the proper columns in order to import properly.",
+        "To start, here are some files that will help with understanding how the import process works:",
+        "\u2022 Import template with ALL fields and explanations of each field\n\u2022 Import template with only the simple / basic required fields\n\u2022 Example of a completed import file with ALL fields\n\u2022 Example of a completed simple / basic import file",
+        "The template and example files that have \" ALL fields \" included show all of the different fields that can be filled out for a member during import.",
+        "However, not all imports will need to make use of all of these fields, so we also included a simple / basic version of each that has the most commonly used fields. Importing custom variables is also possible."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Downloading the File",
+      "paragraphs": [
+        "\u2022 Download one of the CSV import templates shown above.Inrow 1of this file, one will see all of the headers required to import the data.Make sure not to edit the spelling of any of these headers, as doing so will cause the import to fail. Inrows 2 to 4of this file, one will see an explanation of what kind of text should be added into each column (in thelisting_typecolumn, rows 2 and 3 show its only two values,CompanyandIndividual).\n\u2022 Once the required content for each column is understood,delete rows 2 to 4from the spreadsheet (if they are not removed, the explanations will be imported as members of the site!)\n\u2022 Enter all of the member data into the correct columns\n\u2022 Delete any empty columns from the spreadsheet - for example, if no data is entered in the Twitter column, that column can be deleted from the spreadsheet completely. This will reduce the size of the import file and speed up the import process."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Add Categories to a CSV Import Spreadsheet",
+      "paragraphs": [
+        "Categories go in 2 columns near the right side of the spreadsheet (columns AM and AN in the template with ALL fields) - \" profession_name \" and \" services \":"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Top Categories",
+      "paragraphs": [
+        "Under \" profession_name \" put the Top Level Category for the listing to be imported into. For example, if we were doing this for the Local Dessert Shops Directory then I could add \u201c Ice Cream Shop \u201d in this column.",
+        "The Membership Plan Settings also allow to pre-assign the Top level category to all profiles in that membership plan. For more information on how to do this, refer to step 2 in the following article ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Sub Categories + Sub-Sub Categories",
+      "paragraphs": [
+        "In the \" services \" column, add a comma-separated list of Sub Level Categories and Sub-Sub Level Categories one would like the listing added into.",
+        "For example, for the listing added into the Top Level Category \u201cIce Cream Shop\u201d, one could add the Sub Level Categories \"Ice Cream,Ice Cream Cake,Ice Cream Cupcake\" (since these are all Sub Level Categories of \u201cIce Cream Shop\u201d that apply to this listing). If one would like a listing imported into ALL Sub Level Categories under the Top Level Category it is being imported into (as designated in the profession_name column), then one could simply put \"all\" under the services column."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Helpful Tips",
+      "paragraphs": [
+        "Automatically generated member URLs use the current name-formatting rules. Straight or curly apostrophes are removed, most other punctuation and spaces become hyphens, and underscores are preserved. For example, a member name of Ruby\u2019s Clay Studio produces rubys-clay-studio in the name portion of the URL. These rules format the generated URL; the CSV file must still meet the import requirements in this article. See How To Customize The Member Profile URL Structure for the complete URL structure.",
+        "\u2022 If any columns are blank in the import file, it is always best to delete the entire column. This is also mentioned above, but is a very common issue that people run into! For example, if none of the members which are going to import have any data for the \"fees\" column, it is best to delete this column entirely before import.\n\u2022 Some US zip codes begin with a zero or multiple zeros, which Excel and other spreadsheet programs sometimes remove automatically. Make sure all of the zip_codes are formatted as text and have all of the required 0\u2019s at the beginning of the zipcode\n\u2022 If one is entering data for the logo, profile_photo, website, twitter, facebook, linkedin, or google_plus fields, be sure to use full URLs including the http:// (EG: http://www.google.com/image.jpg)\n\u2022 Make sure all listings have something entered into either the company or name field (or first_name and last_name fields) to insure that there will be a title for each listing.\n\u2022 Make sure to enter eitherCompanyorIndividualinto thelisting_typefield for each listing (Entering \"Company\" will make the company name more prominent in the listing; entering \"Individual\" will make the name of the person more prominent in the listing) *Our variables are case sensitive so make sure to capitalize the first letter for these.\n\u2022 Add the Top Level category for each listing into the profession_name column. Note that this must be spelled exactly the same as the category is spelled in the directory, or they will not import correctly. (See the section of this article above titled \"How to Add Categories to a CSV Import Spreadsheet\" for more tips)\n\u2022 (OPTIONAL) Add a comma-separated list of Sub Level Categories in each listing imported into in the services column (See the section of this article above titled \"How to Add Categories to a CSV Import Spreadsheet\" for more tips).\n\u2022 For best results, it is recommended to first create the Category Structure in your site before importing your members into these categories. For more information on how to create categories for members."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Import Existing Subscription & Billing Information",
+      "paragraphs": [
+        "MPORTANT: These fields are not required for standard member imports. However, if importing subscription information, both subscription_start_date and billing_cycle must be included together.",
+        "The billing_cycle and subscription_start_date fields allow the Billing Cycle and Start Billing On information to be included during the member import, removing the need to manually create this subscription information for each imported member.",
+        "Subscription Start Date Field Variable: subscription_start_date This field defines the subscription start date for the imported member. It is available for paid membership plans only and must be provided together with the billing_cycle field. Accepted date formats:",
+        "\u2022 YYYY-MM-DD (example: 2024-06-15)\n\u2022 YYYYMMDD (example: 20240615)\n\u2022 The website's configured date format (e.g. MM/DD/YYYY or DD/MM/YYYY)The subscription start date cannot be more than one billing cycle in the past or more than 10 years in the future."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Billing Cycle",
+      "paragraphs": [
+        "Field Variable: billing_cycle",
+        "This field defines the billing cycle for the imported member's subscription. It is available for paid membership plans only and must be provided together with the subscription_start_date field.",
+        "The corresponding billing amount in the selected Membership Plan must be greater than 0. For example, if the billing cycle is Monthly, the plan's monthly amount must be greater than 0.",
+        "Available billing cycles depend on the billing options and prices configured for the selected Membership Plan."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Import the File",
+      "paragraphs": [
+        "\u2022 Navigate to the Search Members section of the admin. On the right side of the page, open theList Actionsmenu and selectImport Members via CSV File. The import page opens; the numbers in the second screenshot below match the steps that follow.\n\u2022 The Import settings will allow the user to select the membership plan the new listings will belong to. This is required to begin the import.\n\u2022 A second option will allow the admin to determine the status of the listings upon import:Set as ACTIVE MembersorSet as NOT ACTIVE Members.\n\u2022 An option to create aMember Tag and assign a Tag Groupwill show, the system will automatically fill out the tag name with the date and time of the import, the information can be edited and the tag can be assigned to any of the available Tag Groups:\n\u2022 The Advanced Options will allow the import to:- Pass unique email checks- Create new categories from the file if they have not been added to the admin yet.- Geocode the users based on the location added to the CSV file. To use this function, add the \"Pretty URLS API Key\":Set Up Pretty URLs with Google Maps. A status line under the Geocode option shows whether the server key works, with aTestbutton to check it again and a button to add or fix the key (Add a server keyorFix the server key); a key Google refuses there is not saved.- Auto import profile photo and logo images -Member Images: Importing Members with Profile Photos, Logos & Cover Photos\n\u2022 \"Step 2. Upload CSV File Here\" will allow the user to select a CSV import file from the computer.\n\u2022 Once the file is selected, simply select \"Begin File Import\" for the upload to begin.\n\u2022 TheImport Members Data Mapwill display on screen, listing each column header from the file with a preview of its first value and the directory property it will be imported into (1). When using the default import templates without any type of variable modification, we recommend to perform the import as is and clickContinue with Import(2).\n\u2022 If the import file includes custom variables which may have been added to forms prior to the import, the same module will display them on the left side of the columns with an example of a value next to it. A column that does not match an existing property showsChoose or create a propertyin itsDirectory Propertydropdown (1). Click that dropdown to choose the property the column should be imported into:The dropdown lists the existing properties (1): every standard member field, plus any custom field that already has a value saved for at least one member. Should the new variable be missing from the list, clickCreate new property(2) at the bottom of the dropdown to create the variable name for a successful import:Type the new property name and clickAdd(1) to add it to the dropdown. Use lowercase letters, numbers, underscores or hyphens: uppercase letters are changed to lowercase and spaces to underscores, and a name with any other character, or one already in the list, is not accepted:Then open the dropdown again, type the new property name in the search box at the top, and click it to choose it for the column.\n\u2022 To leave a column out of the import, open its dropdown and clickDon't import column(1):\n\u2022 ClickContinue with Import. One last verification asks \"Are you sure you want to run this Import Members File?\": clickYes, Continue(1) for the file to be imported.",
+        "Important Note: An error message titled Import File Exceeds Member Limi t will display in place of the Data Map when the number of members in the file plus the members already on the site is more than the site's member limit:",
+        "Once the import is completed a message is going to pop up to Sync the members with Google Maps :",
+        "\"It is recommended to sync all newly imported members with Google Maps so they are searchable by location. Sync members now?\"\u00a0Click Sync Members (1) to open the geocoding page now, or Cancel to do it later.",
+        "To learn more information regarding member limits, refer to the article down below:",
+        "100,000 Member Limit Boost"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Import Profile Images (optional)",
+      "paragraphs": [
+        "Member Images: Importing Members With Profile Photos, Logos & Cover Photos",
+        "For the Cover Photo to appear on the profile this Add-on must be active on the website Profile Cover Photo ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Get Personal Assistance",
+      "paragraphs": [
+        "We understand that this can be a challenging process, even for some users that are more technically inclined. If one would prefer that someone on our team assists with the import of the members, we have Training Sessions covering importing members. Use the link below to purchase this service: Training Sessions"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Important Notes",
+      "paragraphs": [
+        "\u2022 The files below should be downloaded to the computer and viewed in a spreadsheet application like Microsoft Excel, Google Sheets or another similar application.\n\u2022 Service Areascan't be imported at this time, this might be something we add in the future.\n\u2022 The system checks default URL fields (website, booking link, social, etc) and only imports them if they\u2019re in a valid URL format - otherwise, they\u2019re skipped. Valid formats are: https://website.com or https://www.website.com."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 19
+}

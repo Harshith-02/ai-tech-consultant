@@ -1,0 +1,22 @@
+{
+  "article_id": "5000558357-can-i-send-a-mass-email-campai",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000558357-can-i-send-a-mass-email-campaign-using-brilliant-directories-",
+  "title": "Can I Send A Mass Email Campaign Using Brilliant Directories?",
+  "category": "Section: Emails >> Email FAQ >> Can I Send A Mass Email Campaign Using Brilliant Directories?",
+  "content_hash": "bcb69673622b6d7da42ee978d94975defd8eb541043c1ee4a36e642abf24231b",
+  "raw_text": "Can I Send A Mass Email Campaign Using Brilliant Directories?\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000558357\nThe built-in email system is designed for emailing active members who have requested to receive emails from the site. A common example would be sending a monthly newsletter to members who have opted in to receive updates.\nThe email system also sends transactional emails, such as new member signup notifications, credit card update notices, lead emails, and other system-generated messages related to member activity.\nSending mass unsolicited emails to Claim Listings or an imported contact list may be considered spam. This can violate email compliance laws, damage the sending reputation of your domain, and result in future emails being blocked or blacklisted.\nIn some cases, sending spam messages can also negatively impact other sites on the same server and may lead to account restrictions or termination with Brilliant Directories.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000558357",
+        "The built-in email system is designed for emailing active members who have requested to receive emails from the site. A common example would be sending a monthly newsletter to members who have opted in to receive updates.",
+        "The email system also sends transactional emails, such as new member signup notifications, credit card update notices, lead emails, and other system-generated messages related to member activity.",
+        "Sending mass unsolicited emails to Claim Listings or an imported contact list may be considered spam. This can violate email compliance laws, damage the sending reputation of your domain, and result in future emails being blocked or blacklisted.",
+        "In some cases, sending spam messages can also negatively impact other sites on the same server and may lead to account restrictions or termination with Brilliant Directories."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 0
+}

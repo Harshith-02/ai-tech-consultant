@@ -1,0 +1,23 @@
+{
+  "article_id": "5000614045-can-i-host-a-wordpress-site-on",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000614045-can-i-host-a-wordpress-site-on-brilliant-directories-",
+  "title": "Can I host a Wordpress site on Brilliant Directories?",
+  "category": "Get Started Here >> Common Questions & Troubleshooting >> Can I host a Wordpress site on Brilliant Directories?",
+  "content_hash": "09eaffec576707bcf4da68948ed1f24da388f22482c4d0d0743e1a675101f13a",
+  "raw_text": "Can I host a Wordpress site on Brilliant Directories?\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000614045\nAt this time, this is not possible.\nWordpress cannot be hosted on the local Brilliant Directories cPanel account with us where the directory is. This cPanel account is only meant for your directory alone and no other 3rd party software, including Wordpress, can be hosted here. Since we cannot guarantee the security of 3rd party software platforms like Wordpress, we cannot host any of these software applications in the interest of maintaining the security of the website and the sites of others on the same server.\nIt is possible to setup a subdomain and use Wordpress for an alternate website using the domain (EG: blog.yourdomain.com), you will need to either buy an upgraded license from Wordpress.com (starting at $99 / year) to host the blog there,buy your own web hosting account and host the free self-hosted version of Wordpress there.\nSome popular web hosts include:\n\u2022 Bluehost.com\n\u2022 Arvixe.com\n\u2022 1and1.com\n\u2022 GoDaddy.com",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000614045",
+        "At this time, this is not possible.",
+        "Wordpress cannot be hosted on the local Brilliant Directories cPanel account with us where the directory is. This cPanel account is only meant for your directory alone and no other 3rd party software, including Wordpress, can be hosted here. Since we cannot guarantee the security of 3rd party software platforms like Wordpress, we cannot host any of these software applications in the interest of maintaining the security of the website and the sites of others on the same server.",
+        "It is possible to setup a subdomain and use Wordpress for an alternate website using the domain (EG: blog.yourdomain.com), you will need to either buy an upgraded license from Wordpress.com (starting at $99 / year) to host the blog there,buy your own web hosting account and host the free self-hosted version of Wordpress there.",
+        "Some popular web hosts include:",
+        "\u2022 Bluehost.com\n\u2022 Arvixe.com\n\u2022 1and1.com\n\u2022 GoDaddy.com"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 0
+}

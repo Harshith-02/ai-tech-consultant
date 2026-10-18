@@ -1,0 +1,163 @@
+{
+  "article_id": "5000682639-google-maps-api-features-funct",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682639-google-maps-api-features-functions-and-key-considerations",
+  "title": "Google Maps API: Features, Functions, and Key Considerations",
+  "category": "Section: Settings >> Google Maps Troubleshooting >> Google Maps API: Features, Functions, and Key Considerations",
+  "content_hash": "3035b35e78f1678c343955a777ad0b69ec60e3c1d9bf18a11e39ee138764c4cf",
+  "raw_text": "Google Maps API: Features, Functions, and Key Considerations\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682639\nThe Google Maps API plays an essential role in powering location-based features on Brilliant Directories websites. By integrating directly with Google\u2019s mapping technology, it provides members and visitors with accurate, flexible, and dynamic location search options that go far beyond simple address lookups.\nFrom handling multiple spellings and landmarks to displaying real-time map results and offering advanced geocoding controls, the API brings significant functionality to any directory site.\nAt the same time, there are important requirements and limitations to be aware of, ensuring site owners understand both the advantages and the boundaries of this integration.\n\n## Benefits\nThe API offers a range of benefits for website owners who connect their site to Google Maps, making it easier for members to find locations and access relevant map-based features.\nOne of the powerful parts of BD, as users generate content, or join from different locations; all the profiles pages and search result pages are all automatically created and dynamically populated.\n\n## Location Flexibility\nSearch for any type of location, including street addresses:\n\n## Landmarks\nSearch for landmarks:\n\n## Location Spelling\nSearch using different spellings of the same location (Montreal vs. Montr\u00e9al), even using accents and other special characters:\nRobust handling of misspellings / imperfect matches:\n\n## Map Display\nSearch results are displayed on a Google Map:\nAdditional Information:\n\u00bb Google Map Search Results Add-On\n\n## Geocoding\nNew manual geocoding module gives the website administrator full control over correcting the latitude and longitude assigned to each member:\nAdditional Information:\n\u00bb How To Geocode Members\n\n## Latitude and Longitude\nMembers will use Google Maps when filling out their profile information to provide an exact latitude and longitude for their listing (even if Google Maps does not recognize their written address):\n\n## Additional Benefits\n\u2022 Location auto-suggestions are lightning-fast, as they are delivered directly from the Google Maps API.\n\u2022 Location data is pulled in real time from the Google Map's location database, meaning your locations always use the latest location data available from Google.\n\u2022 Location searches are automatically tailored to your users' likely behavior. For example, if a user is located in India, the system will read their IP address and provide them with location suggestions that are most likely to fit their needs.\n\u2022 Gain unprecedented control over how searches behave on your site. \u00a0For example, choose between having bounding-box search results or radius search results for every type of location search. For example, if a user searches for \"90210\", you will be able to restrict results to the northeast and southwest points of that specific zip code, providing incredible local results, OR choose to provide results within a set radius from the center of that zip code.\n\n## Requirements\nYou must provide your own (free) Google Maps Javascript API key.\nGetting an API key: Google Maps Javascript API Key\n\n## Limitations\n\u2022 The auto-suggest module when users are entering location information has limited customization options. Since it is directly returning results from the Google Maps API, the suggestions provided are not editable.\n\u2022 Using the mouse wheel to zoom in and out on the map is not available for the integration.\n\u2022 For Kosovo, searches cannot be performed using the \u201cbounds\u201d search type. Only radius-based searches are supported. This limitation occurs because locations within Kosovo are not consistently recognized as cities or other locality types in the underlying data, preventing bounds-based queries from returning results. This limitation is due to how Google Maps classifies locations in the region.\n\u2022 Location search results cannot be strictly limited to specific geographic regions. Since the Google Maps API is built to return results intuitively, it will know where a user is located, and likely matches to their search are given precedence. If the search is ambiguous and could refer to several different locations, it will provide additional location suggestions, which CAN be controlled through your Admin settings. \u00a0However, the initial search a user enters may not provide results within your preferred countries if Google believes the search is most likely for a location outside of your preferred countries.\n\u2022 Most websites and applications may use the Google Maps API free of charge. However, if you consistently generate a high amount of traffic, you may be required to pay for additional usage of the API. If your site or application generates 25,000 or more map loads each day for more than 90 consecutive days, Google may contact you to upgrade from the free API. But don\u2019t worry! \u00a0If you go over the limits, Google will not immediately shut off your API access or display error messages on your site. \u00a0And if you are generating more than 25,000 map loads per day consistently, your website is already a major success!\nFor Kosovo, searches cannot be performed using the \u201cbounds\u201d search type. Only radius-based searches are supported. This limitation occurs because locations within Kosovo are not consistently recognized as cities or other locality types in the underlying data, preventing bounds-based queries from returning results. This limitation is due to how Google Maps classifies locations in the region.\n\n## Places (New) API\nTo ensure more accurate searches, websites that use the Google Maps \u201c PLACES (NEW) API \u201d \u00a0require visitors to select an option from the dropdown suggestions. In the past, users could type free-form text and attempt a search without confirming a recognized location, which often led to incomplete or invalid results. With this update in place, the search will not continue unless a valid suggestion has been chosen, making the process clearer and more reliable for everyone using the site.\n\u2022 When a visitor tries to search without selecting a suggestion, a small banner appears at the top of the results with the message \u201cREQUIRED: Select Location\u201d.\n\u2022 Next to it, an exclamation point icon provides additional context when hovered over, displaying \u201cPlease select a location from the suggestions dropdown to continue.\u201d\nThis approach makes it immediately obvious what action is needed and reduces confusion or errors during the search process.\n\n## Text Labels\nThe banner message and tooltip are both standard text labels in the system. This means they can be fully customized, translated, or removed from the admin area if desired. Editing these labels allows administrators to match the exact language or terminology used on their website.\n\u2022 Google Suggestion Require Text\n\u2022 Google Suggestion Require Text Popover\nWhile removing the text is possible, it is not recommended since doing so would reduce clarity for visitors and may lead to repeated search errors. The default labels provide helpful guidance and are intended to create a smoother, more user-friendly search experience.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682639",
+        "The Google Maps API plays an essential role in powering location-based features on Brilliant Directories websites. By integrating directly with Google\u2019s mapping technology, it provides members and visitors with accurate, flexible, and dynamic location search options that go far beyond simple address lookups.",
+        "From handling multiple spellings and landmarks to displaying real-time map results and offering advanced geocoding controls, the API brings significant functionality to any directory site.",
+        "At the same time, there are important requirements and limitations to be aware of, ensuring site owners understand both the advantages and the boundaries of this integration."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662151/original/9mdgNkQ7kWc8brXcFW4HyAyf0E29B-B--Q.png?1619050023",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662156/original/WE7PPjgqBmMOejfW4TWOgprMeCdClqJ04g.png?1619050048",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662192/original/f2qVEKe2Gu59-ZUvVsvWII-HV7pILDEiFA.png?1619050098",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662199/original/q5vw4yM4tT8eIbkCUZSJ5oRzcg3htgjzIg.png?1619050147",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662210/original/HavenhmYSPbD0O2AL9VRgYWQaVm4XuMqbQ.png?1619050181",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662249/original/2us8S5-sv5-Ch_G-FHexTjpFmsQQEGDKFw.png?1619050308",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12091662266/original/H32lSDErLTdydCDggL8NxbAqfxn3xKSXug.png?1619050351",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12167924248/original/v5LYLW8VRbJZ5knk9kzor9t5ZxgOcuLBgg.png?1758641916",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12167924483/original/CRrJJ3_l59NL2bmiBegnX9MSuePvs8NiKQ.png?1758642042",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Benefits",
+      "paragraphs": [
+        "The API offers a range of benefits for website owners who connect their site to Google Maps, making it easier for members to find locations and access relevant map-based features.",
+        "One of the powerful parts of BD, as users generate content, or join from different locations; all the profiles pages and search result pages are all automatically created and dynamically populated."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Location Flexibility",
+      "paragraphs": [
+        "Search for any type of location, including street addresses:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Landmarks",
+      "paragraphs": [
+        "Search for landmarks:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Location Spelling",
+      "paragraphs": [
+        "Search using different spellings of the same location (Montreal vs. Montr\u00e9al), even using accents and other special characters:",
+        "Robust handling of misspellings / imperfect matches:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Map Display",
+      "paragraphs": [
+        "Search results are displayed on a Google Map:",
+        "Additional Information:",
+        "\u00bb Google Map Search Results Add-On"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Geocoding",
+      "paragraphs": [
+        "New manual geocoding module gives the website administrator full control over correcting the latitude and longitude assigned to each member:",
+        "Additional Information:",
+        "\u00bb How To Geocode Members"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Latitude and Longitude",
+      "paragraphs": [
+        "Members will use Google Maps when filling out their profile information to provide an exact latitude and longitude for their listing (even if Google Maps does not recognize their written address):"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Additional Benefits",
+      "paragraphs": [
+        "\u2022 Location auto-suggestions are lightning-fast, as they are delivered directly from the Google Maps API.\n\u2022 Location data is pulled in real time from the Google Map's location database, meaning your locations always use the latest location data available from Google.\n\u2022 Location searches are automatically tailored to your users' likely behavior. For example, if a user is located in India, the system will read their IP address and provide them with location suggestions that are most likely to fit their needs.\n\u2022 Gain unprecedented control over how searches behave on your site. \u00a0For example, choose between having bounding-box search results or radius search results for every type of location search. For example, if a user searches for \"90210\", you will be able to restrict results to the northeast and southwest points of that specific zip code, providing incredible local results, OR choose to provide results within a set radius from the center of that zip code."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Requirements",
+      "paragraphs": [
+        "You must provide your own (free) Google Maps Javascript API key.",
+        "Getting an API key: Google Maps Javascript API Key"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Limitations",
+      "paragraphs": [
+        "\u2022 The auto-suggest module when users are entering location information has limited customization options. Since it is directly returning results from the Google Maps API, the suggestions provided are not editable.\n\u2022 Using the mouse wheel to zoom in and out on the map is not available for the integration.\n\u2022 For Kosovo, searches cannot be performed using the \u201cbounds\u201d search type. Only radius-based searches are supported. This limitation occurs because locations within Kosovo are not consistently recognized as cities or other locality types in the underlying data, preventing bounds-based queries from returning results. This limitation is due to how Google Maps classifies locations in the region.\n\u2022 Location search results cannot be strictly limited to specific geographic regions. Since the Google Maps API is built to return results intuitively, it will know where a user is located, and likely matches to their search are given precedence. If the search is ambiguous and could refer to several different locations, it will provide additional location suggestions, which CAN be controlled through your Admin settings. \u00a0However, the initial search a user enters may not provide results within your preferred countries if Google believes the search is most likely for a location outside of your preferred countries.\n\u2022 Most websites and applications may use the Google Maps API free of charge. However, if you consistently generate a high amount of traffic, you may be required to pay for additional usage of the API. If your site or application generates 25,000 or more map loads each day for more than 90 consecutive days, Google may contact you to upgrade from the free API. But don\u2019t worry! \u00a0If you go over the limits, Google will not immediately shut off your API access or display error messages on your site. \u00a0And if you are generating more than 25,000 map loads per day consistently, your website is already a major success!",
+        "For Kosovo, searches cannot be performed using the \u201cbounds\u201d search type. Only radius-based searches are supported. This limitation occurs because locations within Kosovo are not consistently recognized as cities or other locality types in the underlying data, preventing bounds-based queries from returning results. This limitation is due to how Google Maps classifies locations in the region."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Places (New) API",
+      "paragraphs": [
+        "To ensure more accurate searches, websites that use the Google Maps \u201c PLACES (NEW) API \u201d \u00a0require visitors to select an option from the dropdown suggestions. In the past, users could type free-form text and attempt a search without confirming a recognized location, which often led to incomplete or invalid results. With this update in place, the search will not continue unless a valid suggestion has been chosen, making the process clearer and more reliable for everyone using the site.",
+        "\u2022 When a visitor tries to search without selecting a suggestion, a small banner appears at the top of the results with the message \u201cREQUIRED: Select Location\u201d.\n\u2022 Next to it, an exclamation point icon provides additional context when hovered over, displaying \u201cPlease select a location from the suggestions dropdown to continue.\u201d",
+        "This approach makes it immediately obvious what action is needed and reduces confusion or errors during the search process."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Text Labels",
+      "paragraphs": [
+        "The banner message and tooltip are both standard text labels in the system. This means they can be fully customized, translated, or removed from the admin area if desired. Editing these labels allows administrators to match the exact language or terminology used on their website.",
+        "\u2022 Google Suggestion Require Text\n\u2022 Google Suggestion Require Text Popover",
+        "While removing the text is possible, it is not recommended since doing so would reduce clarity for visitors and may lead to repeated search errors. The default labels provide helpful guidance and are intended to create a smoother, more user-friendly search experience."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 9
+}

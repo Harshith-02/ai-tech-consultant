@@ -1,0 +1,49 @@
+{
+  "article_id": "5000682655-how-to-edit-the-seo-for-social",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682655-how-to-edit-the-seo-for-social-media-sharing-for-seo-templates",
+  "title": "How To Edit The SEO For Social Media Sharing for SEO Templates",
+  "category": "Section: My Content >> SEO Templates >> How To Edit The SEO For Social Media Sharing for SEO Templates",
+  "content_hash": "9873385e3c6a324cd8db75efb68f9d6e6b3599a849b23ef16cefc070548c8141",
+  "raw_text": "How To Edit The SEO For Social Media Sharing for SEO Templates\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682655\n\n## Steps\n\u2022 Navigate toMy Content>SEO Templates.\n\u2022 Locate the relevant template and clickCustomizeorEdit.\n\u2022 On theSEO Settingstab, scroll down to theSocial Media Sharingsection.\n\u2022 Update the fields as needed.\n\u2022 ClickSave This Page.\n\n## Social Media Shared Image\nA Social Media Shared Image can be set for the template. As with other SEO settings, this is treated as a suggestion, social media platforms and search engines determine at their own discretion whether to use the supplied image.\nA generic, default social media image can also be configured; this is covered separately in the \" How to Set a Default Social Media Image \" article.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682655"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184690927/original/SisLSvTa3UqRkEbhcGDCv8ynm6NkvNoZUQ.jpeg?1788511925",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184690938/original/4kv96QT0kl7Esr0X2nx-GG6UtL15sm3WTQ.jpeg?1788511938",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184690959/original/dzFpdiUYqNtVwXBHIDFibbIvB6POrP1W2g.png?1788511968",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Steps",
+      "paragraphs": [
+        "\u2022 Navigate toMy Content>SEO Templates.\n\u2022 Locate the relevant template and clickCustomizeorEdit.\n\u2022 On theSEO Settingstab, scroll down to theSocial Media Sharingsection.\n\u2022 Update the fields as needed.\n\u2022 ClickSave This Page."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Social Media Shared Image",
+      "paragraphs": [
+        "A Social Media Shared Image can be set for the template. As with other SEO settings, this is treated as a suggestion, social media platforms and search engines determine at their own discretion whether to use the supplied image.",
+        "A generic, default social media image can also be configured; this is covered separately in the \" How to Set a Default Social Media Image \" article."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 3
+}

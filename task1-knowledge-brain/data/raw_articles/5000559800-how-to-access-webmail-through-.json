@@ -1,0 +1,61 @@
+{
+  "article_id": "5000559800-how-to-access-webmail-through-",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000559800-how-to-access-webmail-through-the-admin-area",
+  "title": "How To Access Webmail Through the Admin Area",
+  "category": "Section: Emails >> Email FAQ >> How To Access Webmail Through the Admin Area",
+  "content_hash": "fb2ab539e1e79dd14b5128a678dc58e3a880af0ed5c18b411e4c629e8e2410a7",
+  "raw_text": "How To Access Webmail Through the Admin Area\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000559800\nWebmail reads and sends a mailbox's email in the browser, with no mail program to set up. The admin opens it from Settings > Domain Manager > Mailboxes , and for administrators whose role can open the website's cPanel it signs in to the mailbox without asking for the mailbox password.\n\n## Before starting\n\u2022 The website must use a custom domain with at least one mailbox on its hosting. SeeSettings \u00bb Domain Manager \u00bb Mailboxes and Email Routingto create one.\n\u2022 Allow pop-ups for the admin, because webmail opens in a new browser window.\n\n## Open a mailbox in webmail\n\u2022 OpenEmails > Email Accounts, orSettings > Domain Managerand selectMailboxes.\n\u2022 Find the mailbox in theMailboxeslist.\n\u2022 ClickOpen webmail.\n\u2022 The mailbox's inbox opens in a new window, already signed in.\nOpen webmail (2) on a mailbox row. The Catch-all label (1) marks the mailbox that receives mail sent to addresses that do not exist.\n\n## If the password is requested\n\u2022 The administrator's role cannot open cPanel.Signing in without the password is limited to administrators who can already open the website's cPanel, where cPanel's own Check Email does the same. For other administrators,Open webmailopens the webmail sign-in page; enter the full email address and the mailbox password there. A forgotten mailbox password can be replaced withMore > Change the passwordon the mailbox row.\n\u2022 The mail server could not sign in.The new window shows the webmail sign-in page instead, and a message explains that the mailbox password is needed there.\n\u2022 The browser blocked the window.A message asks to allow pop-ups for the page. Allow them, then clickOpen webmailagain.\n\n## Catch-all mail\nMail sent to addresses at the domain that do not exist can be kept in the account's own mailbox ( Keep in the catch-all mailbox ). That mailbox is then listed as The account's own mailbox with the Catch-all label, and Open webmail is the way to read its mail.\n\n## Additional notes\n\u2022 Each signed-in opening is recorded in the website's notifications asWebmail opened forthe mailbox.\n\u2022 For administrators without cPanel access,Open webmaillinks to the website's address followed by/webmail, such ashttps://www.example.com/webmail, which is the webmail sign-in page and asks for the mailbox password.\n\u2022 For help using the webmail program itself, see thecPanel documentation.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000559800",
+        "Webmail reads and sends a mailbox's email in the browser, with no mail program to set up. The admin opens it from Settings > Domain Manager > Mailboxes , and for administrators whose role can open the website's cPanel it signs in to the mailbox without asking for the mailbox password."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186358597/original/VJD5ebuo2MSVnjmV9iUW09e7i8XsEAqvDA.png?1791318602",
+          "alt": "Mailboxes card with a catch-all mailbox address (1) and its Open webmail button (2) beside Set up and More.",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Before starting",
+      "paragraphs": [
+        "\u2022 The website must use a custom domain with at least one mailbox on its hosting. SeeSettings \u00bb Domain Manager \u00bb Mailboxes and Email Routingto create one.\n\u2022 Allow pop-ups for the admin, because webmail opens in a new browser window."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Open a mailbox in webmail",
+      "paragraphs": [
+        "\u2022 OpenEmails > Email Accounts, orSettings > Domain Managerand selectMailboxes.\n\u2022 Find the mailbox in theMailboxeslist.\n\u2022 ClickOpen webmail.\n\u2022 The mailbox's inbox opens in a new window, already signed in.",
+        "Open webmail (2) on a mailbox row. The Catch-all label (1) marks the mailbox that receives mail sent to addresses that do not exist."
+      ],
+      "images": []
+    },
+    {
+      "heading": "If the password is requested",
+      "paragraphs": [
+        "\u2022 The administrator's role cannot open cPanel.Signing in without the password is limited to administrators who can already open the website's cPanel, where cPanel's own Check Email does the same. For other administrators,Open webmailopens the webmail sign-in page; enter the full email address and the mailbox password there. A forgotten mailbox password can be replaced withMore > Change the passwordon the mailbox row.\n\u2022 The mail server could not sign in.The new window shows the webmail sign-in page instead, and a message explains that the mailbox password is needed there.\n\u2022 The browser blocked the window.A message asks to allow pop-ups for the page. Allow them, then clickOpen webmailagain."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Catch-all mail",
+      "paragraphs": [
+        "Mail sent to addresses at the domain that do not exist can be kept in the account's own mailbox ( Keep in the catch-all mailbox ). That mailbox is then listed as The account's own mailbox with the Catch-all label, and Open webmail is the way to read its mail."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Additional notes",
+      "paragraphs": [
+        "\u2022 Each signed-in opening is recorded in the website's notifications asWebmail opened forthe mailbox.\n\u2022 For administrators without cPanel access,Open webmaillinks to the website's address followed by/webmail, such ashttps://www.example.com/webmail, which is the webmail sign-in page and asks for the mailbox password.\n\u2022 For help using the webmail program itself, see thecPanel documentation."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 1
+}

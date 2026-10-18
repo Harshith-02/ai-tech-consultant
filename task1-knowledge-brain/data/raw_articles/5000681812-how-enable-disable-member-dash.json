@@ -1,0 +1,83 @@
+{
+  "article_id": "5000681812-how-enable-disable-member-dash",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681812-how-enable-disable-member-dashboard-forms-per-membership-plan",
+  "title": "How Enable/Disable Member Dashboard Forms per Membership Plan",
+  "category": "Section: Finance >> Membership Plans >> How Enable/Disable Member Dashboard Forms per Membership Plan",
+  "content_hash": "209da29f4d37281c6c0ea671094bae44ca3107be6271ebba5a6cc8660d23aed9",
+  "raw_text": "How Enable/Disable Member Dashboard Forms per Membership Plan\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681812\nThis article explains how to identify and then enable or disable member dashboard forms for each membership plan.\n\n## About Member Dashboard Forms\nBy default, three forms are displayed in the member dashboard:\n\n## Identify Forms Currently Used\nThese forms can be enabled or disabled by navigating to:\n\u2022 Finance section\n\u2022 Click \u00a0Membership Plans\n\u2022 Then click 'Edit' for the membership plan to be modified.\n\n## Go to Member's Dashboard tab\nUnder the Member's Dashboard tab, member dashboard forms can be enabled or disabled.\n\n## Example: Disabling a Form\nIn this example, the Additional Details and About Me forms are disabled as shown above.\n\n## Go to Member Dashboard tab\nIdentify the Section\n\n## Front-End Members View\nThis is how the member dashboard looks after the changes:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681812",
+        "This article explains how to identify and then enable or disable member dashboard forms for each membership plan."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12108897418/original/--uNhoVcCfnDQSJtJghxIfOVcRCW4-Hv8A.png?1652396125",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12108897330/original/wAIpNne7BsLkCOFNVF2HjG7Cz3fUGceC9w.png?1652395827",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12108897364/original/HaQ-L_HvBlOLZQaK37b5NRSBf0py7xbwHQ.png?1652395963",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12108897476/original/0SwEUDnTr9ZCQUtFvw64QHmS-gjobdbpqA.png?1652396292",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "About Member Dashboard Forms",
+      "paragraphs": [
+        "By default, three forms are displayed in the member dashboard:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Identify Forms Currently Used",
+      "paragraphs": [
+        "These forms can be enabled or disabled by navigating to:",
+        "\u2022 Finance section\n\u2022 Click \u00a0Membership Plans\n\u2022 Then click 'Edit' for the membership plan to be modified."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Go to Member's Dashboard tab",
+      "paragraphs": [
+        "Under the Member's Dashboard tab, member dashboard forms can be enabled or disabled."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Example: Disabling a Form",
+      "paragraphs": [
+        "In this example, the Additional Details and About Me forms are disabled as shown above."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Go to Member Dashboard tab",
+      "paragraphs": [
+        "Identify the Section"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Front-End Members View",
+      "paragraphs": [
+        "This is how the member dashboard looks after the changes:"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 4
+}

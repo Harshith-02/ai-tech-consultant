@@ -1,0 +1,32 @@
+{
+  "article_id": "5000681841-how-to-send-emails-through-a-g",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681841-how-to-send-emails-through-a-gmail-account",
+  "title": "How To Send Emails Through A Gmail Account",
+  "category": "Section: Developer Hub >> cPanel Dashboard >> How To Send Emails Through A Gmail Account",
+  "content_hash": "5a7a007f47d275c5f726af77cf4ddf92ca80284519c610824de874299e190200",
+  "raw_text": "How To Send Emails Through A Gmail Account\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681841\nIn order to setup Gmail to send email from these accounts, please follow these instructions:\n\u2022 On the Gmail account click the gear in the top right.\n\u2022 SelectSee AllSettings.\n\u2022 Click theAccounts and Importtab.\n\u2022 Under Send mail as, clickAdd another email address.\n\u2022 In the 'Email address' field, enter the name and alternate email addresses needed.\n\u2022 Enter the SMTP server (e.g. smtp.domain.com), username on that domain, and the password for the account. The port setting or SSL setting might need to be updated (talk to the ISP if this information is needed).\n\u2022 ClickAdd account >>\n\u2022 Open your other account and either click the link in the message Gmail sent or enter the confirmation code in the Accounts and Import section of your Gmail settings.\nIf unable to view Gmail's verification email, try checking the Spam or Bulk Mail folders for a message from account-verification-noreply@google.com",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681841",
+        "In order to setup Gmail to send email from these accounts, please follow these instructions:",
+        "\u2022 On the Gmail account click the gear in the top right.\n\u2022 SelectSee AllSettings.\n\u2022 Click theAccounts and Importtab.\n\u2022 Under Send mail as, clickAdd another email address.\n\u2022 In the 'Email address' field, enter the name and alternate email addresses needed.\n\u2022 Enter the SMTP server (e.g. smtp.domain.com), username on that domain, and the password for the account. The port setting or SSL setting might need to be updated (talk to the ISP if this information is needed).\n\u2022 ClickAdd account >>\n\u2022 Open your other account and either click the link in the message Gmail sent or enter the confirmation code in the Accounts and Import section of your Gmail settings.",
+        "If unable to view Gmail's verification email, try checking the Spam or Bulk Mail folders for a message from account-verification-noreply@google.com"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180160886/original/li3kowZJggsMAoaw-huBd76HzfDVqVezhw.png?1781042363",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://www.google.com/help/hc/images/mail/mail_gear.png",
+          "alt": "",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'the gear in the top right'."
+        }
+      ]
+    }
+  ],
+  "screenshot_count": 2
+}

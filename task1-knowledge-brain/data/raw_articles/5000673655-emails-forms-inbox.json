@@ -1,0 +1,168 @@
+{
+  "article_id": "5000673655-emails-forms-inbox",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673655-emails-forms-inbox",
+  "title": "Emails \u00bb Forms Inbox",
+  "category": "Section: Emails >> Forms Inbox >> Emails \u00bb Forms Inbox",
+  "content_hash": "cf69901b47c63d86f6fb9e61711c2a891b3aaf7fc81e1b72e95a19b5ef695e1d",
+  "raw_text": "Emails \u00bb Forms Inbox\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673655\n\n## Forms Inbox - Admin Actions\nOnce inside the message, there are 4 available actions.\n\u2022 View\n\u2022 Reply\n\u2022 Actions (Archive & Delete)\n\n## View Full Inquiry\nOpens a modal with the information related to the message being viewed.\n\n## Reply to Inquiry\nWhen clicked, it will open the Compose Email module and the system will use the \" reply-contact-us \" email template by default:\nHere is the content of the reply-contact-us email template, which can be edited under Emails >> Email Templates if needed:\n\n## Delete Inquiry\nRemoves the message from the website.\n\n## Archive\nSends the inquiry to the \"Archived\" folder.\n\n## Notes\nThis fields is for reminders or useful information about this inquiry.\n\n## Toolbar Actions\nThe forms inquiries page includes a toolbar with different filtering options.\n\n## Bulk Actions\nThe Bulk Actions drop-down menu is used to Mark new messages that have already been archived, or to Delete messages that are no longer needed.\n\n## Filter By Form\nFilter by form, allows a more organized background of the inquiries submitted. More than one form can be selected at a time, and a search can be conducted to locate specific forms by running a keyword search.\n\n## Display From Everyone\nFi lter by Members Only or Non-Members.\n\n## Filter By Status\nMessages can be sorted by Any Status , New Inquiries , or Archived .\n\n## List Actions\nThis functionality allows for the creation of an emailing list from the search results generated on the page.\nTo learn more about how Smart Lists work, review the following article: Members \u00bb Smart Lists\nImportant Notes\n\u2022 If the website has been set to the Staging Mode,How To Activate \"Staging Mode\" / \"Coming Soon\" Splash Page As The Homepagemessages submitted using this form will also show up in the Forms Inbox section of the admin.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000673655"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147620267/original/KcMCHDZ9sW7zm3O5UWZfNp5jkKGzH8qkSA.png?1723135576",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092921288/original/HbLts6ewhZqCCnjGHTWy7HQKf2yZiWvWQQ.png?1621523528",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12162307048/original/NUSoK61ibPTiBV7sdBkiqwgF_ONO_G9Spw.png?1748993161",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12145313246/original/8W8ZuPgCuUjDGGyiknPmrc66tvxOXF4SJg.png?1719250668",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147620604/original/6knEgtrWQ1Q2IRF8JuHgTQJOvXxBij16vg.png?1723135891",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092921199/original/A7_4jxml2kqAXaDXow2MoxjbgiASsgm8qw.png?1621523475",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147620768/original/0HETwMUx-xAYKWdoN1y9miUY7LQb_DYxzA.png?1723136044",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12155435229/original/VOqz3U4pijsHaBIUFePS6Jwyt2gAiT9QKA.png?1736954558",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147620897/original/xzNdIIAY9pSdCARtrcs7dKhlFdCq7RGoeA.png?1723136226",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147620878/original/XYUqEXRoOZ2pmZqRk3EGVsUANOAA3Kk7hg.png?1723136202",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147620918/original/0rpa-ta_ovSlnQLkPLUbKzYXV_ZzggY3fw.png?1723136249",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12147621659/original/05dWzPJW3_Ur1vuqJk88XbTSjMRz4R_8Ww.png?1723137023",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Forms Inbox - Admin Actions",
+      "paragraphs": [
+        "Once inside the message, there are 4 available actions.",
+        "\u2022 View\n\u2022 Reply\n\u2022 Actions (Archive & Delete)"
+      ],
+      "images": []
+    },
+    {
+      "heading": "View Full Inquiry",
+      "paragraphs": [
+        "Opens a modal with the information related to the message being viewed."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Reply to Inquiry",
+      "paragraphs": [
+        "When clicked, it will open the Compose Email module and the system will use the \" reply-contact-us \" email template by default:",
+        "Here is the content of the reply-contact-us email template, which can be edited under Emails >> Email Templates if needed:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Delete Inquiry",
+      "paragraphs": [
+        "Removes the message from the website."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Archive",
+      "paragraphs": [
+        "Sends the inquiry to the \"Archived\" folder."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Notes",
+      "paragraphs": [
+        "This fields is for reminders or useful information about this inquiry."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Toolbar Actions",
+      "paragraphs": [
+        "The forms inquiries page includes a toolbar with different filtering options."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Bulk Actions",
+      "paragraphs": [
+        "The Bulk Actions drop-down menu is used to Mark new messages that have already been archived, or to Delete messages that are no longer needed."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Filter By Form",
+      "paragraphs": [
+        "Filter by form, allows a more organized background of the inquiries submitted. More than one form can be selected at a time, and a search can be conducted to locate specific forms by running a keyword search."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Display From Everyone",
+      "paragraphs": [
+        "Fi lter by Members Only or Non-Members."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Filter By Status",
+      "paragraphs": [
+        "Messages can be sorted by Any Status , New Inquiries , or Archived ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "List Actions",
+      "paragraphs": [
+        "This functionality allows for the creation of an emailing list from the search results generated on the page.",
+        "To learn more about how Smart Lists work, review the following article: Members \u00bb Smart Lists",
+        "Important Notes",
+        "\u2022 If the website has been set to the Staging Mode,How To Activate \"Staging Mode\" / \"Coming Soon\" Splash Page As The Homepagemessages submitted using this form will also show up in the Forms Inbox section of the admin."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 12
+}

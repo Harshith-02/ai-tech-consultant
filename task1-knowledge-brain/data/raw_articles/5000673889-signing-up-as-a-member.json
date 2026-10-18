@@ -1,0 +1,139 @@
+{
+  "article_id": "5000673889-signing-up-as-a-member",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673889-signing-up-as-a-member",
+  "title": "Signing Up As A Member",
+  "category": "Section: Finance >> General Billing >> Signing Up As A Member",
+  "content_hash": "cf25d1e44f1088b62d655479dbde13e14f21a3e85621ee23bb0df48fe74c359d",
+  "raw_text": "Signing Up As A Member\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673889\nWhen the Membership Plans have been set up, we recommend performing a few tests to make sure the payment gateway was properly set up prior to launching the website.\nThese test purchases can be refunded and they won't impact the website revenue.\nBefore starting the test, make sure the site has a payment gateway \"Active\" under Finance \u00bb Payment Settings:\nIf the site doesn't have an active payment gateway yet, select one from the Supported Payment Gateways .\nNote: For new sites launched using a directoryup.com subdomain, test mode payment credentials are already active. Paid signups can be tested without adding a separate payment gateway. Once the site is switched to a real domain, these test credentials will stop working and a live payment gateway will need to be configured.\n\n## Test the Billing Module\n1. Temporarily edit the Membership Plan monthly price to $1. This is not necessary; however, it is a good practice to test purchases when using real credit cards.\nTo do this, go to the admin and click on Finance \u00bb Membership Plans.\n2. Select one of the paid memberships and click Edit.\n3. Then, go to the \"Sign Ups & Upgrades\" tab and change the amount of the monthly membership to $1.\nSave changes:\nNote : Do not select the \"Admin Only\" option for this test, because we will signup as a new member, not as an admin. This option will hide the payment information in the payment form.\n4. Click the \"Sign Up Page\" button:\n5 . It will redirect to the paid checkout form.\nFill out the form and make sure to select the $1 option.\n6. Add the credit card information.\n\n## Important Notes for This Step:\n\u2022 If the site is using Stripe, the look of the Enter Credit Information fields will vary slightly. See the image above.\n\u2022 If the site is using PayPal Standard, PayFast, 2Checkout, or any other off-site payment gateway, the credit card fields won't appear in this form. The system will redirect the person to the payment gateway website in order for them to pay.\n\u2022 If the site is using PayPal Payflow, Authorize.net, or any other on-site payment gateway, the credit card fields will show up in the checkout form.\n7 . After clicking 'Create My Profile,' the system will process the payment. A pop-up will appear, click \u00a0the \"Click To Continue\" button:\nImportant Note : The message shown in the pop-up above will depend on the \" After Sign Up, Set Account Status As\" setting assigned to this membership plan. The above message will display if the \" Active Account \" option is selected:\nIf the \" Inactive Account, Requires Email Verification \" option is selected:\nThe message below will appear:\nIf the \" On Hold, Requires Admin Approval \" option is selected:\nThe message below will appear:\nAll of this text can be edited under Text Labels directly.\n8 . The system will log in the member automatically into the account.\n\n## From the Owner's Perspective\nAfter all the steps above have been completed, a new profile will be created with an 'Active' status in the member's section.\nAlso, a transaction will appear in the \"Transaction History\" section of the Finance tab in the Admin area.\n\n## Sign Up Errors\nTo learn what happens when a payment fails during the signup process, read this article: Attempted Sign Up - No Payment Collected\nTo learn more information about Membership plans, read the articles below:\nSetting up One Time Payments\nSetting up Recurring Payments\nSetting up Membership Plans",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000673889",
+        "When the Membership Plans have been set up, we recommend performing a few tests to make sure the payment gateway was properly set up prior to launching the website.",
+        "These test purchases can be refunded and they won't impact the website revenue.",
+        "Before starting the test, make sure the site has a payment gateway \"Active\" under Finance \u00bb Payment Settings:",
+        "If the site doesn't have an active payment gateway yet, select one from the Supported Payment Gateways .",
+        "Note: For new sites launched using a directoryup.com subdomain, test mode payment credentials are already active. Paid signups can be tested without adding a separate payment gateway. Once the site is switched to a real domain, these test credentials will stop working and a live payment gateway will need to be configured."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12140002908/original/VXrz3QjrdusaXwvrCZjmXZ_VP-l6HysVUA.png?1710177234",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120752/original/NUmF4_HQTmLpPk8PvjJHCBQ3Q2HfC1h_FQ.png?1643116633",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120712/original/TSh66g5bvDiqLs-fSIQae6pUeIyeAyPmxQ.png?1643116565",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089831524/original/FzEj-P1q0-UYh1FptfcJqWlvRCd-mtN-2Q.png?1615394012",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089831773/original/6GcmyyeCvP1i9e78g_K370HOtVNtLgixOg.png?1615394358",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089832134/original/ZInryLSk1et3-Hj9hdjAycZ8w4qnIp05Eg.png?1615394842",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120285/original/WU-g3TV5810kKqBZLPh89e31zFi1jkbmXg.png?1643116114",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120338/original/gr0w-PNDYsfppmiyI_viT2l6a2u9pBUzyQ.png?1643116167",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120394/original/quFGeGTaVQxJe2R-kRvTvqgDmpzfhQUgiQ.png?1643116202",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120436/original/4eHGp1fXsE5HdVh5sguygkBmAI1MpmMOfQ.png?1643116269",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12104120464/original/CYoXMBXg9SoK5d59284x4BmRTieAgtbZCg.png?1643116308",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12089832353/original/bNKWPLQIa_1D8DgDVyHtLC-g8PdrHOyc1w.png?1615395078",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12140003221/original/42dUQYhTlP1DC1fVVf_CRLUl3dLal9Gvrw.png?1710177485",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Test the Billing Module",
+      "paragraphs": [
+        "1. Temporarily edit the Membership Plan monthly price to $1. This is not necessary; however, it is a good practice to test purchases when using real credit cards.",
+        "To do this, go to the admin and click on Finance \u00bb Membership Plans.",
+        "2. Select one of the paid memberships and click Edit.",
+        "3. Then, go to the \"Sign Ups & Upgrades\" tab and change the amount of the monthly membership to $1.",
+        "Save changes:",
+        "Note : Do not select the \"Admin Only\" option for this test, because we will signup as a new member, not as an admin. This option will hide the payment information in the payment form.",
+        "4. Click the \"Sign Up Page\" button:",
+        "5 . It will redirect to the paid checkout form.",
+        "Fill out the form and make sure to select the $1 option.",
+        "6. Add the credit card information."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Important Notes for This Step:",
+      "paragraphs": [
+        "\u2022 If the site is using Stripe, the look of the Enter Credit Information fields will vary slightly. See the image above.\n\u2022 If the site is using PayPal Standard, PayFast, 2Checkout, or any other off-site payment gateway, the credit card fields won't appear in this form. The system will redirect the person to the payment gateway website in order for them to pay.\n\u2022 If the site is using PayPal Payflow, Authorize.net, or any other on-site payment gateway, the credit card fields will show up in the checkout form.",
+        "7 . After clicking 'Create My Profile,' the system will process the payment. A pop-up will appear, click \u00a0the \"Click To Continue\" button:",
+        "Important Note : The message shown in the pop-up above will depend on the \" After Sign Up, Set Account Status As\" setting assigned to this membership plan. The above message will display if the \" Active Account \" option is selected:",
+        "If the \" Inactive Account, Requires Email Verification \" option is selected:",
+        "The message below will appear:",
+        "If the \" On Hold, Requires Admin Approval \" option is selected:",
+        "The message below will appear:",
+        "All of this text can be edited under Text Labels directly.",
+        "8 . The system will log in the member automatically into the account."
+      ],
+      "images": []
+    },
+    {
+      "heading": "From the Owner's Perspective",
+      "paragraphs": [
+        "After all the steps above have been completed, a new profile will be created with an 'Active' status in the member's section.",
+        "Also, a transaction will appear in the \"Transaction History\" section of the Finance tab in the Admin area."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Sign Up Errors",
+      "paragraphs": [
+        "To learn what happens when a payment fails during the signup process, read this article: Attempted Sign Up - No Payment Collected",
+        "To learn more information about Membership plans, read the articles below:",
+        "Setting up One Time Payments",
+        "Setting up Recurring Payments",
+        "Setting up Membership Plans"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 13
+}

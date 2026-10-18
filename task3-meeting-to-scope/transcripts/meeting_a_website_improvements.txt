@@ -1,0 +1,29 @@
+[MEETING TRANSCRIPT - PROJECT APEX]
+Date: October 14, 2026
+Participants:
+- Mark Sterling (Founder, Apex Directories - Client)
+- Maya Lin (Senior AI Tech Consultant - Agency)
+- Dave Miller (Technical Lead - Agency)
+
+[00:00:05] Maya Lin: Good morning Mark. Thanks for taking the time today. The goal of this call is to understand the pain points on your current directory platform and identify the improvements you want to prioritize for Q4.
+[00:00:18] Mark Sterling: Thanks Maya, Dave. To be blunt, our search experience right now is frustrating. Customers come to the homepage, type a keyword like 'plumbers' or 'roofing contractors in Chicago', and the results are either overwhelming or unorganized. We want customers to find services in 2 clicks.
+[00:00:41] Dave Miller: Understood. When you say unorganized, what specific filtering are your users looking for?
+[00:00:48] Mark Sterling: Right now, we only have a generic keyword box. We need multi-attribute filters on the search results page: filtering by service category tiers (Top Level and Sub Level), filtering by verified member badges, and filtering by distance radius (5 miles, 10 miles, 25 miles).
+[00:01:14] Maya Lin: Got it. So multi-tier category filtering, verified badge toggle, and location radius search. Does your current membership tier structure have verified badges enabled in your admin settings?
+[00:01:28] Mark Sterling: Yes, we have 'Verified Pro' tags on about 400 members, but they don't show up in search filtering. Also, we really want AI search. Can we add AI search where someone types 'I need someone to fix a burst pipe tonight' and it matches emergency plumbers?
+[00:01:52] Dave Miller: An AI natural-language semantic search overlay is definitely possible. We can check whether your directory platform's API supports embedding indexing, or if we can configure smart keyword synonym mapping first.
+[00:02:10] Mark Sterling: Another big issue is mobile responsiveness. Over 65% of our visitors browse on phones, but the category navigation cards on the homepage are clunky and require endless vertical scrolling. We want horizontal swipeable pill cards for top categories.
+[00:02:32] Maya Lin: Horizontal swipeable category pills on mobile. What about performance and loading speed?
+[00:02:38] Mark Sterling: Yes! Our mobile PageSpeed score is around 45 right now. We must keep search results rendering under 1.5 seconds.
+[00:02:50] Dave Miller: Regarding deadlines and budget: do you have a target launch date in mind?
+[00:02:56] Mark Sterling: We have our annual trade expo on November 28th. We need this live by November 20th at the latest. Budget-wise, we have approved between $4,000 and $6,000 for this milestone.
+[00:03:15] Maya Lin: Perfect. To recap:
+1. Multi-tier category filters and verified badge filters on search.
+2. Distance radius location filtering.
+3. AI semantic natural-language search assistance.
+4. Mobile homepage category navigation overhaul with swipeable pills.
+5. Performance optimization to achieve < 1.5s mobile search response.
+Target completion: November 20th.
+[00:03:42] Mark Sterling: Exactly right. Let me know what can be done with standard platform settings versus custom development so we don't reinvent the wheel.
+[00:03:52] Dave Miller: We will run a thorough feasibility check against the platform documentation and deliver the Scope of Work and task hour estimates by tomorrow.
+[00:04:02] Mark Sterling: Sounds great, thanks team.

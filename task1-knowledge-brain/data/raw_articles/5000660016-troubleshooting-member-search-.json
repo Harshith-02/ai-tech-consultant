@@ -1,0 +1,32 @@
+{
+  "article_id": "5000660016-troubleshooting-member-search-",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000660016-troubleshooting-member-search-result-issues-overview",
+  "title": "Troubleshooting: Member Search Result Issues Overview",
+  "category": "Get Started Here >> Common Questions & Troubleshooting >> Troubleshooting: Member Search Result Issues Overview",
+  "content_hash": "cc4427cac227695f882b36957e4f03e1729ab481fe3c9651b94e1bc47027ae39",
+  "raw_text": "Troubleshooting: Member Search Result Issues Overview\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000660016\nBefore diving into possible reasons why the member may not be appearing in the search result conducted, we highly recommend going over the article down below, as the member itself may not be active on the site or maybe in a membership plan that is not searchable:\nTroubleshooting: Listing is not Public or Active\nAnother possible setting that will have an effect on which members will display in search results would be the Require Complete Profiles setting. When this setting is enabled, certain members will be hidden from search results. For more information regarding this setting, please refer to the article down below:\nHow To Hide Incomplete Profiles On Member Search Results\nAfter making sure the member is indeed active on the site and not hidden due to the Require Complete Profiles setting, the troubleshooting steps down below can be used.\n\n## Different Types Of Member Search Issues\nThe Brilliant Directories software offers a few different ways to conduct a member search and these can be categorized as Location Search, Keyword Search and Category Search.\nWe created 3 dedicated articles for each type of search result issue to share a detailed overview of each of them:\n\u2022 Location Search Issues\n\u2022 Keyword Search Issues\n\u2022 Category Search Issues",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000660016",
+        "Before diving into possible reasons why the member may not be appearing in the search result conducted, we highly recommend going over the article down below, as the member itself may not be active on the site or maybe in a membership plan that is not searchable:",
+        "Troubleshooting: Listing is not Public or Active",
+        "Another possible setting that will have an effect on which members will display in search results would be the Require Complete Profiles setting. When this setting is enabled, certain members will be hidden from search results. For more information regarding this setting, please refer to the article down below:",
+        "How To Hide Incomplete Profiles On Member Search Results",
+        "After making sure the member is indeed active on the site and not hidden due to the Require Complete Profiles setting, the troubleshooting steps down below can be used."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Different Types Of Member Search Issues",
+      "paragraphs": [
+        "The Brilliant Directories software offers a few different ways to conduct a member search and these can be categorized as Location Search, Keyword Search and Category Search.",
+        "We created 3 dedicated articles for each type of search result issue to share a detailed overview of each of them:",
+        "\u2022 Location Search Issues\n\u2022 Keyword Search Issues\n\u2022 Category Search Issues"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 0
+}

@@ -1,0 +1,92 @@
+{
+  "article_id": "5000681822-how-to-setup-sidebars-for-post",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681822-how-to-setup-sidebars-for-post-types",
+  "title": "How To Setup Sidebars For Post Types",
+  "category": "Section: Toolbox >> Sidebar Manager >> How To Setup Sidebars For Post Types",
+  "content_hash": "6d54eb498a1fe3ef9dde55c566427f27bb4ae36554c9d37ce534463feedfdf4e",
+  "raw_text": "How To Setup Sidebars For Post Types\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681822\nEssentially every Post Type has two main pages, the search results page where all the results for that feature show up:\nAnd the details page where the details of every single post from that feature show up.:\nAn example of a feature search result page can be seen on the link down below:\nThe Jobs Feature Search Result Page\nAn example of a feature detail page can be seen on the link down below:\nThe Job Feature Post Details Page\nOur software will allow users to add/remove/edit specific sidebars to each of these pages specified.\n\n## How to Add/Remove Widgets From the Sidebars\nBefore we can add or remove any widgets from these sidebars, first we have to identify which Sidebars that we will be making these edits on.\n\n## How to Identify Which Sidebar to Edit\nTo identify which Post Type using which sidebar on which page, navigate to Content >> Edit Post Settings >> Click \" Edit \" on preferred Post Type:\nIn its edit view, Search Results Design and Detail Page Design are the tabs we will be using:\nWhen on the Search Results Design tab, scroll down and identify the sidebar under Sidebar To Use section:\nWhen on the Detail Page Design tab, scroll down and identify the sidebar under Sidebar To Use section:\nAnother way to identify which sidebar is being used on what page is to utilize the Admin Bar tool on the front end and click on the Show Widgets button:\nNot only will this display the names of the widgets being used on the page but it will also display the sidebars being used on the page:\n\n## Important Note\n\u2022 Post Type sidebars come with a set of pre-defined filters and fields, which can\u2019t be expanded through the standard settings. To add custom filter types to post type sidebars, this would require a customization.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681822",
+        "Essentially every Post Type has two main pages, the search results page where all the results for that feature show up:",
+        "And the details page where the details of every single post from that feature show up.:",
+        "An example of a feature search result page can be seen on the link down below:",
+        "The Jobs Feature Search Result Page",
+        "An example of a feature detail page can be seen on the link down below:",
+        "The Job Feature Post Details Page",
+        "Our software will allow users to add/remove/edit specific sidebars to each of these pages specified."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12090374446/original/-sTWuMBRL8wrPw69iDB16zdNWKxf6oNZqw.png?1616511960",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12090374403/original/eiP10Lg-0HLpCSkbuAN2XvNNpCuB45bwAA.png?1616511914",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12088606483/original/NtadhPf56n1mWraCL5Z48lKjaW2vmnwzng.png?1612908023",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12090374610/original/yh1IRucwijBAsXFwUFmjzLlFVImY6iT0_g.png?1616512142",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12052033724/original/p021T2DiZMtFPlLlS3mmRLjQf20wIzMcHA.png?1560351637",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12052033800/original/WC9Eevdpd_IX1xLHOXLvViESnuOISOR1rw.png?1560351698",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12090374534/original/2HnqVXd3rudEN4Y-vYESpUqcGy2uQA3HvQ.png?1616512032",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12052035485/original/WA-Wf4hkJftPmmLIpXyhIE7JWd83i7_eFg.png?1560353334",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "How to Add/Remove Widgets From the Sidebars",
+      "paragraphs": [
+        "Before we can add or remove any widgets from these sidebars, first we have to identify which Sidebars that we will be making these edits on."
+      ],
+      "images": []
+    },
+    {
+      "heading": "How to Identify Which Sidebar to Edit",
+      "paragraphs": [
+        "To identify which Post Type using which sidebar on which page, navigate to Content >> Edit Post Settings >> Click \" Edit \" on preferred Post Type:",
+        "In its edit view, Search Results Design and Detail Page Design are the tabs we will be using:",
+        "When on the Search Results Design tab, scroll down and identify the sidebar under Sidebar To Use section:",
+        "When on the Detail Page Design tab, scroll down and identify the sidebar under Sidebar To Use section:",
+        "Another way to identify which sidebar is being used on what page is to utilize the Admin Bar tool on the front end and click on the Show Widgets button:",
+        "Not only will this display the names of the widgets being used on the page but it will also display the sidebars being used on the page:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Important Note",
+      "paragraphs": [
+        "\u2022 Post Type sidebars come with a set of pre-defined filters and fields, which can\u2019t be expanded through the standard settings. To add custom filter types to post type sidebars, this would require a customization."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 8
+}

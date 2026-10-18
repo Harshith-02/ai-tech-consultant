@@ -1,0 +1,136 @@
+{
+  "article_id": "5000682653-how-to-edit-the-seo-settings-o",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682653-how-to-edit-the-seo-settings-of-dynamic-search-results-pages",
+  "title": "How To Edit The SEO Settings Of  Dynamic (Search Results) Pages",
+  "category": "Section: My Content >> SEO Templates >> How To Edit The SEO Settings Of  Dynamic (Search Results) Pages",
+  "content_hash": "07418f53eebb9fe6f4c1cc97cb2ed00b7642d784c629175aaa1e238089dc19a1",
+  "raw_text": "How To Edit The SEO Settings Of  Dynamic (Search Results) Pages\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682653\n\n## Overview\nDefault on-page SEO is pre-configured for all pages of the site. Advanced configuration is available for the SEO settings of dynamic pages, primarily search results pages and member profile pages, for administrators who wish to customize them further.\nCAUTION: These are dynamic pages . A change made to one SEO template is reflected across every page that uses that template. For example, editing the SEO template for a top-level category affects the search results pages for all locations and combinations tied to that category, not a single page.\nCAUTION: These are dynamic pages . A change made to one SEO template is reflected across every page that uses that template. For example, editing the SEO template for a top-level category affects the search results pages for all locations and combinations tied to that category, not a single page.\n\n## Identifying an SEO Template\nThe Admin Toolbar can be used to identify which SEO template controls a given page:\n\u2022 ClickVisit Websitefrom the Admin Area to enable the Admin Bar.\n\u2022 Navigate to the search results page in question and open the Admin Bar dropdown menu. The SEO template name and number are displayed there.\n\n## Accessing SEO Template Settings\nThere are two ways to reach the SEO template settings.\n\n## Back End\n\u2022 Navigate toMy Content>SEO Templates.\n\u2022 Locate the relevant template and clickCustomizeorEdit.\n\n## Front End\n\u2022 From the Admin Toolbar on the front end, clickEdit SEO Template #.\n\u2022 The system redirects to the corresponding Admin Section. ClickCustomizeorEdit.Once the template loads, theSEO Settingstab contains the editable fields.\n\n## Editing SEO Meta Tags\n\u2022 Update thePage Meta Title,Meta Description, andMeta Keywordsfields as needed.\n\u2022 ClickSave SEO Templateto apply the changes.\nNOTE: Default pages already include optimized SEO information, including default SEO variables. Existing values should be reviewed before being overwritten.\nNOTE: Default pages already include optimized SEO information, including default SEO variables. Existing values should be reviewed before being overwritten.\n\n## Dynamic Page Types\nDynamic SEO templates correspond to different combinations of category and location. Commonly edited templates include:\nTemplate | Path pattern\nProfile page | %filename%\nTop-level category search results | %profession%\nSub-level category search results | %service_name%,%sub_category_name%,%sub_sub_category_name%\nCountry search results | /%country_name%\nCity search results | /%country_name%/%city_name%\nCombinations of these are also available as separate templates, for example:\n\u2022 Top-level category search results in a specific country \u2014/%country_name%/%profession%\n\u2022 Top-level category search results in a specific city \u2014/%country_name%/%city_name%/%profession%\n\n## Example: Profile Page Title\nFor a profile page belonging to a Dentist named James Smith, with a company called Smith Dentistry, located in Pasadena, California, the default Page Title template reads:\nOn the live page, this renders as:\nEach %variable% pulls data specific to the page being displayed and can be replaced with different variables or static text.\n\n## Common SEO Variables\nVariable | Description\n%country_name% | The name of the country associated with the page\n%city%/%city_name% | The name of the city associated with the page\n%profession% | The name of the top-level category associated with the page\n%service_name% | The name of the sub-level category associated with the page\n%sub_category_name% | Alternate variable for the sub-level category; functionally equivalent to%service_name%\n%sub_sub_category_name% | The name of the sub-sub-level category associated with the page\n%full_name% | The full name of the member associated with the page\n%company% | The name of the member's company associated with the page\n%location% | The city and state associated with the listing\n%trade% | The Trade variable entered underWebsite>Website Settings>Variables\n%industry% | The Industry variable entered underWebsite>Website Settings>Variables\n\n## Formatting Variables\n\u2022 Pluralizing:Surround the variable with double percent signs \u2014%%profession%%displays \"Dentists\" instead of \"Dentist.\"\n\u2022 Capitalizing:Capitalize the first letter of the variable name \u2014%Profession%displays \"Dentist\" instead of \"dentist.\"\n\n## Related Reading\nAdditional detail on available variables is covered in the \" Understanding SEO Variables \" article.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682653"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628414/original/Cy9w0lJQzT7e0Ds7us86RkUzUwytNHmzog.jpeg?1788422143",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628458/original/dx4c-1teH_qVMIpZkdfYNEnm4tzbDlW-Yw.jpeg?1788422208",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628462/original/EcFKnIjLxn1Uglvs-HtvQAbf51cEwSXYjg.jpeg?1788422221",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628473/original/1UVcThk8fSpOBmDuwsENd4rxqzaigCVJ8w.jpeg?1788422238",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628501/original/6x6E_iKJmip8rhoGC59Ltb0_PQFvMnI6yw.png?1788422289",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184628515/original/nj4eXUcpoQLj0-XAv4mgNzKUEHHyMF6pAw.jpeg?1788422328",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Default on-page SEO is pre-configured for all pages of the site. Advanced configuration is available for the SEO settings of dynamic pages, primarily search results pages and member profile pages, for administrators who wish to customize them further.",
+        "CAUTION: These are dynamic pages . A change made to one SEO template is reflected across every page that uses that template. For example, editing the SEO template for a top-level category affects the search results pages for all locations and combinations tied to that category, not a single page.",
+        "CAUTION: These are dynamic pages . A change made to one SEO template is reflected across every page that uses that template. For example, editing the SEO template for a top-level category affects the search results pages for all locations and combinations tied to that category, not a single page."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Identifying an SEO Template",
+      "paragraphs": [
+        "The Admin Toolbar can be used to identify which SEO template controls a given page:",
+        "\u2022 ClickVisit Websitefrom the Admin Area to enable the Admin Bar.\n\u2022 Navigate to the search results page in question and open the Admin Bar dropdown menu. The SEO template name and number are displayed there."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Accessing SEO Template Settings",
+      "paragraphs": [
+        "There are two ways to reach the SEO template settings."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Back End",
+      "paragraphs": [
+        "\u2022 Navigate toMy Content>SEO Templates.\n\u2022 Locate the relevant template and clickCustomizeorEdit."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Front End",
+      "paragraphs": [
+        "\u2022 From the Admin Toolbar on the front end, clickEdit SEO Template #.\n\u2022 The system redirects to the corresponding Admin Section. ClickCustomizeorEdit.Once the template loads, theSEO Settingstab contains the editable fields."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Editing SEO Meta Tags",
+      "paragraphs": [
+        "\u2022 Update thePage Meta Title,Meta Description, andMeta Keywordsfields as needed.\n\u2022 ClickSave SEO Templateto apply the changes.",
+        "NOTE: Default pages already include optimized SEO information, including default SEO variables. Existing values should be reviewed before being overwritten.",
+        "NOTE: Default pages already include optimized SEO information, including default SEO variables. Existing values should be reviewed before being overwritten."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Dynamic Page Types",
+      "paragraphs": [
+        "Dynamic SEO templates correspond to different combinations of category and location. Commonly edited templates include:",
+        "Template | Path pattern\nProfile page | %filename%\nTop-level category search results | %profession%\nSub-level category search results | %service_name%,%sub_category_name%,%sub_sub_category_name%\nCountry search results | /%country_name%\nCity search results | /%country_name%/%city_name%",
+        "Combinations of these are also available as separate templates, for example:",
+        "\u2022 Top-level category search results in a specific country \u2014/%country_name%/%profession%\n\u2022 Top-level category search results in a specific city \u2014/%country_name%/%city_name%/%profession%"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Example: Profile Page Title",
+      "paragraphs": [
+        "For a profile page belonging to a Dentist named James Smith, with a company called Smith Dentistry, located in Pasadena, California, the default Page Title template reads:",
+        "On the live page, this renders as:",
+        "Each %variable% pulls data specific to the page being displayed and can be replaced with different variables or static text."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Common SEO Variables",
+      "paragraphs": [
+        "Variable | Description\n%country_name% | The name of the country associated with the page\n%city%/%city_name% | The name of the city associated with the page\n%profession% | The name of the top-level category associated with the page\n%service_name% | The name of the sub-level category associated with the page\n%sub_category_name% | Alternate variable for the sub-level category; functionally equivalent to%service_name%\n%sub_sub_category_name% | The name of the sub-sub-level category associated with the page\n%full_name% | The full name of the member associated with the page\n%company% | The name of the member's company associated with the page\n%location% | The city and state associated with the listing\n%trade% | The Trade variable entered underWebsite>Website Settings>Variables\n%industry% | The Industry variable entered underWebsite>Website Settings>Variables"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Formatting Variables",
+      "paragraphs": [
+        "\u2022 Pluralizing:Surround the variable with double percent signs \u2014%%profession%%displays \"Dentists\" instead of \"Dentist.\"\n\u2022 Capitalizing:Capitalize the first letter of the variable name \u2014%Profession%displays \"Dentist\" instead of \"dentist.\""
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Reading",
+      "paragraphs": [
+        "Additional detail on available variables is covered in the \" Understanding SEO Variables \" article."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 6
+}

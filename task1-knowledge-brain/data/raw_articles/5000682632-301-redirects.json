@@ -1,0 +1,123 @@
+{
+  "article_id": "5000682632-301-redirects",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682632-301-redirects",
+  "title": "301 Redirects",
+  "category": "Section: Developer Hub >> 301 Redirects >> 301 Redirects",
+  "content_hash": "413b87dff17218a105318d477bc8a3bd89418050a917ff2b1ef1733fa8f284d9",
+  "raw_text": "301 Redirects\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682632\nA 301 redirect permanently sends visitors and search engines from an old address on the website to a new one. The 301 Redirect Rules page lists every redirect on the website and is where redirects are added, edited, tested and deleted.\nWhen member profile details are updated, such as changes to URL structure, business name, or address, the system automatically creates redirects. This ensures that existing links continue to resolve correctly and point to the updated profile.\n\n## Opening the 301 Redirect Rules Page\n\u2022 Go toDeveloper Hub.\n\u2022 On the301 Redirect Rulescard, clickManage Redirects.\n\n## The 301 Redirect Rules Page\nThe page shows each redirect as one row: the old address (Source URL) in green, with the new address (Destination URL) beneath it, followed by the redirect's Type and the date it was last Updated .\n\u2022 Import CSV: adds many redirects at once from a CSV file. SeeImport 301 Redirects via CSV file.\n\u2022 New Redirect Rule: opens a drawer for adding one or more redirects.\n\u2022 Search: finds redirects by text. The menu beside the search box limits the search toAll fields,Source URL,Destination URL,Admin notesorID. A full address on the website can be pasted in; it is searched by its path.\n\u2022 Date updated: shows only redirects updated on one day or within a date range.\n\u2022 All types: shows only redirects of the selected types, EGMember Profileredirects created automatically, or redirects added by an admin.\n\u2022 All redirects / Broken redirects: switches to the list of broken redirects (see below).\n\u2022 Export CSV: downloads the redirects currently shown, with the active search and filters applied, in the same columns the CSV import uses.\n\u2022 Show or hide columns: chooses which columns appear in the table.\n\u2022 Actions: the menu for a single redirect.\nHovering over a row shows copy buttons beside the Source URL and the Destination URL. Clicking anywhere else on a row opens that redirect for editing.\nTables show 25 rows per page by default. The Rows per page menu below the table switches between 10, 25, 50 and 100 rows, and the browser remembers the last size picked.\n\n## Adding 301 Redirects\n\u2022 ClickNew Redirect Rule. The New Redirect Rule drawer opens.\n\u2022 InSource URL, enter the old address as a path on the website, without the domain or a leading slash. EGabout/contact.\n\u2022 InDestination URL, enter the new address: a path on the website (EGabout/contact-us) or a full address on another website (EGhttps://example.com). To send visitors to the homepage, enter a single/.\n\u2022 To add more redirects at the same time, clickAdd Another Redirectand fill in the new row. TheXat the end of a row removes it.\n\u2022 ClickSave. A confirmation appears and the new redirects are added to the top of the list.\n\u2022 The reminder at the top of the drawer: the Source is a path on the website, the Destination is a path on the website or a full address, and a single/as Destination redirects to the homepage.\n\u2022 Source URL: the old address.\n\u2022 Destination URL: the new address.\n\u2022 Add Another Redirect: adds another Source and Destination row.\n\u2022 CancelandSave. If anything was typed, Cancel asks before discarding it.\nThe drawer checks each row before saving and shows the problem under the field. EG a Source URL that starts with http , www. or a slash is refused with a request to enter the path only, a Destination that matches its Source is refused, and quotes, angle brackets and backslashes are not accepted in either field.\n\n## Editing a Redirect\nClick a row, or choose Edit from its Actions menu, to open the Edit Redirect drawer.\n\u2022 Source URL: the old address, with a button to copy its full address.\n\u2022 Destination URL: the new address, with a copy button. A single/redirects to the homepage.\n\u2022 Admin notes: an internal note about the purpose of the redirect. Notes are searchable and appear under the rule in the list.\n\u2022 Test Redirect: opens the Source URL in a new browser tab to confirm it lands on the Destination.\n\u2022 CancelandSave.\nThe drawer also shows the redirect's type and when it was last updated.\n\n## The Actions Menu\n\u2022 Edit: opens the Edit Redirect drawer.\n\u2022 Copy Source URLandCopy Destination URL: copy the full address.\n\u2022 Test Redirect: opens the Source URL in a new browser tab.\n\u2022 Delete Redirect Rule: asks for confirmation, then deletes the redirect. Its Source URL stops redirecting and the deletion cannot be undone.\n\n## Deleting Several Redirects\n\u2022 Tick the checkbox beside each redirect to delete. The checkbox in the header selects every row on the page, andSelect Allin the bar that appears selects every matching redirect.\n\u2022 In the bar above the table, chooseDeletefromSelect Actionand clickApply.\n\u2022 When two or more redirects are selected, type the number of selected redirects to confirm, then clickDelete Records.\n\u2022 The bulk action bar: the number selected,Cancel,Select ActionandApply.\n\u2022 The confirmation field.Delete Recordsstays disabled until the number is typed.\n\n## Finding Broken Redirects\nChoose Broken redirects in the filter menu to list only redirects whose destination is a page that does not exist on the website. Chains of redirects are followed to their last step, so a redirect that points at another redirect is broken when the end of the chain is missing. Destinations on other websites are not checked.\n\u2022 TheBroken redirectsfilter.\n\u2022 The note explaining what counts as broken.\nReview the list and either edit each broken redirect to point at a page that exists, or delete the redirects that are no longer needed. Typing in the search box switches the list back to All redirects .\n\n## Importing 301 Redirects\nFor bulk redirect creation, a CSV file listing Source URLs and their Destination URLs can be imported with Import CSV .\n>> Import 301 Redirects via CSV file",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682632",
+        "A 301 redirect permanently sends visitors and search engines from an old address on the website to a new one. The 301 Redirect Rules page lists every redirect on the website and is where redirects are added, edited, tested and deleted.",
+        "When member profile details are updated, such as changes to URL structure, business name, or address, the system automatically creates redirects. This ensures that existing links continue to resolve correctly and point to the updated profile."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186730097/original/3fxPATwguKACs1VCda4iI-kB1vm701WJig.png?1791925378",
+          "alt": "301 Redirect Rules page with Import CSV (1), New Redirect Rule (2), search and filters (3 to 6), export (7), columns (8) and a row's Actions menu (9).",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186365019/original/55W37s0svO7oB-3i4jMHuQ9FYBnhecVGBQ.png?1791325267",
+          "alt": "Bottom of the redirects table with the Rows per page menu highlighted and a callout listing 10, 25, 50 or 100 rows.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186415521/original/vvwCCid9qRLDlbEZzb98c1UpLHq50UZV4Q.png?1791392550",
+          "alt": "New Redirect Rule drawer with the instructions (1), Source URL (2), Destination URL (3), Add Another Redirect (4) and Cancel and Save (5).",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186415522/original/8HPe1hCzdyxC-MyRt1A_j00Plpjyf-ZURw.png?1791392551",
+          "alt": "Edit Redirect drawer with the Source URL (1), Destination URL (2), Admin notes (3), Test Redirect button (4) and Cancel and Save (5).",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186365010/original/XM4R4Qqmou6qUmFLU-gfv_6RtZ1-7lzKuA.png?1791325262",
+          "alt": "Actions menu for a redirect row listing Edit, Copy Source URL, Copy Destination URL, Test Redirect and Delete Redirect Rule.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186415524/original/hvkNP_0q87qHMMvAMF3_Eh2JXEOebev8lw.png?1791392554",
+          "alt": "Bulk action bar with two redirects selected and Delete chosen (1), and the confirmation asking to type 2 to confirm (2).",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'ActionandApply'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186730098/original/WntzD7VjwbruM1XH7U_Ds_HjlJ3elsgtcQ.png?1791925380",
+          "alt": "Redirect list filtered to Broken redirects (1) with a note explaining that broken redirects lead to a missing page (2).",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Opening the 301 Redirect Rules Page",
+      "paragraphs": [
+        "\u2022 Go toDeveloper Hub.\n\u2022 On the301 Redirect Rulescard, clickManage Redirects."
+      ],
+      "images": []
+    },
+    {
+      "heading": "The 301 Redirect Rules Page",
+      "paragraphs": [
+        "The page shows each redirect as one row: the old address (Source URL) in green, with the new address (Destination URL) beneath it, followed by the redirect's Type and the date it was last Updated .",
+        "\u2022 Import CSV: adds many redirects at once from a CSV file. SeeImport 301 Redirects via CSV file.\n\u2022 New Redirect Rule: opens a drawer for adding one or more redirects.\n\u2022 Search: finds redirects by text. The menu beside the search box limits the search toAll fields,Source URL,Destination URL,Admin notesorID. A full address on the website can be pasted in; it is searched by its path.\n\u2022 Date updated: shows only redirects updated on one day or within a date range.\n\u2022 All types: shows only redirects of the selected types, EGMember Profileredirects created automatically, or redirects added by an admin.\n\u2022 All redirects / Broken redirects: switches to the list of broken redirects (see below).\n\u2022 Export CSV: downloads the redirects currently shown, with the active search and filters applied, in the same columns the CSV import uses.\n\u2022 Show or hide columns: chooses which columns appear in the table.\n\u2022 Actions: the menu for a single redirect.",
+        "Hovering over a row shows copy buttons beside the Source URL and the Destination URL. Clicking anywhere else on a row opens that redirect for editing.",
+        "Tables show 25 rows per page by default. The Rows per page menu below the table switches between 10, 25, 50 and 100 rows, and the browser remembers the last size picked."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Adding 301 Redirects",
+      "paragraphs": [
+        "\u2022 ClickNew Redirect Rule. The New Redirect Rule drawer opens.\n\u2022 InSource URL, enter the old address as a path on the website, without the domain or a leading slash. EGabout/contact.\n\u2022 InDestination URL, enter the new address: a path on the website (EGabout/contact-us) or a full address on another website (EGhttps://example.com). To send visitors to the homepage, enter a single/.\n\u2022 To add more redirects at the same time, clickAdd Another Redirectand fill in the new row. TheXat the end of a row removes it.\n\u2022 ClickSave. A confirmation appears and the new redirects are added to the top of the list.",
+        "\u2022 The reminder at the top of the drawer: the Source is a path on the website, the Destination is a path on the website or a full address, and a single/as Destination redirects to the homepage.\n\u2022 Source URL: the old address.\n\u2022 Destination URL: the new address.\n\u2022 Add Another Redirect: adds another Source and Destination row.\n\u2022 CancelandSave. If anything was typed, Cancel asks before discarding it.",
+        "The drawer checks each row before saving and shows the problem under the field. EG a Source URL that starts with http , www. or a slash is refused with a request to enter the path only, a Destination that matches its Source is refused, and quotes, angle brackets and backslashes are not accepted in either field."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Editing a Redirect",
+      "paragraphs": [
+        "Click a row, or choose Edit from its Actions menu, to open the Edit Redirect drawer.",
+        "\u2022 Source URL: the old address, with a button to copy its full address.\n\u2022 Destination URL: the new address, with a copy button. A single/redirects to the homepage.\n\u2022 Admin notes: an internal note about the purpose of the redirect. Notes are searchable and appear under the rule in the list.\n\u2022 Test Redirect: opens the Source URL in a new browser tab to confirm it lands on the Destination.\n\u2022 CancelandSave.",
+        "The drawer also shows the redirect's type and when it was last updated."
+      ],
+      "images": []
+    },
+    {
+      "heading": "The Actions Menu",
+      "paragraphs": [
+        "\u2022 Edit: opens the Edit Redirect drawer.\n\u2022 Copy Source URLandCopy Destination URL: copy the full address.\n\u2022 Test Redirect: opens the Source URL in a new browser tab.\n\u2022 Delete Redirect Rule: asks for confirmation, then deletes the redirect. Its Source URL stops redirecting and the deletion cannot be undone."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Deleting Several Redirects",
+      "paragraphs": [
+        "\u2022 Tick the checkbox beside each redirect to delete. The checkbox in the header selects every row on the page, andSelect Allin the bar that appears selects every matching redirect.\n\u2022 In the bar above the table, chooseDeletefromSelect Actionand clickApply.\n\u2022 When two or more redirects are selected, type the number of selected redirects to confirm, then clickDelete Records.",
+        "\u2022 The bulk action bar: the number selected,Cancel,Select ActionandApply.\n\u2022 The confirmation field.Delete Recordsstays disabled until the number is typed."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Finding Broken Redirects",
+      "paragraphs": [
+        "Choose Broken redirects in the filter menu to list only redirects whose destination is a page that does not exist on the website. Chains of redirects are followed to their last step, so a redirect that points at another redirect is broken when the end of the chain is missing. Destinations on other websites are not checked.",
+        "\u2022 TheBroken redirectsfilter.\n\u2022 The note explaining what counts as broken.",
+        "Review the list and either edit each broken redirect to point at a page that exists, or delete the redirects that are no longer needed. Typing in the search box switches the list back to All redirects ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Importing 301 Redirects",
+      "paragraphs": [
+        "For bulk redirect creation, a CSV file listing Source URLs and their Destination URLs can be imported with Import CSV .",
+        ">> Import 301 Redirects via CSV file"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 7
+}

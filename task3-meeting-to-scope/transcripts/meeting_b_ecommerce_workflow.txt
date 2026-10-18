@@ -1,0 +1,21 @@
+[MEETING TRANSCRIPT - PROJECT BAZAAR]
+Date: October 15, 2026
+Participants:
+- Chloe Bennett (Operations Director, Artisan Collective - Client)
+- Maya Lin (Senior AI Tech Consultant - Agency)
+- Dave Miller (Technical Lead - Agency)
+
+[00:00:04] Maya Lin: Hello Chloe, great to connect. Let's walk through your operational goals for the Artisan Collective directory marketplace.
+[00:00:14] Chloe Bennett: Hi Maya, Dave. We currently have 500 craft makers listing on our site. Right now, members pay an annual subscription, but we want to introduce a direct product purchase workflow where visitors can buy handmade items directly on artisan profiles.
+[00:00:34] Dave Miller: Excellent. Let's break down the purchase flow: shopping cart, checkout, payment gateway, and notifications. What payment provider are you planning to use?
+[00:00:46] Chloe Bennett: We currently use Stripe for directory memberships. Can we use Stripe Connect so that when an order is placed, 90% goes straight to the maker and our platform retains a 10% marketplace commission?
+[00:01:03] Dave Miller: Stripe Connect marketplace split payouts require custom webhook handling if your core directory CMS only supports standard direct Stripe charges. We will verify your platform's payment gateway hooks.
+[00:01:21] Chloe Bennett: Okay, what about order notifications? When someone buys a ceramic bowl, the artisan needs an immediate SMS or automated email notification with customer shipping details, and the customer needs an order confirmation PDF receipt.
+[00:01:40] Maya Lin: Automated transactional order confirmation emails and downloadable PDF invoices. What about SMS alerts?
+[00:01:48] Chloe Bennett: For SMS, we can integrate Twilio or whichever SMS API you recommend, as long as it supports Canadian and US numbers.
+[00:02:00] Dave Miller: And how are order fulfillments and inventory tracked?
+[00:02:06] Chloe Bennett: Artisans need a simple dashboard tab inside their member portal: 'My Orders' where they can see incoming orders, click 'Mark as Shipped', and enter a tracking number which emails the buyer. We do not need complex multi-warehouse inventory right now—just a basic stock quantity field per item.
+[00:02:30] Maya Lin: That is very clear. What is your required launch date and budget?
+[00:02:35] Chloe Bennett: We want this ready for holiday shopping by November 15th. Our budget envelope is $7,000 to $9,000.
+[00:02:46] Dave Miller: Perfect. We will evaluate platform e-commerce add-ons, document Stripe Connect custom endpoints, and outline dependencies on Twilio credentials and merchant agreements.
+[00:03:00] Chloe Bennett: Excellent, looking forward to the proposal.

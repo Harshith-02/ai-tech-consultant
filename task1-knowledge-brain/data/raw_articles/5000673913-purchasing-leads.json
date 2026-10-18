@@ -1,0 +1,99 @@
+{
+  "article_id": "5000673913-purchasing-leads",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673913-purchasing-leads",
+  "title": "Purchasing Leads",
+  "category": "Section: Interactions >> Member Leads >> Purchasing Leads",
+  "content_hash": "45a8fa81f1194a09902d60f62304b277bea15168145680df603787521103296c",
+  "raw_text": "Purchasing Leads\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673913\nIf the website associates a cost to purchasing leads, the members will be required to pay the set price in order to view the email and phone number. There are two primary scenarios that can occur:\n1. The member will receive an email notifying them that they have a lead. A link to view the lead is included in the email template:\n2. Clicking on the link will AUTOMATICALLY log that member into his dashboard and take them straight to the lead itself facilitating the purchasing process. Clicking on \" View Details \" will open the lead:\nThe member must click on \" Purchase Lead \" in order to view the full contact details (if the email setting is set to \"Preview\"):\n3. The member will be able to review the lead price one final time before confirming the purchase. There should also be a note notifying them that they will be able to view the contact details immediately after purchase:\n4. If the purchase is successful, the member will receive a success message with a direct link to view the complete details of the purchased lead:\n5. The complete lead details including email and phone number are now available for the member to view:\n6. \u00a0The lead purchase will show up as a \"Lead\" in the \"Transaction History\".\n1. The member will receive an email notifying them that they have a lead. A link to view the lead is included in the email template:\n2. Clicking on the link will AUTOMATICALLY log that member into their dashboard and take them straight to the lead itself facilitating the purchasing process. Clicking on \" View Details \" will open the lead:\nThe member must click on \" Purchase Lead \" in order to view the full contact details (if email setting is set to \"Preview\"):\n3. The member will be able to review the lead price before confirming the purchase and complete the form with a Promo Code or if there are Credits under the member it will be possible to use them as well:\n4. If the member does not have any credits or promo codes it will display the option to add valid credit card information:\n5. In either case, the members will get a success message if the credits, promo codes, or credit card is charged correctly, which will allow the member to instantly see the lead details:\n6. The complete lead details including email and phone number are now available for the member to view:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000673913",
+        "If the website associates a cost to purchasing leads, the members will be required to pay the set price in order to view the email and phone number. There are two primary scenarios that can occur:",
+        "1. The member will receive an email notifying them that they have a lead. A link to view the lead is included in the email template:",
+        "2. Clicking on the link will AUTOMATICALLY log that member into his dashboard and take them straight to the lead itself facilitating the purchasing process. Clicking on \" View Details \" will open the lead:",
+        "The member must click on \" Purchase Lead \" in order to view the full contact details (if the email setting is set to \"Preview\"):",
+        "3. The member will be able to review the lead price one final time before confirming the purchase. There should also be a note notifying them that they will be able to view the contact details immediately after purchase:",
+        "4. If the purchase is successful, the member will receive a success message with a direct link to view the complete details of the purchased lead:",
+        "5. The complete lead details including email and phone number are now available for the member to view:",
+        "6. \u00a0The lead purchase will show up as a \"Lead\" in the \"Transaction History\".",
+        "1. The member will receive an email notifying them that they have a lead. A link to view the lead is included in the email template:",
+        "2. Clicking on the link will AUTOMATICALLY log that member into their dashboard and take them straight to the lead itself facilitating the purchasing process. Clicking on \" View Details \" will open the lead:",
+        "The member must click on \" Purchase Lead \" in order to view the full contact details (if email setting is set to \"Preview\"):",
+        "3. The member will be able to review the lead price before confirming the purchase and complete the form with a Promo Code or if there are Credits under the member it will be possible to use them as well:",
+        "4. If the member does not have any credits or promo codes it will display the option to add valid credit card information:",
+        "5. In either case, the members will get a success message if the credits, promo codes, or credit card is charged correctly, which will allow the member to instantly see the lead details:",
+        "6. The complete lead details including email and phone number are now available for the member to view:"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092489670/original/0oGcADVfkystQgyHFJ18Vo56DzvCtEltNg.png?1620742413",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120970754/original/kOYbAyrkDP7b7QNE5ZMceP7NBp5JHboHig.png?1675788903",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120970788/original/fgH8btarzcSacMCOxWQi9c4v4ar6rKza8A.png?1675788947",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092490366/original/3Tb9Cx2Pmb4A4pfzqmPMksI_swsL8GAD2g.png?1620743067",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120970846/original/3Bkk_BYXOAEwvZ_HCUBg_IXJl_Z-idVXFw.png?1675789013",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120970890/original/Wodl-NuDF8nOYCh2qPFKf2gqLtV3j5MiEg.png?1675789075",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092490544/original/y6IyMfTUZQIj1UlDMUHEDzw1pTL0HvSoVw.png?1620743213",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120971047/original/KLUU6IFcIInhlnAFRksJwtii0vJNasXFFw.png?1675789189",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120971199/original/HSe6cCvj9Y50D6XxEPsnfL4x-u7KXnU9Wg.png?1675789311",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12128976710/original/ltCC8JM-TFigLuE-Wa0IYhXvC6RD4TjiOQ.png?1690433702",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12128976900/original/udWg1euUmwwjRFzF2r1LJ0Xb9TCJ2dlt5A.png?1690434146",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092490363/original/KyAh43dnUoX5ViVouyTL0i_nDea0Vxa8Aw.png?1620743061",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12120973809/original/MSQQi3oqo76teJnDNQd_yY52bF7vDt9hDQ.png?1675791844",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    }
+  ],
+  "screenshot_count": 13
+}

@@ -1,0 +1,67 @@
+{
+  "article_id": "5000682630-approving-member-reviews-from-",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682630-approving-member-reviews-from-the-admin",
+  "title": "Approving Member Reviews from the Admin",
+  "category": "Section: Interactions >> Member Reviews >> Approving Member Reviews from the Admin",
+  "content_hash": "5aabdc6455c4887f92e5256d24e526dc6c6d886a811c7c11d5738824b2d2873f",
+  "raw_text": "Approving Member Reviews from the Admin\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682630\nWhen a review is submitted, the member who received the review can manage it directly from their Member Dashboard. Depending on the review settings, members may have the ability to approve or decline reviews submitted to their profile.\nSite administrators can also review, approve, or decline reviews from the Admin Area.\nAfter receiving a review notification, members can log in to their account and review the submission.\nAvailable actions include:\n\u2022 Approve the review\n\u2022 Decline the review\nThis allows members to manage reviews associated with their profile.\nThis allows members who signed up on the site to effectively manage their online reputation.\nAlternatively, reviews can be approved by the administrator of the site.\nManaging Reviews from the Admin Area\nAdministrators can manage all submitted reviews from:\nInteractions \u2192 Member Reviews\nThis section displays all reviews submitted to the website and provides options to review, approve, or decline individual submissions.\nThe status can be changed per review:\nEmail Notification Options\nWhen a review status is updated manually, the following notification options become available:\n\u2022 Do Not Send Email Notifications\n\u2022 Email Member About This Update\n\u2022 Email Reviewer About This Update\n\u2022 Email Member and Reviewer About This Update\nSelect the preferred option before saving the status change.\nAlso, there is an option to bulk change the status:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682630",
+        "When a review is submitted, the member who received the review can manage it directly from their Member Dashboard. Depending on the review settings, members may have the ability to approve or decline reviews submitted to their profile.",
+        "Site administrators can also review, approve, or decline reviews from the Admin Area.",
+        "After receiving a review notification, members can log in to their account and review the submission.",
+        "Available actions include:",
+        "\u2022 Approve the review\n\u2022 Decline the review",
+        "This allows members to manage reviews associated with their profile.",
+        "This allows members who signed up on the site to effectively manage their online reputation.",
+        "Alternatively, reviews can be approved by the administrator of the site.",
+        "Managing Reviews from the Admin Area",
+        "Administrators can manage all submitted reviews from:",
+        "Interactions \u2192 Member Reviews",
+        "This section displays all reviews submitted to the website and provides options to review, approve, or decline individual submissions.",
+        "The status can be changed per review:",
+        "Email Notification Options",
+        "When a review status is updated manually, the following notification options become available:",
+        "\u2022 Do Not Send Email Notifications\n\u2022 Email Member About This Update\n\u2022 Email Reviewer About This Update\n\u2022 Email Member and Reviewer About This Update",
+        "Select the preferred option before saving the status change.",
+        "Also, there is an option to bulk change the status:"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092491678/original/uG9qzIdSm08KfaTtEgi2eHdzA3TL6n4Yuw.png?1620744226",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12127616620/original/2wRai_ikPUKwc5c0A4u1-jX9qCd6vfvXYg.jpeg?1687995341",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12127616622/original/9wIbffNH9MLT8CNfQRIPgx1cA9NIaPPCsQ.jpeg?1687995351",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092494337/original/xgGoC2w0vJTOizN5xKb4mktTrgy5Jm8yNw.png?1620746481",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12127616626/original/yv_Nliy4RqbOE3LFUS1_7GdsnWyxMoa19Q.png?1687995377",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092494390/original/WnvxAxpGbwL0_H7JmFQoPyer3e385xM0bg.png?1620746526",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    }
+  ],
+  "screenshot_count": 6
+}

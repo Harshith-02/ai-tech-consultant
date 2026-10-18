@@ -1,0 +1,63 @@
+{
+  "article_id": "5000558373-email-forwarders",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000558373-email-forwarders",
+  "title": "Email Forwarders",
+  "category": "Section: Emails >> Email Accounts >> Email Forwarders",
+  "content_hash": "9c6389d69ae6a6e11020e281f870eb8710385a425b5ebb5dbe2df49c4a664a2b",
+  "raw_text": "Email Forwarders\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000558373\n\n## Email Forwarders Not Supported\nIMPORTANT: The Email Forwarders functionality has been removed from our implementation of cPanel as of June, 2024.\nDue to the way this functionality works in cPanel, it caused several issues for users. Some of these issue included:\n\u2022 Not all emails being forwarded properly based on the domain settings of the email sender and the receiver of the forwarded email\n\u2022 Sendgrid blocking emails from being sent to accounts hosted in cPanel, preventing the Admins of sites from getting notification emails\n\u2022 The domain reputation and reputation of the server being harmed when SPAM emails are forwarded through this system\nWhile email forwarders can no longer be added or modified, any existing email forwarders will remain in place. \u00a0If an email forwarder needs to be removed from a site, please submit a ticket to our Support Team for assistance.\n\n## Recommendations to Replace Email Forwarders\nThe recommended alternative for using email forwarders is to use an email app that can send and receive emails from multiple email accounts in one place:\n\n## Gmail\nPaid Google Workspace email accounts can connect to 3rd party email accounts to send and receive emails. \u00a0For this, the MX record would need to be pointed to Google workspace, for more information: How To Change Email MX Records\n\n## Thunderbird\nThis is a free desktop email application from Mozilla, the makers of the FireFox browser. Thunderbird offers an app for Windows, MacOS, and Linux operating systems.\n\n## Apple Mail\nApple includes a free email client that can connect to 3rd party email accounts for all of their devices and operating systems.\n\n## Microsoft\nWindows Mail and Microsoft Outlook - Microsoft includes the Windows Mail and Outlook for Windows applications for free on devices using Windows 10 or newer. Both of these applications can connect to 3rd party email accounts.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000558373"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Email Forwarders Not Supported",
+      "paragraphs": [
+        "IMPORTANT: The Email Forwarders functionality has been removed from our implementation of cPanel as of June, 2024.",
+        "Due to the way this functionality works in cPanel, it caused several issues for users. Some of these issue included:",
+        "\u2022 Not all emails being forwarded properly based on the domain settings of the email sender and the receiver of the forwarded email\n\u2022 Sendgrid blocking emails from being sent to accounts hosted in cPanel, preventing the Admins of sites from getting notification emails\n\u2022 The domain reputation and reputation of the server being harmed when SPAM emails are forwarded through this system",
+        "While email forwarders can no longer be added or modified, any existing email forwarders will remain in place. \u00a0If an email forwarder needs to be removed from a site, please submit a ticket to our Support Team for assistance."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Recommendations to Replace Email Forwarders",
+      "paragraphs": [
+        "The recommended alternative for using email forwarders is to use an email app that can send and receive emails from multiple email accounts in one place:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Gmail",
+      "paragraphs": [
+        "Paid Google Workspace email accounts can connect to 3rd party email accounts to send and receive emails. \u00a0For this, the MX record would need to be pointed to Google workspace, for more information: How To Change Email MX Records"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Thunderbird",
+      "paragraphs": [
+        "This is a free desktop email application from Mozilla, the makers of the FireFox browser. Thunderbird offers an app for Windows, MacOS, and Linux operating systems."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Apple Mail",
+      "paragraphs": [
+        "Apple includes a free email client that can connect to 3rd party email accounts for all of their devices and operating systems."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Microsoft",
+      "paragraphs": [
+        "Windows Mail and Microsoft Outlook - Microsoft includes the Windows Mail and Outlook for Windows applications for free on devices using Windows 10 or newer. Both of these applications can connect to 3rd party email accounts."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 0
+}

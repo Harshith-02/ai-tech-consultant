@@ -1,0 +1,116 @@
+{
+  "article_id": "5000558389-settings-general-settings-soci",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000558389-settings-general-settings-social-media-tab",
+  "title": "Settings \u00bb General Settings \u00bb Social Media Tab",
+  "category": "Section: Settings >> General Settings >> Settings \u00bb General Settings \u00bb Social Media Tab",
+  "content_hash": "bf9704155fe2668863776e415d7862c62bde8acc03723f9ad883a0c493d28834",
+  "raw_text": "Settings \u00bb General Settings \u00bb Social Media Tab\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000558389\nThis article reviews links for the Social Media accounts for the website, \u00a0members and visitors will be able to access the full spectrum of profiles available for the website and it helps link the social media world to the website\n\n## Social Media Accounts\nBelow is a full list of the Social Media accounts linked to the website.\nImportant note: The system will ask for absolute URLs. For example:\n\u2022 facebook.comwillnotbe accepted\n\u2022 https://www.facebook.comwill be accepted\n\n## 1. Facebook\nAdd a link to the website's facebook account using the following format: https://www.facebook.com/CompanyFacebook\n\n## 2. Twitter\nAdd a link to the website's Twitter account using the following format: https://www.twitter.com/CompanyTwitter\n\n## 3. LinkedIn\nAdd a link to the website's LinkedIn account using the following format: https://www.linkedin.com/CompanyLinkedIn\n\n## 4. Pinterest\nAdd a link to the website's Pinterest account using the following format: https://www.pinterest.com/CompanyPinteres\n\n## 5. Instagram\nAdd a link to the website's Instagram account using the following format: https://www.instagram.com/CompanyInstagram\n\n## 6. Youtube\nAdd a link to the website's Youtube account using the following format: https://www.youtube.com/CompanyYouTube\n\n## 7. RSS Feed\nAdd a link to the website's RSS feed using the following format: https://www.yourwebsite.com/rss\n\n## 8. Tik Tok\nAdd a link to the website's TikTok account using the following format: https://www.tiktok.com/@name\n\n## 9. Whatsapp\nAdd a link to the website's WhatsApp account using the following format: https://wa.me/1XXXXXXXXXX\n\n## 10. Snapchat\nAdd a link to the website's Snapchat accout using the following format: https://www.snapchat.com/add/username\n\n## Where Do These Links Appear?\nInside the Footer Menu of the website:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000558389",
+        "This article reviews links for the Social Media accounts for the website, \u00a0members and visitors will be able to access the full spectrum of profiles available for the website and it helps link the social media world to the website"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12132171349/original/ScGFFTLRwpppX7RsyMTIz3RaD35rEBxnOA.png?1696295524",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12132162075/original/1UNijwTWHMGd6c0gwTZBva0OSvnTeXXyEA.png?1696281494",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Social Media Accounts",
+      "paragraphs": [
+        "Below is a full list of the Social Media accounts linked to the website.",
+        "Important note: The system will ask for absolute URLs. For example:",
+        "\u2022 facebook.comwillnotbe accepted\n\u2022 https://www.facebook.comwill be accepted"
+      ],
+      "images": []
+    },
+    {
+      "heading": "1. Facebook",
+      "paragraphs": [
+        "Add a link to the website's facebook account using the following format: https://www.facebook.com/CompanyFacebook"
+      ],
+      "images": []
+    },
+    {
+      "heading": "2. Twitter",
+      "paragraphs": [
+        "Add a link to the website's Twitter account using the following format: https://www.twitter.com/CompanyTwitter"
+      ],
+      "images": []
+    },
+    {
+      "heading": "3. LinkedIn",
+      "paragraphs": [
+        "Add a link to the website's LinkedIn account using the following format: https://www.linkedin.com/CompanyLinkedIn"
+      ],
+      "images": []
+    },
+    {
+      "heading": "4. Pinterest",
+      "paragraphs": [
+        "Add a link to the website's Pinterest account using the following format: https://www.pinterest.com/CompanyPinteres"
+      ],
+      "images": []
+    },
+    {
+      "heading": "5. Instagram",
+      "paragraphs": [
+        "Add a link to the website's Instagram account using the following format: https://www.instagram.com/CompanyInstagram"
+      ],
+      "images": []
+    },
+    {
+      "heading": "6. Youtube",
+      "paragraphs": [
+        "Add a link to the website's Youtube account using the following format: https://www.youtube.com/CompanyYouTube"
+      ],
+      "images": []
+    },
+    {
+      "heading": "7. RSS Feed",
+      "paragraphs": [
+        "Add a link to the website's RSS feed using the following format: https://www.yourwebsite.com/rss"
+      ],
+      "images": []
+    },
+    {
+      "heading": "8. Tik Tok",
+      "paragraphs": [
+        "Add a link to the website's TikTok account using the following format: https://www.tiktok.com/@name"
+      ],
+      "images": []
+    },
+    {
+      "heading": "9. Whatsapp",
+      "paragraphs": [
+        "Add a link to the website's WhatsApp account using the following format: https://wa.me/1XXXXXXXXXX"
+      ],
+      "images": []
+    },
+    {
+      "heading": "10. Snapchat",
+      "paragraphs": [
+        "Add a link to the website's Snapchat accout using the following format: https://www.snapchat.com/add/username"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Where Do These Links Appear?",
+      "paragraphs": [
+        "Inside the Footer Menu of the website:"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 2
+}

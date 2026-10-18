@@ -1,0 +1,106 @@
+{
+  "article_id": "5000681811-adding-custom-information-to-y",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681811-adding-custom-information-to-your-member-search-results",
+  "title": "Adding Custom Information to your Member Search Results",
+  "category": "Section: My Content >> Additional Tips & Tutorials >> Adding Custom Information to your Member Search Results",
+  "content_hash": "6fb5aff585f1cb9314a8bddd860691c0341750349ea985598ff9d759c99e8132",
+  "raw_text": "Adding Custom Information to your Member Search Results\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681811\nCustom content can be displayed in member search results based on:\n\u2022 Whether a user is logged in (is a member)\n\u2022 The membership level of the member being displayed in the results\n\u2022 Whether the viewing member is permitted to see additional information about other members (e.g., Premium or higher-level members)\nThe following steps outline how to configure search results output for each of these scenarios by editing the search results template code.\nCAUTION: The steps below require editing raw PHP code inside a system template field. Incorrect syntax in this area can break the search results page for all site visitors. Saving a backup copy of the existing Page Loop content before making changes is strongly recommended.\n\n## Accessing the Search Results Template\n\u2022 Navigate toContent>Edit Post Settings.\n\u2022 SelectListing, then clickEdit.\n\u2022 On the Listing Feature edit page, go to theSearch Results Designsection.\n\u2022 Locate thePage Looptext area. This field contains the template code that controls how each search result is rendered.\n\u2022 Within the code, locate the<table class=\"bmargin\">tag (found near line 34 in the default template). Custom code is inserted directly below this tag to control where it appears in the search results.\n\n## Scenario 1: Content Based on the Membership Level of the Displayed Member\nThis method checks the subscription_id value of the member appearing in the search results.\nInserted below <table class=\"bmargin\"> , the resulting code appears as:\nAfter saving this, the visual output of the search results will now look like this:\n\n## Scenario 2: Content Based on the Membership Level of the Viewing User\nThis method checks the membership level of the currently logged-in user (the person viewing the page) rather than the member shown in the result. The variable changes from $user[subscription_id] to $_COOKIE[subscription_id] .\nNOTE: The only change from Scenario 1 is the condition \u2014 from if ($user[subscription_id] == '1') to if ($_COOKIE[subscription_id] == '1') . This shifts the check from the member displayed in the result to the member currently viewing the site.\nThe end result would be something like:\n\n## Scenario 3: Content Based on Both the Viewer's and the Displayed Member's Levels\nThis method combines both checks, displaying different content depending on the combination of the viewer's membership level and the membership level of the member shown in the results.\nExample: a Level 1 (Premium) viewer sees additional information about Level 2 members, and even more about Level 3 members.\nSo if the user viewing the page is NOT a membership level 1, the search results would show like this:\nBut if the member viewing the site has a membership level of 1, then it would look like this:\n\n## Summary\nUsing the Page Loop field together with the subscription_id variable, search result content can be conditioned on:\n\u2022 The membership level of the displayed member \u2014$user[subscription_id]\n\u2022 The membership level of the viewer \u2014$_COOKIE[subscription_id]\n\u2022 A combination of both",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681811",
+        "Custom content can be displayed in member search results based on:",
+        "\u2022 Whether a user is logged in (is a member)\n\u2022 The membership level of the member being displayed in the results\n\u2022 Whether the viewing member is permitted to see additional information about other members (e.g., Premium or higher-level members)",
+        "The following steps outline how to configure search results output for each of these scenarios by editing the search results template code.",
+        "CAUTION: The steps below require editing raw PHP code inside a system template field. Incorrect syntax in this area can break the search results page for all site visitors. Saving a backup copy of the existing Page Loop content before making changes is strongly recommended."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184569637/original/qs1epAaQBCiJFZOKyEN7mZhtJJCN5oI69A.jpeg?1788347372",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184569659/original/Ht0nyYmmyruewsQR8bAm2u7539Pzzfpa9A.jpeg?1788347392",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184569673/original/7b5Isz7UPbEnUffBE5wG4_fXANipt9WmnA.png?1788347404",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12184569678/original/9pmt7inMSM7ZO_ipvg_xp-G43ZLNAXN8Rw.png?1788347414",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5040918705/original/Screenshot%20from%202015-10-09%2010-42-42.png?1444409046",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5040920922/original/Screenshot%20from%202015-10-09%2011-01-06.png?1444410076",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5040922533/original/Screenshot%20from%202015-10-09%2011-09-25.png?1444410749",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5040922601/original/Screenshot%20from%202015-10-09%2011-11-46.png?1444410781",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Accessing the Search Results Template",
+      "paragraphs": [
+        "\u2022 Navigate toContent>Edit Post Settings.\n\u2022 SelectListing, then clickEdit.\n\u2022 On the Listing Feature edit page, go to theSearch Results Designsection.\n\u2022 Locate thePage Looptext area. This field contains the template code that controls how each search result is rendered.\n\u2022 Within the code, locate the<table class=\"bmargin\">tag (found near line 34 in the default template). Custom code is inserted directly below this tag to control where it appears in the search results."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Scenario 1: Content Based on the Membership Level of the Displayed Member",
+      "paragraphs": [
+        "This method checks the subscription_id value of the member appearing in the search results.",
+        "Inserted below <table class=\"bmargin\"> , the resulting code appears as:",
+        "After saving this, the visual output of the search results will now look like this:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Scenario 2: Content Based on the Membership Level of the Viewing User",
+      "paragraphs": [
+        "This method checks the membership level of the currently logged-in user (the person viewing the page) rather than the member shown in the result. The variable changes from $user[subscription_id] to $_COOKIE[subscription_id] .",
+        "NOTE: The only change from Scenario 1 is the condition \u2014 from if ($user[subscription_id] == '1') to if ($_COOKIE[subscription_id] == '1') . This shifts the check from the member displayed in the result to the member currently viewing the site.",
+        "The end result would be something like:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Scenario 3: Content Based on Both the Viewer's and the Displayed Member's Levels",
+      "paragraphs": [
+        "This method combines both checks, displaying different content depending on the combination of the viewer's membership level and the membership level of the member shown in the results.",
+        "Example: a Level 1 (Premium) viewer sees additional information about Level 2 members, and even more about Level 3 members.",
+        "So if the user viewing the page is NOT a membership level 1, the search results would show like this:",
+        "But if the member viewing the site has a membership level of 1, then it would look like this:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Summary",
+      "paragraphs": [
+        "Using the Page Loop field together with the subscription_id variable, search result content can be conditioned on:",
+        "\u2022 The membership level of the displayed member \u2014$user[subscription_id]\n\u2022 The membership level of the viewer \u2014$_COOKIE[subscription_id]\n\u2022 A combination of both"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 8
+}

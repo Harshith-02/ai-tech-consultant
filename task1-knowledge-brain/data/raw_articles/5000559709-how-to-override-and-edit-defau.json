@@ -1,0 +1,91 @@
+{
+  "article_id": "5000559709-how-to-override-and-edit-defau",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000559709-how-to-override-and-edit-default-css-stylesheets",
+  "title": "How to Override and Edit Default CSS stylesheets",
+  "category": "Section: Settings >> Design Settings >> How to Override and Edit Default CSS stylesheets",
+  "content_hash": "4812c143fd91340aa3e2fda1c8443482ab364c4acaf8145491a0e483ece51769",
+  "raw_text": "How to Override and Edit Default CSS stylesheets\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000559709\nThe Additional CSS field applies custom CSS to every page of the website. It is useful for changing the header, the footer, the page background, or any other area that should look the same on all pages. CSS added here overrides the default CSS of the template.\n\n## Adding Custom CSS\n\u2022 Go toSettings >> Design Settingsand open theCustom CSS / HEADtab (1).\n\u2022 Add the custom CSS rules to theAdditional CSSeditor (2).\n\u2022 Check the status line under the editor (3). It should readCSS looks valid.(seeLive CSS Checkerbelow).\n\u2022 ClickSave Changes.\nTo go back to the default styles, delete the CSS from this field and save. The styles reset to the template defaults.\nNOTE: Be careful when removing CSS from this field, as the custom CSS will be permanently deleted and cannot be retrieved.\n\n## Live CSS Checker\nThe Additional CSS editor checks the CSS while it is typed. A single missing closing brace ( } ) can break the layout of every page, because the custom CSS is placed in the same style block as the page\u2019s other CSS, so the checker catches these mistakes before they are saved.\nThe checker reports in two places:\n\u2022 The status lineunder the editor. It shows\u2713 CSS looks valid.in green when nothing is wrong, or a count of the problems found with the line number and description of the first one.\n\u2022 A marker in the editor marginnext to the line with the problem: red for an error, amber for a warning.\nThe clip below types a rule with a missing closing brace, shows the red error appear, then adds the brace so the status line returns to CSS looks valid.\n\n## Errors (Saving Is Blocked)\nErrors are problems that break the CSS that follows them. They are marked in red (1) and the status line turns red (2), for example 1 error (first on line 1: Unclosed rule \u2014 missing closing '}'.) . The checker reports these errors:\n\u2022 Unclosed rule \u2014 missing closing '}'.A rule or@mediablock was opened with{and never closed.\n\u2022 Unexpected '}' with no matching '{'.There is an extra closing brace.\n\u2022 Unclosed comment \u2014 missing closing comment delimiter.A comment was started with/*and never ended with*/.\nWhile the Additional CSS has an error, clicking Save Changes does not save. A popup titled Additional CSS has syntax errors (1) names the line to fix, and the Custom CSS / HEAD tab opens so the error is in view. Fix the line, confirm the status line no longer shows an error, then save again.\n\n## Warnings (Saving Still Allowed)\nWarnings point at CSS that the browser will skip, but they never stop a save. They are marked in amber (1), and the status line ends with saves still allowed (2). The checker warns about:\n\u2022 Declaration outside a rule, such ascolor: red;typed outside any{ }. The browser drops it and the rule after it.\n\u2022 Invalid valuefor a property, such asdisplay: blok;, or anUnknown property. The browser ignores that line.\n\u2022 Unclosed '(' or '[', such as an unfinishedcalc(orurl(. The browser ignores the CSS after it.\nWarnings are worth fixing because the browser skips that CSS, but vendor prefixes (such as -webkit- ), CSS custom properties ( --my-color ) and other valid modern CSS do not trigger them.\n\n## Bracket Matching\nPlacing the cursor next to a brace highlights the matching brace, which makes it easier to see which rule a closing brace belongs to. A brace with no partner is marked instead.\n\n## What the Checker Covers\n\u2022 Only theAdditional CSSfield is checked.Additional HEAD CodeandAdditional Footer Codeare not checked and save as entered.\n\u2022 The checker runs in the admin editor. CSS that is already broken when the page loads is flagged as soon as the tab opens.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000559709",
+        "The Additional CSS field applies custom CSS to every page of the website. It is useful for changing the header, the footer, the page background, or any other area that should look the same on all pages. CSS added here overrides the default CSS of the template."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186357130/original/1NFdX8I1exwsFDfbF_jFpkWytTJ7X5Da0w.png?1791317381",
+          "alt": "Design Settings Custom CSS / HEAD tab with the empty Additional CSS editor and a green CSS looks valid status line below it.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186357131/original/6oV_41TIrh9J8povHKYPKBQ0Z9eV7b_ImQ.png?1791317383",
+          "alt": "Additional CSS editor with an unclosed rule marked in red on line 1 and the red error status line below it.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186357154/original/qtRJJysgaQs-YJ_E6zbInAe3z0ITQAcXjA.png?1791317384",
+          "alt": "Popup titled Additional CSS has syntax errors, saying to fix line 1 and that Save is blocked until the editor reports no errors.",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186357155/original/Jhe0UhJqXbHyAhudCR2yFqBYky-nLnGNag.png?1791317386",
+          "alt": "Additional CSS editor with display: blok on line 1 marked in amber and an amber warning line below saying saves are still allowed.",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Adding Custom CSS",
+      "paragraphs": [
+        "\u2022 Go toSettings >> Design Settingsand open theCustom CSS / HEADtab (1).\n\u2022 Add the custom CSS rules to theAdditional CSSeditor (2).\n\u2022 Check the status line under the editor (3). It should readCSS looks valid.(seeLive CSS Checkerbelow).\n\u2022 ClickSave Changes.",
+        "To go back to the default styles, delete the CSS from this field and save. The styles reset to the template defaults.",
+        "NOTE: Be careful when removing CSS from this field, as the custom CSS will be permanently deleted and cannot be retrieved."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Live CSS Checker",
+      "paragraphs": [
+        "The Additional CSS editor checks the CSS while it is typed. A single missing closing brace ( } ) can break the layout of every page, because the custom CSS is placed in the same style block as the page\u2019s other CSS, so the checker catches these mistakes before they are saved.",
+        "The checker reports in two places:",
+        "\u2022 The status lineunder the editor. It shows\u2713 CSS looks valid.in green when nothing is wrong, or a count of the problems found with the line number and description of the first one.\n\u2022 A marker in the editor marginnext to the line with the problem: red for an error, amber for a warning.",
+        "The clip below types a rule with a missing closing brace, shows the red error appear, then adds the brace so the status line returns to CSS looks valid."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Errors (Saving Is Blocked)",
+      "paragraphs": [
+        "Errors are problems that break the CSS that follows them. They are marked in red (1) and the status line turns red (2), for example 1 error (first on line 1: Unclosed rule \u2014 missing closing '}'.) . The checker reports these errors:",
+        "\u2022 Unclosed rule \u2014 missing closing '}'.A rule or@mediablock was opened with{and never closed.\n\u2022 Unexpected '}' with no matching '{'.There is an extra closing brace.\n\u2022 Unclosed comment \u2014 missing closing comment delimiter.A comment was started with/*and never ended with*/.",
+        "While the Additional CSS has an error, clicking Save Changes does not save. A popup titled Additional CSS has syntax errors (1) names the line to fix, and the Custom CSS / HEAD tab opens so the error is in view. Fix the line, confirm the status line no longer shows an error, then save again."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Warnings (Saving Still Allowed)",
+      "paragraphs": [
+        "Warnings point at CSS that the browser will skip, but they never stop a save. They are marked in amber (1), and the status line ends with saves still allowed (2). The checker warns about:",
+        "\u2022 Declaration outside a rule, such ascolor: red;typed outside any{ }. The browser drops it and the rule after it.\n\u2022 Invalid valuefor a property, such asdisplay: blok;, or anUnknown property. The browser ignores that line.\n\u2022 Unclosed '(' or '[', such as an unfinishedcalc(orurl(. The browser ignores the CSS after it.",
+        "Warnings are worth fixing because the browser skips that CSS, but vendor prefixes (such as -webkit- ), CSS custom properties ( --my-color ) and other valid modern CSS do not trigger them."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Bracket Matching",
+      "paragraphs": [
+        "Placing the cursor next to a brace highlights the matching brace, which makes it easier to see which rule a closing brace belongs to. A brace with no partner is marked instead."
+      ],
+      "images": []
+    },
+    {
+      "heading": "What the Checker Covers",
+      "paragraphs": [
+        "\u2022 Only theAdditional CSSfield is checked.Additional HEAD CodeandAdditional Footer Codeare not checked and save as entered.\n\u2022 The checker runs in the admin editor. CSS that is already broken when the page loads is flagged as soon as the tab opens."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 4
+}

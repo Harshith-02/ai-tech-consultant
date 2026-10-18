@@ -1,0 +1,21 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+dist/
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

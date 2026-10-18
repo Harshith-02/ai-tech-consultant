@@ -1,0 +1,47 @@
+{
+  "article_id": "5000681833-service-areas-in-australia-cit",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681833-service-areas-in-australia-city-vs-suburb",
+  "title": "Service Areas in Australia - City vs Suburb",
+  "category": "Section: Finance >> Membership Plans >> Service Areas in Australia - City vs Suburb",
+  "content_hash": "2e8e0dfbf57c85c4895968e0d210c66612a13f43053bb2449c53ce3f641edd6b",
+  "raw_text": "Service Areas in Australia - City vs Suburb\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681833\nThe Service Areas functionality of the software, just like all other location-based features of the platform, is powered by Google Maps.\nGoogle Maps treats Australian 'suburbs' the same as 'cities' in the rest of the world. Australian \"cities\" (Brisbane, for example), are treated as both a suburb and what they call a \"Colloquial Area\" (IE an unofficial name for a region that contains multiple suburbs).\nFor example, if 'Brisbane' is added as a service area, Google Maps treats it as a \"city\":\nAnd when searching for \"Banksia Beach\" (a suburb in Brisbane), it will also treat this as a \"city\":\nSmaller regions within cities (North Brisbane, for example), are not recognized by Google Maps.\nWhen searching for a region like this, Google Maps will simply return results for 'Brisbane' by default:\nSince Google Maps treats Australian suburbs and cities this way, the recommended way to allow members to add additional Service Areas is to allow them to add \"suburbs\" (Suggestion: Change to \"(which are referred to as 'city' in both the Brilliant Directories system and Google Maps).\nTo allow members to add suburbs as service areas, sset the 'Maximum Number of Locations' to a value greater than 0 and select \"City\" as an option in the \"Location Types Member Can Select\" \u00a0in the Membership Plan Settings:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681833",
+        "The Service Areas functionality of the software, just like all other location-based features of the platform, is powered by Google Maps.",
+        "Google Maps treats Australian 'suburbs' the same as 'cities' in the rest of the world. Australian \"cities\" (Brisbane, for example), are treated as both a suburb and what they call a \"Colloquial Area\" (IE an unofficial name for a region that contains multiple suburbs).",
+        "For example, if 'Brisbane' is added as a service area, Google Maps treats it as a \"city\":",
+        "And when searching for \"Banksia Beach\" (a suburb in Brisbane), it will also treat this as a \"city\":",
+        "Smaller regions within cities (North Brisbane, for example), are not recognized by Google Maps.",
+        "When searching for a region like this, Google Maps will simply return results for 'Brisbane' by default:",
+        "Since Google Maps treats Australian suburbs and cities this way, the recommended way to allow members to add additional Service Areas is to allow them to add \"suburbs\" (Suggestion: Change to \"(which are referred to as 'city' in both the Brilliant Directories system and Google Maps).",
+        "To allow members to add suburbs as service areas, sset the 'Maximum Number of Locations' to a value greater than 0 and select \"City\" as an option in the \"Location Types Member Can Select\" \u00a0in the Membership Plan Settings:"
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092141260/original/R36wdGrl9G2csQ0GjYOqO2VGsjU0A0MwIQ.png?1620095749",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092141271/original/K2TWbXErlhpUGJ3l2878vZZVWZ8V2Mejcg.png?1620095787",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092141286/original/GEnxHUXg8qq3rqnc3b5ZoYs-vtWMkX5tpQ.png?1620095843",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12131882323/original/mqIoZp_1xlojmnCin29EbefWTjYGpX8gqQ.png?1695749590",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    }
+  ],
+  "screenshot_count": 4
+}

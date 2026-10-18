@@ -1,0 +1,51 @@
+{
+  "how_to": {
+    "category": "how_to",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": false,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  },
+  "troubleshooting": {
+    "category": "troubleshooting",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": false,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  },
+  "project_request": {
+    "category": "project_request",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": true,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  },
+  "refund_cancellation": {
+    "category": "refund_cancellation",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": true,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  },
+  "complaint": {
+    "category": "complaint",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": true,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  },
+  "quote_request": {
+    "category": "quote_request",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": true,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  },
+  "follow_up": {
+    "category": "follow_up",
+    "consecutiveUneditedCount": 0,
+    "isEligibleForAutonomy": false,
+    "isPermanentlyGuarded": false,
+    "updatedAt": "2026-10-18T18:52:31.345Z"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "article_id": "5000682629-can-i-get-a-backup-of-my-websi",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682629-can-i-get-a-backup-of-my-website-data-",
+  "title": "Can I Get A Backup Of My Website Data?",
+  "category": "Get Started Here >> Common Questions & Troubleshooting >> Can I Get A Backup Of My Website Data?",
+  "content_hash": "b1db6e6c257d63ceb9844ad6eed3a9338c5db6e275f729035fe82a1eff61c27d",
+  "raw_text": "Can I Get A Backup Of My Website Data?\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682629\nYes. Our servers automatically backup all the unique data of your website (including uploaded files and images) once a month and once every morning. Our servers also automatically backup your website's databases (which is the element most likely to require to be restored if something should go wrong) every morning, and a copy of the databases as they were each morning over the last 14 days is kept on file. While a site can be restored from a backup made on our server in the past, it is a process that requires the time of a developer on our staff to complete.\nDownloading Your Own Backup\nWhile not required (as we keep backups of your full website automatically as mentioned above), some may wish to perform their own backups as well.\nThe items that would needed to complete a full restoration of your site are the uploaded files in your file structure and your databases .\nTo create a backup of these items, first login to cPanel from the Admin area of your website, and click on the \"Backup\" item in cPanel:\nYou will then see a screen that looks something like this:\n\u2022 To download a copy of all of the uploaded files in your Home Directory, click on the \"Home Directory\" button in the \"Download a Home Directory Backup\" section.\n\u2022 You can then restore a Home Directory backup using the \"Restore a Home Directory Backup\" section.\n\u2022 To download a copy of each database, click on the names of the Databases in the \"Download a MySQL Database Backup\" section.\n\u2022 You can then restore a database from backup by using the \"Restore a MySQL Database Backup\" section.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682629",
+        "Yes. Our servers automatically backup all the unique data of your website (including uploaded files and images) once a month and once every morning. Our servers also automatically backup your website's databases (which is the element most likely to require to be restored if something should go wrong) every morning, and a copy of the databases as they were each morning over the last 14 days is kept on file. While a site can be restored from a backup made on our server in the past, it is a process that requires the time of a developer on our staff to complete.",
+        "Downloading Your Own Backup",
+        "While not required (as we keep backups of your full website automatically as mentioned above), some may wish to perform their own backups as well.",
+        "The items that would needed to complete a full restoration of your site are the uploaded files in your file structure and your databases .",
+        "To create a backup of these items, first login to cPanel from the Admin area of your website, and click on the \"Backup\" item in cPanel:",
+        "You will then see a screen that looks something like this:",
+        "\u2022 To download a copy of all of the uploaded files in your Home Directory, click on the \"Home Directory\" button in the \"Download a Home Directory Backup\" section.\n\u2022 You can then restore a Home Directory backup using the \"Restore a Home Directory Backup\" section.\n\u2022 To download a copy of each database, click on the names of the Databases in the \"Download a MySQL Database Backup\" section.\n\u2022 You can then restore a database from backup by using the \"Restore a MySQL Database Backup\" section."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12176764644/original/MFzoYVMG0DkiZhbO7xXh9RGDmBI78LpgWg.png?1774974177",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12077660429/original/2NXBNEDmrApUZlFnBvbnhoIPle4FPmnLoA.png?1590190061",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    }
+  ],
+  "screenshot_count": 2
+}

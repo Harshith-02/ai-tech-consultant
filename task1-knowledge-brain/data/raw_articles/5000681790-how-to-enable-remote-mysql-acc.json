@@ -1,0 +1,137 @@
+{
+  "article_id": "5000681790-how-to-enable-remote-mysql-acc",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000681790-how-to-enable-remote-mysql-access",
+  "title": "How To Enable Remote MySQL Access",
+  "category": "Section: Developer Hub >> cPanel Dashboard >> How To Enable Remote MySQL Access",
+  "content_hash": "5f43e3de1f7a0bdd7c00224d870bb07b78bf0655112b7ae3aefbaf3009cb3b0a",
+  "raw_text": "How To Enable Remote MySQL Access\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000681790\nAdvanced users with experience in databases, programming, and security may want to enable remote MySQL access for reasons such as faster development, easier external access, or other development-related tasks. However, it\u2019s important to understand the risks associated with enabling this feature.\nAllowing remote access to the database bypasses several built-in security layers that are designed to protect the site and its data. While it may offer flexibility, it also introduces potential vulnerabilities. Some of the common issues reported in the past from enabling remote access include:\n\u2022 Accidental access or misuse by third parties using the authorized computer (e.g., family members or colleagues)\n\u2022 Running incorrect SQL commands with full privileges (e.g., using DELETE, UPDATE, or REPLACE commands improperly)\n\u2022 Mistakes in queries that unintentionally affect large portions of the database (e.g., updating multiple rows without using unique identifiers)\n\u2022 Data corruption during long transactions if the connection is interrupted (due to local network issues, ISP outages, power loss, etc.)\n\u2022 Conflicts during simultaneous access (e.g., editing tables while maintenance or optimization tasks are in progress)\n\u2022 Man-in-the-middle attacks that intercept sensitive data, including passwords\n\u2022 Malware or viruses affecting the database through vulnerable third-party software or infected systems\n\u2022 Unauthorized access or manipulation of customer data, accounts, or credentials\nBrilliant Directories is not responsible for any issues that arise from enabling remote MySQL access, including database corruption, loss, or unauthorized changes. If remote access is still preferred, it is strongly recommended to make regular backups to mitigate potential data loss.\n\n## Important Notes\n\u2022 Before enabling remote access, contact the Brilliant Directories support team with the static IP address that will be connecting. The IP must be whitelisted to allow full access. Please note that Brilliant Directories does not offer database support or assistance with any issues that may result from enabling remote access.\n\u2022 The cPanel dashboard layout is continuously being updated, however, all the instructions presented in this article apply in the same way.\n\n## Enable Remote MySQL Database Access\nTo have Remote MySQL access, we need 4 variables:\n\u2022 MySQL Username (User that can connect to a database via MySQL)\n\u2022 MySQL Password (Password for said user)\n\u2022 MySQL Database Name (Database name where user can connect to)\n\u2022 MySQL Hostname (Server where the database resides)\nIn order to grab all 4 variables, \u00a0l ogin and navigate to Developers - cPanel\nWe recommend using the keyword search tool to find specific sections:\nOnce in the cPanel dashboard, click on Remote MySQL:\nHere we will be adding YOUR IP to the list of allowed IPs. If you do not know how to grab it, simply go to sites like whatsmyip , ipchicken , iplocation , whatismyip , wtfismyip , ipify , or simply Ask Google for your IP .\nFor this example, the IP is 191.102.100.12, so we add it in the Add Access Host box.\nIf we add 191.102.100.12, then only this IP has remote access to the database, but to offer access to a range of IPs, use the wildcard \"%\".\nFor example, in the image below 191.102.%.%, was used which means that any IP that starts with 191.102 can access the database remotely.\nAfter Adding in the IP and saving this, continue with adding the users (In case there isn't an external user assigned yet).\nFor this we go back to the main cPanel dashboard and click this time on MySQL Databases .\nNow go to the MySQL Users section and on the Add New User we fill this with the information for the user.\nThe end result after filling this up should look something like the image below where the new user is named \" ninj2860_test \", the password fields are filled and click on the blue Create User button.\nNow we click on the Go Back link and go to the Add User to Database section. Here we select the user we just created and the database we want that user to have permissions on.\nAfter clicking on Add , we are shown the following Permission Form. Here we select what permissions that user will have over the whole database. After selecting the permissions we wish to add to the user and clicking on Make Changes , we should see a message similar to the 2nd image below:\nUp to this point we now have the MySQL Username, MySQL Password and MySQL Database Name. We are only missing the MySQL Hostname which can also be the IP of the server.\nIf the IP of the server is known, skip the following 3 steps including this one.\nIf not, then we can learn how to search for the Hostname. So let's go to the cPanel Dashboard one last time and click on the PHPMyAdmin icon.\nClick on Variables\nOn the Containing the word , search for hostname . This will return the value for the MySQL Hostname we were looking for. We all 4 variables, we can now connect to our MySQL database.\nIn the following images, as an example, I am using MySQL Workbench to connect to my database using all 4 variables and adding my IP to the whitelist:",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000681790",
+        "Advanced users with experience in databases, programming, and security may want to enable remote MySQL access for reasons such as faster development, easier external access, or other development-related tasks. However, it\u2019s important to understand the risks associated with enabling this feature.",
+        "Allowing remote access to the database bypasses several built-in security layers that are designed to protect the site and its data. While it may offer flexibility, it also introduces potential vulnerabilities. Some of the common issues reported in the past from enabling remote access include:",
+        "\u2022 Accidental access or misuse by third parties using the authorized computer (e.g., family members or colleagues)\n\u2022 Running incorrect SQL commands with full privileges (e.g., using DELETE, UPDATE, or REPLACE commands improperly)\n\u2022 Mistakes in queries that unintentionally affect large portions of the database (e.g., updating multiple rows without using unique identifiers)\n\u2022 Data corruption during long transactions if the connection is interrupted (due to local network issues, ISP outages, power loss, etc.)\n\u2022 Conflicts during simultaneous access (e.g., editing tables while maintenance or optimization tasks are in progress)\n\u2022 Man-in-the-middle attacks that intercept sensitive data, including passwords\n\u2022 Malware or viruses affecting the database through vulnerable third-party software or infected systems\n\u2022 Unauthorized access or manipulation of customer data, accounts, or credentials",
+        "Brilliant Directories is not responsible for any issues that arise from enabling remote MySQL access, including database corruption, loss, or unauthorized changes. If remote access is still preferred, it is strongly recommended to make regular backups to mitigate potential data loss."
+      ],
+      "images": [
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12086349318/original/qi1LRpCO-uydwVhGHFN0p7Lsqhlq1S2MxA.png?1608050681",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12124667016/original/ENZXJT_X7v-eqENRQtXDH8HtWcTc78AOSA.png?1682605653",
+          "alt": "image",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12037761225/original/cKZ_MU9Qjdzjw49druXMyE05voluiDRAoQ?1532458268",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019597206/original/Selection_004.png?1432752774",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12037761319/original/a4u-iLZ3OeGCMSA29s9JmERhiZ7PqvVMaQ?1532458336",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019598897/original/Selection_006.png?1432753358",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019599115/original/Selection_007.png?1432753426",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019599247/original/Selection_008.png?1432753508",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019599409/original/Selection_009.png?1432753561",
+          "alt": "",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'what permissions that user wil'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019600133/original/Selection_010.png?1432753879",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019600158/original/Selection_011.png?1432753903",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12037761351/original/4UHvKCKirtxhFfmYq15qhMTkxNfe2uujUQ?1532458382",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019600239/original/Selection_014.png?1432753950",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019600257/original/Selection_015.png?1432753959",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019601811/original/Screenshot_from_2015-05-27_13_20_31.png?1432754545",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5019601849/original/Screenshot_from_2015-05-27_13_21_40.png?1432754556",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Important Notes",
+      "paragraphs": [
+        "\u2022 Before enabling remote access, contact the Brilliant Directories support team with the static IP address that will be connecting. The IP must be whitelisted to allow full access. Please note that Brilliant Directories does not offer database support or assistance with any issues that may result from enabling remote access.\n\u2022 The cPanel dashboard layout is continuously being updated, however, all the instructions presented in this article apply in the same way."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Enable Remote MySQL Database Access",
+      "paragraphs": [
+        "To have Remote MySQL access, we need 4 variables:",
+        "\u2022 MySQL Username (User that can connect to a database via MySQL)\n\u2022 MySQL Password (Password for said user)\n\u2022 MySQL Database Name (Database name where user can connect to)\n\u2022 MySQL Hostname (Server where the database resides)",
+        "In order to grab all 4 variables, \u00a0l ogin and navigate to Developers - cPanel",
+        "We recommend using the keyword search tool to find specific sections:",
+        "Once in the cPanel dashboard, click on Remote MySQL:",
+        "Here we will be adding YOUR IP to the list of allowed IPs. If you do not know how to grab it, simply go to sites like whatsmyip , ipchicken , iplocation , whatismyip , wtfismyip , ipify , or simply Ask Google for your IP .",
+        "For this example, the IP is 191.102.100.12, so we add it in the Add Access Host box.",
+        "If we add 191.102.100.12, then only this IP has remote access to the database, but to offer access to a range of IPs, use the wildcard \"%\".",
+        "For example, in the image below 191.102.%.%, was used which means that any IP that starts with 191.102 can access the database remotely.",
+        "After Adding in the IP and saving this, continue with adding the users (In case there isn't an external user assigned yet).",
+        "For this we go back to the main cPanel dashboard and click this time on MySQL Databases .",
+        "Now go to the MySQL Users section and on the Add New User we fill this with the information for the user.",
+        "The end result after filling this up should look something like the image below where the new user is named \" ninj2860_test \", the password fields are filled and click on the blue Create User button.",
+        "Now we click on the Go Back link and go to the Add User to Database section. Here we select the user we just created and the database we want that user to have permissions on.",
+        "After clicking on Add , we are shown the following Permission Form. Here we select what permissions that user will have over the whole database. After selecting the permissions we wish to add to the user and clicking on Make Changes , we should see a message similar to the 2nd image below:",
+        "Up to this point we now have the MySQL Username, MySQL Password and MySQL Database Name. We are only missing the MySQL Hostname which can also be the IP of the server.",
+        "If the IP of the server is known, skip the following 3 steps including this one.",
+        "If not, then we can learn how to search for the Hostname. So let's go to the cPanel Dashboard one last time and click on the PHPMyAdmin icon.",
+        "Click on Variables",
+        "On the Containing the word , search for hostname . This will return the value for the MySQL Hostname we were looking for. We all 4 variables, we can now connect to our MySQL database.",
+        "In the following images, as an example, I am using MySQL Workbench to connect to my database using all 4 variables and adding my IP to the whitelist:"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 16
+}

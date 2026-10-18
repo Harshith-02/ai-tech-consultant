@@ -1,0 +1,53 @@
+{
+  "article_id": "5000662041-how-search-result-ordering-and",
+  "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000662041-how-search-result-ordering-and-distance-sorting-work",
+  "title": "How Search Result Ordering and Distance Sorting Work",
+  "category": "Section: My Members >> Search Members >> How Search Result Ordering and Distance Sorting Work",
+  "content_hash": "b26a39aa9cafbf90b60af509a9be16e5526055317b189993ec5f8a1122f5cc01",
+  "raw_text": "How Search Result Ordering and Distance Sorting Work\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000662041\n\n## Overview\nThe following explains three search result behaviors that are commonly misunderstood. Each section describes how the system is designed to work and why.\n\n## 1 \u2014 Searching by State, Country, or Region Does Not Produce Distance-Sorted Results\nWhen a visitor searches using a state, country, province, or county name, for example, \"Texas,\" \"California,\" or \"United Kingdom\", the system does not sort results by distance. This is by design.\nDistance sorting only activates when the searched location resolves to a specific point on a map, such as a city name , zip code , postal code , or street address . These location types have a precise latitude and longitude coordinate, which the system uses as the reference point for calculating member distances.\n\u26a0 NOTE \u2014 If Distance Sorting Is Not Appearing for City or Zip Code Searches: If distance is not calculating correctly even when a specific city or zip code is searched, verify that the members in the results have been geocoded. Members without geocoded coordinates will not have distance values and will not sort correctly by distance, regardless of the location searched. Reference: How To Geocode Members\n\n## 2 \u2014 Results Are Sorted by Distance from the Searched Location, Not the Visitor's Physical Location\nWhen a visitor searches for a location, the system returns members sorted by their proximity to the searched location, not by their proximity to the visitor's current physical position.\nFor example, a visitor located in Chicago who searches for \"90210\" will see members sorted by their distance from the Beverly Hills area, not from Chicago. This is the intended behavior.\nThis design allows a visitor to search for businesses or listings near a hotel, a client's office, or any location other than their own. Sorting by the visitor's physical location instead would make location-based searching impractical for any use case where the visitor and the searched area are not in the same place.\n\n## 3 \u2014 Members on Higher-Priority Plans with Service Areas Can Rank Ahead of Geographically Closer Members\nWhen a Membership Plan is configured to allow members to select service areas, those members will appear in search results for their selected service area locations regardless of where they are physically located. If that plan also carries a higher search result priority than another plan on the site, its members will rank above geographically closer members on the lower-priority plan.\nExample: A member physically located in California and New York, as a selected service area. This member will appear in the New York search results. If that member's plan has a higher search priority than a member who is physically located in New York on a lower-tier plan, the California-based member will rank above them.\nThis behavior is the result of two deliberate configuration choices on the site:\n\u2022 The Membership Plan hasservice areaselection enabled.\n\u2022 The Membership Plan has a highersearch result prioritythan the plan being outranked.",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000662041"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "The following explains three search result behaviors that are commonly misunderstood. Each section describes how the system is designed to work and why."
+      ],
+      "images": []
+    },
+    {
+      "heading": "1 \u2014 Searching by State, Country, or Region Does Not Produce Distance-Sorted Results",
+      "paragraphs": [
+        "When a visitor searches using a state, country, province, or county name, for example, \"Texas,\" \"California,\" or \"United Kingdom\", the system does not sort results by distance. This is by design.",
+        "Distance sorting only activates when the searched location resolves to a specific point on a map, such as a city name , zip code , postal code , or street address . These location types have a precise latitude and longitude coordinate, which the system uses as the reference point for calculating member distances.",
+        "\u26a0 NOTE \u2014 If Distance Sorting Is Not Appearing for City or Zip Code Searches: If distance is not calculating correctly even when a specific city or zip code is searched, verify that the members in the results have been geocoded. Members without geocoded coordinates will not have distance values and will not sort correctly by distance, regardless of the location searched. Reference: How To Geocode Members"
+      ],
+      "images": []
+    },
+    {
+      "heading": "2 \u2014 Results Are Sorted by Distance from the Searched Location, Not the Visitor's Physical Location",
+      "paragraphs": [
+        "When a visitor searches for a location, the system returns members sorted by their proximity to the searched location, not by their proximity to the visitor's current physical position.",
+        "For example, a visitor located in Chicago who searches for \"90210\" will see members sorted by their distance from the Beverly Hills area, not from Chicago. This is the intended behavior.",
+        "This design allows a visitor to search for businesses or listings near a hotel, a client's office, or any location other than their own. Sorting by the visitor's physical location instead would make location-based searching impractical for any use case where the visitor and the searched area are not in the same place."
+      ],
+      "images": []
+    },
+    {
+      "heading": "3 \u2014 Members on Higher-Priority Plans with Service Areas Can Rank Ahead of Geographically Closer Members",
+      "paragraphs": [
+        "When a Membership Plan is configured to allow members to select service areas, those members will appear in search results for their selected service area locations regardless of where they are physically located. If that plan also carries a higher search result priority than another plan on the site, its members will rank above geographically closer members on the lower-priority plan.",
+        "Example: A member physically located in California and New York, as a selected service area. This member will appear in the New York search results. If that member's plan has a higher search priority than a member who is physically located in New York on a lower-tier plan, the California-based member will rank above them.",
+        "This behavior is the result of two deliberate configuration choices on the site:",
+        "\u2022 The Membership Plan hasservice areaselection enabled.\n\u2022 The Membership Plan has a highersearch result prioritythan the plan being outranked."
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 0
+}
