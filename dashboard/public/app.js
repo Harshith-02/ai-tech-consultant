@@ -1,6 +1,8 @@
-const API_KB = "http://127.0.0.1:8000";
-const API_INBOX = "http://127.0.0.1:3001";
-const API_SCOPE = "http://127.0.0.1:8002";
+// Support both local multi-service development and cloud / Vercel serverless deployment
+const isLocalMultiPort = window.location.hostname === "127.0.0.1" && window.location.port === "5000";
+const API_KB = isLocalMultiPort ? "http://127.0.0.1:8000" : "/api/kb";
+const API_INBOX = isLocalMultiPort ? "http://127.0.0.1:3001" : "/api/inbox";
+const API_SCOPE = isLocalMultiPort ? "http://127.0.0.1:8002" : "/api/scope";
 
 let currentSelectedEmail = null;
 let currentTranscriptChoice = "A";

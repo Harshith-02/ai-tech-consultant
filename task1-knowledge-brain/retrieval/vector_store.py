@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import json
 import uuid
@@ -17,11 +18,18 @@ DOMAIN_STOP_WORDS = {
 
 class KnowledgeVectorStore:
     def __init__(self, db_path: Optional[Path] = None):
-        self.db_path = str(db_path or settings.DB_PATH)
-        self._init_db()
+        env_db = os.environ.get("DB_PATH")
+        self.db_path = str(env_db or db_path or settings.DB_PATH)
+        try:
+            self._init_db()
+        except Exception:
+            pass
 
     def _get_connection(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self.db_path)
+        try:
+            conn = sqlite3.connect(self.db_path)
+        except Exception:
+            conn = sqlite3.connect(f"file:{self.db_path}?mode=ro", uri=True)
         conn.row_factory = sqlite3.Row
         return conn
 
@@ -262,6 +270,8 @@ class KnowledgeVectorStore:
             })
 
         return final_chunks
+
+    search = hybrid_search
 
     def create_escalation(self, question: str, user_email: Optional[str] = None, reason: str = "Insufficient evidence") -> str:
         esc_id = f"ESC-{uuid.uuid4().hex[:8].upper()}"

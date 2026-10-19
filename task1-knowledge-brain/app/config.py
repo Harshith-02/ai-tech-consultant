@@ -38,7 +38,10 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# Ensure directories exist
-settings.DATA_DIR.mkdir(parents=True, exist_ok=True)
-settings.RAW_ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
-settings.IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+# Ensure directories exist (gracefully handle read-only filesystems in serverless cloud environments)
+try:
+    settings.DATA_DIR.mkdir(parents=True, exist_ok=True)
+    settings.RAW_ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
+    settings.IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass
