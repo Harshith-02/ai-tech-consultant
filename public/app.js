@@ -9,6 +9,129 @@ let currentTranscriptChoice = "A";
 let activeProposalId = null;
 let currentEscalationId = null;
 
+// Slide Bars & Multimodal State
+let currentMinConfidence = 0.40;
+let currentTopK = 4;
+let stagedScreenshotData = null;
+
+// Interactive Slide Bars (Sliders) Controls
+function updateThresholdVal(val) {
+  currentMinConfidence = parseFloat(val) / 100;
+  const label = document.getElementById("threshold-val");
+  if (label) label.textContent = `${val}%`;
+}
+
+function updateTopKVal(val) {
+  currentTopK = parseInt(val, 10);
+  const label = document.getElementById("topk-val");
+  if (label) label.textContent = `${val} Chunks`;
+}
+
+function toggleSidebarSlide() {
+  const sidebar = document.querySelector(".sidebar");
+  if (sidebar) sidebar.classList.toggle("collapsed");
+}
+
+// Screenshot Staging & Image Handling
+function handleFileSelect(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  loadScreenshotFile(file);
+}
+
+function loadScreenshotFile(file) {
+  if (!file.type.startsWith("image/")) {
+    alert("Please upload a valid image (PNG, JPG, WebP)");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    stagedScreenshotData = {
+      name: file.name || "screenshot.png",
+      dataUrl: event.target.result
+    };
+    showStagedScreenshot();
+  };
+  reader.readAsDataURL(file);
+}
+
+function showStagedScreenshot() {
+  if (!stagedScreenshotData) return;
+  const bar = document.getElementById("staged-screenshot-bar");
+  const img = document.getElementById("staged-screenshot-img");
+  const name = document.getElementById("staged-screenshot-name");
+  if (img) img.src = stagedScreenshotData.dataUrl;
+  if (name) name.textContent = stagedScreenshotData.name;
+  if (bar) bar.style.display = "flex";
+}
+
+function clearStagedScreenshot() {
+  stagedScreenshotData = null;
+  const bar = document.getElementById("staged-screenshot-bar");
+  if (bar) bar.style.display = "none";
+  const fileInput = document.getElementById("kb-file-input");
+  if (fileInput) fileInput.value = "";
+}
+
+// Paste Screenshot from Clipboard (Ctrl+V)
+window.addEventListener("paste", (e) => {
+  const items = (e.clipboardData || (e.originalEvent && e.originalEvent.clipboardData))?.items;
+  if (!items) return;
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf("image") !== -1) {
+      const blob = items[i].getAsFile();
+      loadScreenshotFile(blob);
+      break;
+    }
+  }
+});
+
+// Drag & Drop onto Chat Panel
+document.addEventListener("DOMContentLoaded", () => {
+  const chatPanel = document.getElementById("kb-chat-panel");
+  if (chatPanel) {
+    chatPanel.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      chatPanel.style.borderColor = "var(--accent-primary)";
+    });
+    chatPanel.addEventListener("dragleave", () => {
+      chatPanel.style.borderColor = "var(--border-color)";
+    });
+    chatPanel.addEventListener("drop", (e) => {
+      e.preventDefault();
+      chatPanel.style.borderColor = "var(--border-color)";
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        loadScreenshotFile(e.dataTransfer.files[0]);
+      }
+    });
+  }
+});
+
+// Image Zoom Modal
+function zoomImage(src, caption) {
+  const modal = document.getElementById("image-modal");
+  const modalImg = document.getElementById("image-modal-img");
+  const modalCaption = document.getElementById("image-modal-caption");
+  if (modalImg) modalImg.src = src;
+  if (modalCaption) modalCaption.textContent = caption || "";
+  if (modal) modal.classList.add("open");
+}
+
+function closeImageModal() {
+  const modal = document.getElementById("image-modal");
+  if (modal) modal.classList.remove("open");
+}
+
+// Copy to Clipboard
+function copyToClipboard(text, btn) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = "✓ Copied";
+    setTimeout(() => { btn.innerHTML = orig; }, 1800);
+  });
+}
+
 // Tab Switching
 document.querySelectorAll(".nav-item").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -39,9 +162,12 @@ async function handleKbSubmit(e) {
   e.preventDefault();
   const input = document.getElementById("kb-input");
   const q = input.value.trim();
-  if (!q) return;
+  const currentStaged = stagedScreenshotData;
 
-  appendChat("user", q);
+  if (!q && !currentStaged) return;
+
+  clearStagedScreenshot();
+  appendChat("user", q || "Analyzing attached screenshot...", currentStaged ? currentStaged.dataUrl : null);
   input.value = "";
 
   document.getElementById("retrieval-status-badge").textContent = "Searching...";
@@ -50,12 +176,16 @@ async function handleKbSubmit(e) {
     const res = await fetch(`${API_KB}/query`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: q, top_k: 4 })
+      body: JSON.stringify({
+        question: q || "Explain the UI controls and configuration shown in this screenshot",
+        top_k: currentTopK,
+        min_confidence: currentMinConfidence,
+        image_data: currentStaged ? currentStaged.dataUrl : null
+      })
     });
     const data = await res.json();
     handleKbResponse(data);
   } catch (err) {
-    // Offline / direct fallback
     appendChat("assistant", `I am connecting to Knowledge Brain on port 8000... (Error: ${err.message})`);
   }
 }
@@ -65,11 +195,92 @@ function askPreset(question) {
   document.getElementById("btn-kb-send").click();
 }
 
-function appendChat(role, text) {
+function askPresetWithSampleImage(type) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 640;
+  canvas.height = 360;
+  const ctx = canvas.getContext("2d");
+
+  if (type === "category_sample") {
+    ctx.fillStyle = "#1e293b";
+    ctx.fillRect(0, 0, 640, 360);
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, 180, 360);
+    ctx.fillStyle = "#38bdf8";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText("Members >> Categories", 20, 30);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "12px sans-serif";
+    ctx.fillText("• Healthcare Providers (Top Level)", 200, 50);
+    ctx.fillText("   - Dental Surgeons (Sub Level)", 215, 75);
+    ctx.fillText("   - Pediatricians (Sub Level)", 215, 100);
+    ctx.fillStyle = "#6366f1";
+    ctx.fillRect(200, 130, 180, 32);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 12px sans-serif";
+    ctx.fillText("Import Categories via CSV", 215, 151);
+
+    stagedScreenshotData = {
+      name: "category_csv_manager.png",
+      dataUrl: canvas.toDataURL("image/png")
+    };
+    showStagedScreenshot();
+    document.getElementById("kb-input").value = "Inspect this screenshot: what button do I click to import category CSV tiers?";
+    document.getElementById("btn-kb-send").click();
+  } else if (type === "social_sample") {
+    ctx.fillStyle = "#1e293b";
+    ctx.fillRect(0, 0, 640, 360);
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, 640, 45);
+    ctx.fillStyle = "#38bdf8";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText("General Settings >> Social Media Tab", 20, 28);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "12px sans-serif";
+    ctx.fillText("Facebook Page URL: https://facebook.com/community", 40, 80);
+    ctx.fillText("Twitter/X Profile: @community_hub", 40, 110);
+    ctx.fillText("Instagram Profile: @community_dir", 40, 140);
+    ctx.fillStyle = "#10b981";
+    ctx.fillRect(40, 180, 140, 30);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 12px sans-serif";
+    ctx.fillText("Save Changes", 65, 200);
+
+    stagedScreenshotData = {
+      name: "social_media_settings.png",
+      dataUrl: canvas.toDataURL("image/png")
+    };
+    showStagedScreenshot();
+    document.getElementById("kb-input").value = "Where in general settings are social links entered and saved?";
+    document.getElementById("btn-kb-send").click();
+  }
+}
+
+function formatMarkdown(text) {
+  if (!text) return "";
+  return text
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+    .replace(/`([^`]+)`/g, "<code style='background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;font-family:monospace;'>$1</code>")
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color:#67e8f9;text-decoration:underline;">$1</a>')
+    .replace(/\n/g, "<br>");
+}
+
+function appendChat(role, text, imageSrc) {
   const history = document.getElementById("kb-chat-history");
   const bubble = document.createElement("div");
   bubble.className = `chat-bubble ${role}`;
-  bubble.innerHTML = `<p>${text.replace(/\n/g, "<br>")}</p>`;
+
+  let inner = `<p>${formatMarkdown(text)}</p>`;
+  if (imageSrc) {
+    inner += `<img class="attached-user-shot" src="${imageSrc}" alt="User uploaded screenshot" onclick="zoomImage('${imageSrc}', 'Uploaded Screenshot')">`;
+  }
+  if (role === "assistant") {
+    inner += `<button class="copy-btn" onclick="copyToClipboard(this.parentElement.querySelector('p').innerText, this)">📋 Copy Answer</button>`;
+  }
+
+  bubble.innerHTML = inner;
   history.appendChild(bubble);
   history.scrollTop = history.scrollHeight;
 }
