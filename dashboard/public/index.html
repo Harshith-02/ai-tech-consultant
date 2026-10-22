@@ -57,11 +57,29 @@
     <main class="main-content">
       <!-- Top Bar -->
       <header class="top-bar">
-        <div class="top-bar-title">
-          <h1 id="view-title">Knowledge Brain Chat & Memory</h1>
-          <p id="view-subtitle">Grounded in Brilliant Directories Solution Center documentation & screenshots</p>
+        <div class="top-bar-left">
+          <button class="btn btn-secondary btn-icon" id="btn-toggle-sidebar" onclick="toggleSidebarSlide()" title="Slide/Collapse Sidebar">☰</button>
+          <div class="top-bar-title">
+            <h1 id="view-title">Knowledge Brain Chat & Memory</h1>
+            <p id="view-subtitle">Grounded in Brilliant Directories Solution Center documentation & screenshots</p>
+          </div>
         </div>
+
         <div class="top-bar-actions">
+          <!-- Slide Bars (Interactive RAG Tuning Sliders) -->
+          <div class="slider-group" title="Adjust RAG Retrieval Controls">
+            <div class="slider-item">
+              <span class="slider-label">Min Conf:</span>
+              <input type="range" class="app-slider" id="threshold-slider" min="10" max="90" value="40" step="5" oninput="updateThresholdVal(this.value)">
+              <span class="slider-badge" id="threshold-val">40%</span>
+            </div>
+            <div class="slider-item">
+              <span class="slider-label">Top-K:</span>
+              <input type="range" class="app-slider" id="topk-slider" min="1" max="8" value="4" step="1" oninput="updateTopKVal(this.value)">
+              <span class="slider-badge" id="topk-val">4 Chunks</span>
+            </div>
+          </div>
+
           <span class="badge-tag" id="brain-sync-status">Sitemap Synced</span>
           <button class="btn btn-secondary btn-sm" id="btn-trigger-crawl" onclick="triggerIncrementalCrawl()">🔄 Sync Sitemap</button>
         </div>
@@ -71,25 +89,46 @@
       <section class="tab-pane active" id="tab-knowledge">
         <div class="kb-grid">
           <!-- Chat Panel -->
-          <div class="panel chat-panel">
+          <div class="panel chat-panel" id="kb-chat-panel">
             <div class="panel-header">
-              <h3>Interactive Knowledge Assistant</h3>
-              <span class="panel-subtitle">Grounded citations & screenshot extraction</span>
+              <div>
+                <h3>Interactive Knowledge Assistant</h3>
+                <span class="panel-subtitle">Grounded citations & multimodal screenshot analysis</span>
+              </div>
+              <span class="badge-tag highlight" id="multimodal-status-pill">Vision Ready</span>
             </div>
             <div class="chat-messages" id="kb-chat-history">
               <div class="chat-bubble assistant">
-                <p>Hello! I am your <strong>Brilliant Directories Knowledge Brain</strong>. Ask any question about category CSV imports, email forwarding, member settings, CSS overrides, or platform configurations. I will cite exact guide URLs and screenshot details!</p>
+                <p>Hello! I am your <strong>Brilliant Directories Knowledge Brain</strong>. You can ask any question, or <strong>upload / paste screenshots</strong> (Ctrl+V) of your admin screens, settings, or errors. I will identify the UI controls and ground answers in official documentation!</p>
               </div>
             </div>
+
             <div class="chat-input-wrapper">
+              <!-- Staged Screenshot Preview Bar -->
+              <div class="staged-screenshot-bar" id="staged-screenshot-bar" style="display: none;">
+                <div class="screenshot-thumb-box">
+                  <img id="staged-screenshot-img" src="" alt="Staged Screenshot" onclick="zoomImage(this.src, 'Staged user screenshot')">
+                  <div>
+                    <span class="screenshot-name" id="staged-screenshot-name">screenshot.png</span>
+                    <div class="shot-status-badge">📸 Multimodal Screenshot Staged</div>
+                  </div>
+                </div>
+                <button type="button" class="btn-remove-shot" onclick="clearStagedScreenshot()" title="Remove screenshot">×</button>
+              </div>
+
               <div class="quick-prompts">
                 <span class="quick-chip" onclick="askPreset('How do I import categories via CSV file in Brilliant Directories?')">Category CSV Import</span>
                 <span class="quick-chip" onclick="askPreset('Where are social media links configured in general settings?')">Social Media Links</span>
                 <span class="quick-chip" onclick="askPreset('How do email forwarders work in Brilliant Directories?')">Email Forwarders</span>
+                <span class="quick-chip multimodal" onclick="askPresetWithSampleImage('category_sample')">📸 Sample Category UI</span>
+                <span class="quick-chip multimodal" onclick="askPresetWithSampleImage('social_sample')">📸 Sample Social Setting</span>
                 <span class="quick-chip warning" onclick="askPreset('Does Brilliant Directories support quantum entanglement billing tokens?')">Test Abstention</span>
               </div>
+
               <form class="chat-form" id="kb-form" onsubmit="handleKbSubmit(event)">
-                <input type="text" id="kb-input" placeholder="Ask a product or settings question..." autocomplete="off">
+                <input type="file" id="kb-file-input" accept="image/png,image/jpeg,image/webp,image/gif" style="display: none;" onchange="handleFileSelect(event)">
+                <button type="button" class="btn btn-secondary btn-icon" id="btn-attach-shot" onclick="document.getElementById('kb-file-input').click()" title="Attach screenshot (or press Ctrl+V to paste)">📷</button>
+                <input type="text" id="kb-input" placeholder="Ask a question or paste screenshot (Ctrl+V)..." autocomplete="off">
                 <button type="submit" class="btn btn-primary" id="btn-kb-send">Ask Brain</button>
               </form>
             </div>
@@ -323,6 +362,13 @@
         </div>
       </section>
     </main>
+  <!-- Image Zoom Modal -->
+  <div id="image-modal" class="image-modal" onclick="closeImageModal()">
+    <div class="image-modal-content" onclick="event.stopPropagation()">
+      <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+      <img id="image-modal-img" src="" alt="Enlarged Screenshot">
+      <p id="image-modal-caption"></p>
+    </div>
   </div>
 
   <script src="app.js"></script>

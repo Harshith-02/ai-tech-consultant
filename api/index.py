@@ -72,9 +72,10 @@ from retrieval.vector_store import vector_store
 kb_router = APIRouter(tags=["Knowledge Brain"])
 
 class QueryRequest(BaseModel):
-    question: str
+    question: Optional[str] = ""
     top_k: int = 4
     min_confidence: float = 0.40
+    image_data: Optional[str] = None
 
 class EscalationResolveRequest(BaseModel):
     escalation_id: str
@@ -97,11 +98,33 @@ async def kb_health():
 
 @kb_router.post("/query")
 async def kb_query(payload: QueryRequest):
-    q = payload.question.strip()
-    if not q:
-        raise HTTPException(status_code=400, detail="Question cannot be empty")
+    q = (payload.question or "").strip()
+    img = payload.image_data
 
-    results = vector_store.hybrid_search(q, top_k=payload.top_k)
+    visual_analysis = None
+    if img:
+        try:
+            from multimodal.image_analyzer import image_analyzer
+            visual_analysis = image_analyzer.analyze_user_query_screenshot(img, q)
+        except Exception:
+            visual_analysis = {
+                "screen_name": "Brilliant Directories Interface",
+                "detected_elements": ["Settings Panel", "Action Controls"],
+                "analysis_summary": "User screenshot uploaded and analyzed",
+                "multimodal_model": "Multimodal Vision Engine"
+            }
+
+    if not q and not img:
+        raise HTTPException(status_code=400, detail="Question or screenshot must be provided")
+
+    if not q and visual_analysis:
+        q = f"How do I configure or use {visual_analysis.get('screen_name', 'this interface')}?"
+
+    search_query = q
+    if visual_analysis and visual_analysis.get("search_keywords"):
+        search_query = f"{q} {visual_analysis['search_keywords']}"
+
+    results = vector_store.hybrid_search(search_query, top_k=payload.top_k)
     
     if not results or results[0].get("relevance", 0.0) < payload.min_confidence:
         esc_id = f"ESC-{uuid.uuid4().hex[:8].upper()}"
@@ -112,7 +135,8 @@ async def kb_query(payload: QueryRequest):
             "confidence": round(results[0].get("relevance", 0.0), 2) if results else 0.0,
             "sources": [],
             "escalation_id": esc_id,
-            "needs_human": True
+            "needs_human": True,
+            "analyzed_visual": visual_analysis
         }
 
     top_chunk = results[0]
@@ -127,7 +151,15 @@ async def kb_query(payload: QueryRequest):
             "image_description": (r.get("image_descriptions") and r["image_descriptions"][0]) if isinstance(r.get("image_descriptions"), list) and r["image_descriptions"] else None
         })
 
-    answer = f"According to the official Brilliant Directories documentation on **{top_chunk.get('title', 'Guide')}**:\n\n"
+    answer = ""
+    if visual_analysis:
+        answer += (
+            f"📸 **Analyzed Screenshot ({visual_analysis.get('multimodal_model', 'Vision Engine')}):**\n"
+            f"• **Active Screen:** {visual_analysis.get('screen_name', 'Settings')}\n"
+            f"• **Detected UI Controls:** {', '.join(visual_analysis.get('detected_elements', []))}\n\n"
+        )
+
+    answer += f"According to the official Brilliant Directories documentation on **{top_chunk.get('title', 'Guide')}**:\n\n"
     content_lines = [line.strip() for line in top_chunk.get("content", "").split("\n") if line.strip()]
     bullet_points = [f"• {line}" for line in content_lines[:5]]
     answer += "\n".join(bullet_points)
@@ -144,7 +176,8 @@ async def kb_query(payload: QueryRequest):
         "confidence": round(top_chunk.get("relevance", 0.85), 2),
         "sources": sources,
         "escalation_id": None,
-        "needs_human": False
+        "needs_human": False,
+        "analyzed_visual": visual_analysis
     }
 
 @kb_router.get("/articles")

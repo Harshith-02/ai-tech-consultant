@@ -9,7 +9,9 @@ async def query_knowledge_brain(request: QueryRequest):
     try:
         response = qa_engine.generate_answer(
             question=request.question,
-            top_k=request.top_k
+            top_k=request.top_k,
+            image_data=request.image_data,
+            min_confidence=request.min_confidence
         )
         return response
     except Exception as e:

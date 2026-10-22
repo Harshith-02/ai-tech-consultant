@@ -5,8 +5,8 @@
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/server.ts",
-    "eval": "ts-node src/evaluation/run-evals.ts",
+    "start": "node dist/server.js",
+    "eval": "tsc && node dist/evaluation/run-evals.js",
     "test": "npm run eval"
   },
   "dependencies": {

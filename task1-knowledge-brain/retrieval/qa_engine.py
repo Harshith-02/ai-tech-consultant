@@ -4,6 +4,7 @@ from typing import Dict, Any, List, Optional
 from app.config import settings
 from app.models import QueryResponse, SourceCitation
 from retrieval.vector_store import vector_store
+from multimodal.image_analyzer import image_analyzer
 
 SYSTEM_PROMPT = """You are the AI Knowledge Brain for Brilliant Directories product support.
 Your task is to answer user inquiries strictly grounded in the provided help articles and screenshot descriptions.
@@ -20,16 +21,30 @@ class QAEngine:
     def __init__(self):
         self.api_key = settings.ANTHROPIC_API_KEY
 
-    def generate_answer(self, question: str, top_k: int = 4) -> QueryResponse:
-        trimmed = question.strip()
-        if not trimmed:
+    def generate_answer(
+        self,
+        question: str,
+        top_k: int = 4,
+        image_data: Optional[str] = None,
+        min_confidence: Optional[float] = None
+    ) -> QueryResponse:
+        trimmed = question.strip() if question else ""
+
+        visual_analysis = None
+        if image_data:
+            visual_analysis = image_analyzer.analyze_user_query_screenshot(image_data, trimmed)
+
+        if not trimmed and not image_data:
             return QueryResponse(
-                answer="Please provide a valid product inquiry.",
+                answer="Please provide a valid product inquiry or upload a screenshot.",
                 status="insufficient_evidence",
                 sources=[],
                 confidence=0.0,
                 needs_human=False
             )
+
+        if not trimmed and visual_analysis:
+            trimmed = f"How do I navigate or configure {visual_analysis.get('screen_name', 'this interface')}?"
 
         # Prompt injection detection & safety guard
         if re.search(r"(?i)(ignore\s+(all\s+)?previous\s+instructions|system\s+prompt|reveal\s+your\s+prompt|jailbreak|override\s+system)", trimmed):
@@ -41,11 +56,17 @@ class QAEngine:
                 needs_human=False
             )
 
-        retrieved_chunks = vector_store.hybrid_search(trimmed, top_k=top_k)
+        search_query = trimmed
+        if visual_analysis and visual_analysis.get("search_keywords"):
+            search_query = f"{trimmed} {visual_analysis['search_keywords']}"
+
+        retrieved_chunks = vector_store.hybrid_search(search_query, top_k=top_k)
+
+        threshold = min_confidence if min_confidence is not None else settings.MIN_RELEVANCE_SCORE
 
         if not retrieved_chunks:
             esc_id = vector_store.create_escalation(
-                question=question,
+                question=trimmed,
                 reason="No matching documentation found in knowledge base."
             )
             return QueryResponse(
@@ -54,14 +75,15 @@ class QAEngine:
                 sources=[],
                 confidence=0.1,
                 needs_human=True,
-                escalation_id=esc_id
+                escalation_id=esc_id,
+                analyzed_visual=visual_analysis
             )
 
         top_chunk = retrieved_chunks[0]
-        if top_chunk["relevance"] < settings.MIN_RELEVANCE_SCORE:
+        if top_chunk["relevance"] < threshold:
             esc_id = vector_store.create_escalation(
-                question=question,
-                reason=f"Low relevance match ({top_chunk['relevance']:.2f}) below threshold {settings.MIN_RELEVANCE_SCORE}."
+                question=trimmed,
+                reason=f"Low relevance match ({top_chunk['relevance']:.2f}) below threshold {threshold}."
             )
             return QueryResponse(
                 answer="The available help center articles do not contain sufficient evidence to answer this question with confidence. A support specialist has been notified.",
@@ -69,7 +91,8 @@ class QAEngine:
                 sources=[],
                 confidence=top_chunk["relevance"],
                 needs_human=True,
-                escalation_id=esc_id
+                escalation_id=esc_id,
+                analyzed_visual=visual_analysis
             )
 
         citations: List[SourceCitation] = []
@@ -112,8 +135,16 @@ class QAEngine:
                     )
                     context_blocks.append(block)
 
+                visual_prompt_note = ""
+                if visual_analysis:
+                    visual_prompt_note = (
+                        f"\nUser Uploaded Screenshot Analysis:\n"
+                        f"Screen: {visual_analysis.get('screen_name')}\n"
+                        f"Detected Elements: {', '.join(visual_analysis.get('detected_elements', []))}\n\n"
+                    )
+
                 user_message = (
-                    f"User Inquiry: {trimmed}\n\n"
+                    f"User Inquiry: {trimmed}\n{visual_prompt_note}"
                     f"Evidence Documents:\n{''.join(context_blocks)}\n\n"
                     "Synthesize a clear, helpful, grounded response. Cite the relevant article title and screenshot visual details where appropriate."
                 )
@@ -130,13 +161,23 @@ class QAEngine:
         else:
             answer_text = self._extractive_grounding(trimmed, retrieved_chunks)
 
+        if visual_analysis:
+            visual_banner = (
+                f"📸 **Analyzed Screenshot ({visual_analysis.get('multimodal_model', 'Vision Engine')}):**\n"
+                f"• **Active Screen:** {visual_analysis.get('screen_name', 'Settings')}\n"
+                f"• **Detected UI Controls:** {', '.join(visual_analysis.get('detected_elements', []))}\n\n"
+            )
+            answer_text = visual_banner + answer_text
+
         return QueryResponse(
             answer=answer_text,
             status="answered",
             sources=citations,
             confidence=round(confidence, 2),
-            needs_human=False
+            needs_human=False,
+            analyzed_visual=visual_analysis
         )
+
 
     def _extractive_grounding(self, question: str, chunks: List[Dict[str, Any]]) -> str:
         primary = chunks[0]

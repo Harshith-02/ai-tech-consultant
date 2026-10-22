@@ -1,4 +1,4 @@
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Dict, Any
 from pydantic import BaseModel, Field
 
 class SourceCitation(BaseModel):
@@ -14,6 +14,8 @@ class QueryRequest(BaseModel):
     question: str = Field(..., description="Customer question or inquiry")
     top_k: int = Field(4, ge=1, le=10, description="Number of evidence chunks to retrieve")
     category: Optional[str] = Field(None, description="Optional category filter")
+    image_data: Optional[str] = Field(None, description="Optional user screenshot (base64 data URL or URL)")
+    min_confidence: Optional[float] = Field(0.40, description="Minimum confidence threshold")
 
 class QueryResponse(BaseModel):
     answer: str = Field(..., description="Grounded answer synthesized from evidence")
@@ -26,6 +28,7 @@ class QueryResponse(BaseModel):
     confidence: float = Field(..., description="Confidence estimate between 0.0 and 1.0")
     needs_human: bool = Field(False, description="Whether human expert escalation is recommended")
     escalation_id: Optional[str] = Field(None, description="Escalation ticket ID if created")
+    analyzed_visual: Optional[Dict[str, Any]] = Field(None, description="Visual elements extracted from user screenshot")
 
 class IngestionRunRequest(BaseModel):
     limit: Optional[int] = Field(None, description="Max number of articles to crawl (None for all)")

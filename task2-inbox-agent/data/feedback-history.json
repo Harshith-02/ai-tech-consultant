@@ -1,5 +1,30 @@
 [
   {
+    "id": "FB-5D83AF46",
+    "emailId": "EM-001",
+    "originalEmail": {
+      "id": "EM-001",
+      "senderName": "Sarah Jenkins",
+      "senderEmail": "sarah.j@wellnessdirectory.com",
+      "subject": "How to import our therapist categories via CSV?",
+      "body": "Hi Support Team,\nWe have a spreadsheet containing around 350 practitioner sub-categories that we want to load into our new directory. Could you explain the exact steps to import categories using a CSV file? What columns are mandatory and where do I click in the admin menu?\nThanks,\nSarah",
+      "receivedAt": "2026-10-18T09:15:00Z",
+      "expectedCategory": "how_to",
+      "expectedRisk": "low",
+      "expectedUrgency": "medium"
+    },
+    "predictedCategory": "how_to",
+    "generatedDraft": "Hi Sarah,\n\nThank you for reaching out to support.\n\nAccording to the official Brilliant Directories documentation on **How To Import Members Via CSV File** (Import the File):\n\n• Navigate to the Search Members section of the admin. On the right side of the page, open theList Actionsmenu and selectImport Members via CSV File. The import page opens; the numbers in the second screenshot below match the steps that follow.\n• The Import settings will allow the user to select the membership plan the new listings will belong to. This is required to begin the import.\n• A second option will allow the admin to determine the status of the listings upon import:Set as ACTIVE MembersorSet as NOT ACTIVE Members.\n• An option to create aMember Tag and assign a Tag Groupwill show, the system will automatically fill out the tag name with the date and time of the import, the information can be edited and the tag can be assigned to any of the available Tag Groups:\n• The Advanced Options will allow the import to:- Pass unique email checks- Create new categories from the file if they have not been added to the admin yet.- Geocode the users based on the location added to the CSV file. To use this function, add the \"Pretty URLS API Key\":Set Up Pretty URLs with Google Maps. A status line under the Geocode option shows whether the server key works, with aTestbutton to check it again and a button to add or fix the key (Add a server keyorFix the server key); a key Google refuses there is not saved.- Auto import profile photo and logo images -Member Images: Importing Members with Profile Photos, Logos & Cover Photos\n• \"Step 2. Upload CSV File Here\" will allow the user to select a CSV import file from the computer.\n\n**Visual Reference / Screenshot Guidance:**\nInterface view for 'Overview'.\n\nFor full details, reference the official guide: https://support.brilliantdirectories.com/support/solutions/articles/5000558475-how-to-import-members-via-csv-file\n\n\nVisual Reference:\nInterface view for 'Overview'.\n\nYou can also review the complete step-by-step documentation here: https://support.brilliantdirectories.com/support/solutions/articles/5000558475-how-to-import-members-via-csv-file\n\nPlease let us know if you run into any questions as you set this up!\n\nBest regards,\nSupport Operations Team",
+    "finalSentReply": "Hi Sarah,\n\nThank you for reaching out to support.\n\nAccording to the official Brilliant Directories documentation on **How To Import Members Via CSV File** (Import the File):\n\n• Navigate to the Search Members section of the admin. On the right side of the page, open theList Actionsmenu and selectImport Members via CSV File. The import page opens; the numbers in the second screenshot below match the steps that follow.\n• The Import settings will allow the user to select the membership plan the new listings will belong to. This is required to begin the import.\n• A second option will allow the admin to determine the status of the listings upon import:Set as ACTIVE MembersorSet as NOT ACTIVE Members.\n• An option to create aMember Tag and assign a Tag Groupwill show, the system will automatically fill out the tag name with the date and time of the import, the information can be edited and the tag can be assigned to any of the available Tag Groups:\n• The Advanced Options will allow the import to:- Pass unique email checks- Create new categories from the file if they have not been added to the admin yet.- Geocode the users based on the location added to the CSV file. To use this function, add the \"Pretty URLS API Key\":Set Up Pretty URLs with Google Maps. A status line under the Geocode option shows whether the server key works, with aTestbutton to check it again and a button to add or fix the key (Add a server keyorFix the server key); a key Google refuses there is not saved.- Auto import profile photo and logo images -Member Images: Importing Members with Profile Photos, Logos & Cover Photos\n• \"Step 2. Upload CSV File Here\" will allow the user to select a CSV import file from the computer.\n\n**Visual Reference / Screenshot Guidance:**\nInterface view for 'Overview'.\n\nFor full details, reference the official guide: https://support.brilliantdirectories.com/support/solutions/articles/5000558475-how-to-import-members-via-csv-file\n\n\nVisual Reference:\nInterface view for 'Overview'.\n\nYou can also review the complete step-by-step documentation here: https://support.brilliantdirectories.com/support/solutions/articles/5000558475-how-to-import-members-via-csv-file\n\nPlease let us know if you run into any questions as you set this up!\n\nBest regards,\nSupport Operations Team",
+    "approvalOutcome": "approved",
+    "wasModified": false,
+    "editDistanceScore": 0,
+    "modelVersion": "claude-3-5-sonnet-20241022",
+    "promptVersion": "v1.2",
+    "reviewedBy": "Support Supervisor",
+    "timestamp": "2026-10-22T11:06:58.550Z"
+  },
+  {
     "id": "FB-3704B353",
     "emailId": "EM-001",
     "originalEmail": {
