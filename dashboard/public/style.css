@@ -30,27 +30,28 @@
 }
 
 /* ==============================================================================
-   CUSTOM SLEEK SCROLLBARS (Modern Accent Slide Bars)
+   CUSTOM HIGH-VISIBILITY SCROLLBARS (Modern Accent Slide Bars)
    ============================================================================== */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(16, 22, 34, 0.4);
-  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.28);
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  background: #6366f1;
+  border-radius: 6px;
+  border: 2px solid rgba(15, 23, 42, 0.7);
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.65);
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  background: #818cf8;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
 }
 
 * {
@@ -58,7 +59,7 @@
   margin: 0;
   padding: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(99, 102, 241, 0.3) rgba(16, 22, 34, 0.4);
+  scrollbar-color: #6366f1 rgba(15, 23, 42, 0.7);
 }
 
 body {
@@ -430,12 +431,21 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
 .tab-pane {
   display: none;
   flex: 1;
-  overflow-y: auto;
-  padding: 24px;
+  min-height: 0;
+  padding: 16px 20px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .tab-pane.active {
+  display: flex;
+  flex-direction: column;
+}
+
+#tab-evals.active {
+  overflow-y: auto;
   display: block;
+  padding-bottom: 50px;
 }
 
 /* Panels */
@@ -447,14 +457,17 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
   box-shadow: var(--shadow-subtle);
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .panel-header {
-  padding: 16px 20px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .panel-header h3 {
@@ -472,17 +485,23 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
   gap: 20px;
-  height: calc(100vh - 130px);
+  flex: 1;
+  min-height: 0;
+  height: 100%;
 }
 
 .chat-panel {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .chat-messages {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -512,16 +531,17 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
 }
 
 .chat-input-wrapper {
-  padding: 16px;
+  flex-shrink: 0;
+  padding: 12px 18px;
   border-top: 1px solid var(--border-color);
-  background: rgba(16, 22, 34, 0.4);
+  background: rgba(16, 22, 34, 0.6);
 }
 
 .quick-prompts {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .quick-chip {
@@ -554,7 +574,7 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 12px 16px;
+  padding: 10px 14px;
   color: #fff;
   font-family: inherit;
   font-size: 0.88rem;
@@ -568,11 +588,15 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
 .side-panel {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .evidence-list {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -655,12 +679,23 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
   display: grid;
   grid-template-columns: 1fr 1.6fr;
   gap: 20px;
-  height: calc(100vh - 130px);
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.email-list-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .email-items-scroll {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -726,9 +761,18 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+.email-detail-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .email-viewer-body {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -746,38 +790,47 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
   background: rgba(99, 102, 241, 0.05);
   border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: var(--radius-md);
-  padding: 16px;
+  padding: 14px;
 }
 
 .draft-box textarea {
   width: 100%;
-  min-height: 140px;
+  min-height: 90px;
+  height: 110px;
+  max-height: 220px;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: #fff;
-  padding: 12px;
+  padding: 10px 12px;
   font-family: inherit;
   font-size: 0.85rem;
   line-height: 1.5;
-  margin-top: 10px;
+  margin-top: 8px;
+  resize: vertical;
 }
 
 .draft-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 /* Tab 3: Scope Layout */
 .scope-layout {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
 }
 
 .transcript-selector-panel {
-  padding: 16px;
+  flex-shrink: 0;
+  height: auto;
+  padding: 14px 18px;
 }
 
 .trans-controls {
@@ -788,7 +841,7 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
 }
 
 .trans-choice {
-  padding: 14px;
+  padding: 12px 14px;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -825,7 +878,30 @@ input[type="range"].app-slider::-webkit-slider-thumb:hover {
 .scope-workspace-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.scope-workspace-grid .panel {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.req-cards-container,
+.estimates-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .req-card {
