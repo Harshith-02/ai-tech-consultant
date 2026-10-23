@@ -1,6 +1,7 @@
 import re
 import hashlib
 from typing import Dict, Any, List, Optional
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from multimodal.image_analyzer import image_analyzer
 
@@ -40,23 +41,43 @@ class ArticleParser:
             title = "Help Article"
 
         category = "General"
-        breadcrumb = soup.select(".breadcrumb, .breadcrumbs, .breadcrumb-item, nav[aria-label='breadcrumb']")
+        breadcrumb = soup.select(".breadcrumb, .breadcrumbs, .breadcrumb-item, nav[aria-label='breadcrumb'], nav[aria-label='Breadcrumbs'], .menu-breadcrumb, .schema-breadcrumb")
         if breadcrumb:
             crumb_texts = [b.get_text(strip=True) for b in breadcrumb[0].find_all(["a", "li", "span"]) if b.get_text(strip=True)]
             if len(crumb_texts) > 1:
                 category = " >> ".join(crumb_texts[-3:])
+        else:
+            sec_meta = soup.select_one("meta[property='article:section'], meta[name='category']")
+            if sec_meta and sec_meta.get("content"):
+                category = sec_meta["content"].strip()
+            else:
+                # Fallback to URL path segments
+                path_parts = [p for p in urlparse(url).path.split("/") if p and not p.endswith((".html", ".htm", ".xml", ".php"))]
+                if len(path_parts) > 1:
+                    category = " >> ".join(path_parts[:2]).replace("-", " ").title()
 
         body_elem = None
-        for selector in ["#article-body", ".article-body", ".article__body", "article", ".solution-article", ".content"]:
+        selectors = [
+            "main", "[role='main']", "article", ".markdown-body", ".docs-content",
+            ".documentation", ".entry-content", ".post-content", "#content",
+            "#article-body", ".article-body", ".article__body", ".solution-article",
+            ".content", ".theme-doc-markdown", ".docItemContainer"
+        ]
+        for selector in selectors:
             match = soup.select_one(selector)
-            if match and len(match.get_text(strip=True)) > 100:
+            if match and len(match.get_text(strip=True)) > 40:
                 body_elem = match
                 break
         
         if not body_elem:
             body_elem = soup.body or soup
 
-        for unwanted in body_elem.find_all(["script", "style", "nav", "footer", ".share-box", ".feedback-box", ".related-articles"]):
+        for unwanted in body_elem.find_all([
+            "script", "style", "nav", "footer", "header", "aside", ".sidebar",
+            ".share-box", ".feedback-box", ".related-articles", ".cookie-banner",
+            "#comments", ".comments", ".toc", ".table-of-contents",
+            "[role='navigation']", "[role='banner']"
+        ]):
             unwanted.decompose()
 
         sections: List[Dict[str, Any]] = []
@@ -89,7 +110,7 @@ class ArticleParser:
                 "surrounding_text": surrounding
             })
 
-        elements = body_elem.find_all(["h2", "h3", "h4", "p", "ul", "ol", "table", "blockquote"])
+        elements = body_elem.find_all(["h2", "h3", "h4", "p", "ul", "ol", "table", "blockquote", "pre"])
         for el in elements:
             tag = el.name
             text = el.get_text(separator=" ", strip=True)
@@ -117,6 +138,8 @@ class ArticleParser:
                         rows.append(" | ".join(cells))
                 if rows:
                     current_section["paragraphs"].append("\n".join(rows))
+            elif tag == "pre":
+                current_section["paragraphs"].append(f"```\n{text}\n```")
             else:
                 current_section["paragraphs"].append(text)
 

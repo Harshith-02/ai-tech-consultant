@@ -442,6 +442,11 @@ class PoliteResumableCrawler:
         stats["total_removed"] = stats.get("total_removed", 0) + archived_count
         self._save_manifest()
 
+        try:
+            vector_store.batch_record_sitemap_urls(sitemap_items)
+        except Exception:
+            pass
+
         return {"new": new_count, "changed": changed_count, "archived": archived_count}
 
     def fetch_article_with_retries(self, url: str) -> Optional[str]:
@@ -475,6 +480,7 @@ class PoliteResumableCrawler:
     ) -> Dict[str, Any]:
         self.is_running = True
         sleep_delay = delay if delay is not None else settings.CRAWL_DELAY_SECONDS
+        t_run_start = time.time()
         
         try:
             sitemap_items = self.fetch_sitemap_urls(sitemap_urls=sitemap_urls, url_pattern=url_pattern)
@@ -498,6 +504,26 @@ class PoliteResumableCrawler:
             if limit:
                 targets = targets[:limit]
 
+            self.current_run = {
+                "started_at": datetime.now(timezone.utc).isoformat(),
+                "sitemaps_count": len(sitemap_urls) if sitemap_urls else len(self.manifest.get("configured_sitemaps", [])),
+                "total_urls_discovered": len(sitemap_items),
+                "urls_queued": len(targets),
+                "pages_fetched": 0,
+                "pages_saved": 0,
+                "pages_indexed": 0,
+                "pages_failed": 0,
+                "pages_skipped": max(0, len(sitemap_items) - len(targets)),
+                "new_urls": sync_stats.get("new", 0),
+                "changed_urls": sync_stats.get("changed", 0),
+                "unchanged_urls": max(0, len(sitemap_items) - sync_stats.get("new", 0) - sync_stats.get("changed", 0)),
+                "archived_urls": sync_stats.get("archived", 0),
+                "failure_reasons": {},
+                "elapsed_seconds": 0.0,
+                "throughput_pages_per_sec": 0.0,
+                "estimated_seconds_remaining": 0.0
+            }
+
             crawled_this_run = 0
             failed_this_run = 0
 
@@ -511,18 +537,26 @@ class PoliteResumableCrawler:
                     record["status"] = "failed"
                     record["error"] = "HTTP fetch error or 404"
                     failed_this_run += 1
+                    self.current_run["pages_failed"] += 1
+                    err_lbl = "HTTP 404 / Connection Error"
+                    self.current_run["failure_reasons"][err_lbl] = self.current_run["failure_reasons"].get(err_lbl, 0) + 1
                     self._save_manifest()
                     time.sleep(sleep_delay)
                     continue
+
+                self.current_run["pages_fetched"] += 1
 
                 try:
                     parsed = article_parser.parse_html(html, url)
                     chunks = document_chunker.chunk_article(parsed)
 
                     aid = parsed["article_id"]
-                    raw_path = settings.RAW_ARTICLES_DIR / f"{aid}.json"
-                    with open(raw_path, "w", encoding="utf-8") as f:
-                        json.dump(parsed, f, indent=2)
+                    try:
+                        raw_path = settings.RAW_ARTICLES_DIR / f"{aid}.json"
+                        with open(raw_path, "w", encoding="utf-8") as f:
+                            json.dump(parsed, f, indent=2)
+                    except Exception:
+                        pass
 
                     vector_store.upsert_article(
                         article_id=aid,
@@ -532,7 +566,8 @@ class PoliteResumableCrawler:
                         content_hash=parsed["content_hash"],
                         raw_text=parsed["raw_text"],
                         screenshot_count=parsed["screenshot_count"],
-                        chunks_data=chunks
+                        chunks_data=chunks,
+                        sitemap_source=record.get("sitemap_source")
                     )
 
                     record["status"] = "completed"
@@ -540,6 +575,8 @@ class PoliteResumableCrawler:
                     record["crawled_at"] = datetime.now(timezone.utc).isoformat()
                     record["error"] = None
                     crawled_this_run += 1
+                    self.current_run["pages_saved"] += 1
+                    self.current_run["pages_indexed"] += 1
 
                     elapsed = time.time() - t0
                     perf = self.manifest.setdefault("measured_perf", {"total_pages_measured": 0, "total_seconds": 0.0, "avg_seconds_per_page": 0.55})
@@ -550,6 +587,18 @@ class PoliteResumableCrawler:
                     record["status"] = "failed"
                     record["error"] = str(e)
                     failed_this_run += 1
+                    self.current_run["pages_failed"] += 1
+                    err_msg = str(e)[:60]
+                    self.current_run["failure_reasons"][err_msg] = self.current_run["failure_reasons"].get(err_msg, 0) + 1
+
+                run_elapsed = round(time.time() - t_run_start, 2)
+                self.current_run["elapsed_seconds"] = run_elapsed
+                processed = self.current_run["pages_saved"] + self.current_run["pages_failed"]
+                if run_elapsed > 0 and processed > 0:
+                    tp = round(processed / run_elapsed, 2)
+                    self.current_run["throughput_pages_per_sec"] = tp
+                    rem_pages = max(0, len(targets) - processed)
+                    self.current_run["estimated_seconds_remaining"] = round(rem_pages / tp, 1) if tp > 0 else 0.0
 
                 self._save_manifest()
                 time.sleep(sleep_delay)
@@ -564,17 +613,21 @@ class PoliteResumableCrawler:
                 "failed_this_run": failed_this_run,
                 "total_sitemap_articles": len(sitemap_items),
                 "configured_sitemaps": self.manifest.get("configured_sitemaps", []),
-                "sync_summary": sync_stats
+                "sync_summary": sync_stats,
+                "run_metrics": dict(self.current_run)
             }
         finally:
             self.is_running = False
+            self.last_run_summary = dict(getattr(self, "current_run", {}))
 
     def get_status(self) -> Dict[str, Any]:
         stats = vector_store.get_stats()
         articles_dict = self.manifest.get("articles", {})
         crawled = sum(1 for v in articles_dict.values() if v.get("status") == "completed")
         failed = sum(1 for v in articles_dict.values() if v.get("status") == "failed")
-        return {
+        
+        run_data = getattr(self, "current_run", None) if self.is_running else getattr(self, "last_run_summary", None)
+        res = {
             "status": "running" if self.is_running else "idle",
             "is_running": self.is_running,
             "total_sitemap_urls": len(articles_dict),
@@ -585,6 +638,26 @@ class PoliteResumableCrawler:
             "last_run": self.manifest.get("last_sitemap_sync"),
             "configured_sitemaps": self.manifest.get("configured_sitemaps", [settings.SITEMAP_URL])
         }
+        if run_data:
+            res.update({
+                "sitemaps_count": run_data.get("sitemaps_count", 1),
+                "total_urls_discovered": run_data.get("total_urls_discovered", len(articles_dict)),
+                "urls_queued": run_data.get("urls_queued", 0),
+                "pages_fetched": run_data.get("pages_fetched", 0),
+                "pages_saved": run_data.get("pages_saved", 0),
+                "pages_indexed": run_data.get("pages_indexed", 0),
+                "pages_failed": run_data.get("pages_failed", 0),
+                "pages_skipped": run_data.get("pages_skipped", 0),
+                "new_urls": run_data.get("new_urls", 0),
+                "changed_urls": run_data.get("changed_urls", 0),
+                "unchanged_urls": run_data.get("unchanged_urls", 0),
+                "archived_urls": run_data.get("archived_urls", 0),
+                "failure_reasons": run_data.get("failure_reasons", {}),
+                "elapsed_seconds": run_data.get("elapsed_seconds", 0.0),
+                "throughput_pages_per_sec": run_data.get("throughput_pages_per_sec", 0.0),
+                "estimated_seconds_remaining": run_data.get("estimated_seconds_remaining", 0.0)
+            })
+        return res
 
     def get_sitemaps(self) -> List[Dict[str, Any]]:
         configured = self.manifest.get("configured_sitemaps", [settings.SITEMAP_URL])

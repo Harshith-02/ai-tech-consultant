@@ -826,12 +826,21 @@ async function submitCustomSitemapsIngestion() {
         const sRes = await fetch(`${API_KB}/ingestion/status`);
         const sData = await sRes.json();
         if (sData.is_running) {
-          statusBanner.innerHTML = `<span style="color:var(--accent-cyan);">🔄 Crawling... ${sData.crawled_count} articles indexed, ${sData.chunk_count} chunks searchable</span>`;
+          const fetched = sData.pages_fetched || sData.crawled_count || 0;
+          const queued = sData.urls_queued || sData.total_sitemap_urls || 0;
+          const saved = sData.pages_saved || 0;
+          const tp = sData.throughput_pages_per_sec ? `${sData.throughput_pages_per_sec} p/s` : '';
+          const eta = sData.estimated_seconds_remaining ? ` | ETA: ${sData.estimated_seconds_remaining}s` : '';
+          statusBanner.innerHTML = `<span style="color:var(--accent-cyan);">🔄 Ingesting: ${fetched}/${queued} fetched, ${saved} persisted into Knowledge Brain (${tp}${eta})</span>`;
         } else {
           clearInterval(interval);
-          statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">✓ Ingestion complete! ${sData.active_articles} articles in Knowledge Brain</span>`;
+          let summaryMsg = `✓ Ingestion complete! ${sData.active_articles} articles active, ${sData.chunk_count} chunks searchable.`;
+          if (sData.pages_failed > 0) {
+            summaryMsg += ` (${sData.pages_failed} failed)`;
+          }
+          statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">${summaryMsg}</span>`;
           btn.disabled = false;
-          btn.textContent = "🚀 Ingest Sitemaps";
+          btn.textContent = "🚀 Confirm & Start Ingestion";
           loadConfiguredSitemaps();
           const brainSync = document.getElementById("brain-sync-status");
           if (brainSync) brainSync.textContent = `${sData.active_articles} Articles Indexed`;
@@ -839,18 +848,18 @@ async function submitCustomSitemapsIngestion() {
       } catch (e) {
         if (attempts > 5) clearInterval(interval);
       }
-      if (attempts >= 15) {
+      if (attempts >= 30) {
         clearInterval(interval);
         btn.disabled = false;
-        btn.textContent = "🚀 Ingest Sitemaps";
+        btn.textContent = "🚀 Confirm & Start Ingestion";
         loadConfiguredSitemaps();
       }
-    }, 2000);
+    }, 1500);
 
   } catch (err) {
     statusBanner.innerHTML = `<span style="color:var(--accent-rose);">Error dispatching crawl: ${err.message}</span>`;
     btn.disabled = false;
-    btn.textContent = "🚀 Ingest Sitemaps";
+    btn.textContent = "🚀 Confirm & Start Ingestion";
   }
 }
 

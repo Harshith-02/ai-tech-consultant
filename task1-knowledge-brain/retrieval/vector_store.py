@@ -119,30 +119,33 @@ class KnowledgeVectorStore:
         self.turso_url = os.environ.get("TURSO_DATABASE_URL") or os.environ.get("DATABASE_URL")
         self.turso_token = os.environ.get("TURSO_AUTH_TOKEN")
         env_db = os.environ.get("DB_PATH")
-        self.db_path = str(env_db or db_path or settings.DB_PATH)
+        self.db_path = str(db_path or env_db or settings.DB_PATH)
         try:
             self._init_db()
         except Exception:
             pass
 
     def _get_connection(self):
+        is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
         if self.turso_url:
             if not self.turso_token:
-                is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
                 if is_prod:
                     raise RuntimeError("TURSO_DATABASE_URL is set for production, but TURSO_AUTH_TOKEN is missing. Production requires valid authentication token.")
             else:
                 try:
                     import libsql_client
                     client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
-                    is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
                     if is_prod:
                         client.execute("SELECT 1")
                     return LibsqlConnectionAdapter(client)
                 except Exception as e:
-                    is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
                     if is_prod:
                         raise RuntimeError(f"Failed to connect to persistent Turso database: {str(e)}")
+        elif is_prod:
+            raise RuntimeError(
+                "Production requires persistent managed database storage (TURSO_DATABASE_URL and TURSO_AUTH_TOKEN). "
+                "Ephemeral local SQLite fallback is blocked in production to prevent data loss."
+            )
         
         try:
             conn = sqlite3.connect(self.db_path, timeout=10.0)
@@ -200,7 +203,7 @@ class KnowledgeVectorStore:
             recs.append("Configure TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in Vercel environment variables for managed persistent edge storage.")
             recs.append("Alternatively, deploy on persistent container hosting (Railway/Render/AWS) with a persistent volume.")
             
-        engine = "turso_libsql" if has_turso else ("sqlite_local" if not is_tmp else "sqlite_ephemeral")
+        engine = "turso_libsql" if (has_turso and status == "connected") else ("sqlite_local" if not is_tmp and not is_prod else ("unconfigured_production" if is_prod else "sqlite_ephemeral"))
         masked_path = self.db_path
         if has_turso:
             host = self.turso_url.split("://")[-1].split("/")[0]
@@ -1134,6 +1137,52 @@ class KnowledgeVectorStore:
             VALUES (?, ?, ?, ?, ?, 'active', ?, ?, ?, ?)
             """, (f"su_{uuid.uuid4().hex[:8]}", account_id, real_src_id, page_url, page_url.strip().lower(), now, now, now, now))
             conn.commit()
+
+    def batch_record_sitemap_urls(
+        self,
+        items: List[Dict[str, str]],
+        account_id: str = "acc_default"
+    ) -> int:
+        if not items:
+            return 0
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            source_cache: Dict[str, str] = {}
+            inserted = 0
+
+            for it in items:
+                page_url = it.get("url", "").strip()
+                source_url = it.get("sitemap_source", "").strip()
+                lastmod = it.get("lastmod", "")
+                if not page_url:
+                    continue
+
+                real_src_id = source_cache.get(source_url)
+                if not real_src_id:
+                    cursor.execute("SELECT id FROM sitemap_sources WHERE (id = ? OR root_sitemap_url = ?) AND account_id = ?", (source_url, source_url, account_id))
+                    row = cursor.fetchone()
+                    if row:
+                        real_src_id = row["id"]
+                    else:
+                        real_src_id = f"src_{uuid.uuid4().hex[:8]}"
+                        src_name = source_url.split("/")[-1] or "Custom Source"
+                        cursor.execute("""
+                        INSERT OR IGNORE INTO sitemap_sources (id, account_id, name, root_sitemap_url, is_enabled, refresh_enabled, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, 1, 1, ?, ?)
+                        """, (real_src_id, account_id, src_name, source_url, now, now))
+                    source_cache[source_url] = real_src_id
+
+                normalized_url = page_url.lower()
+                uid = f"su_{hashlib.md5(f'{account_id}_{real_src_id}_{normalized_url}'.encode()).hexdigest()[:16]}"
+                cursor.execute("""
+                INSERT OR REPLACE INTO sitemap_urls (id, account_id, source_id, url, normalized_url, lastmod, status, last_seen_at, last_checked_at, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, 'active', ?, ?, ?, ?)
+                """, (uid, account_id, real_src_id, page_url, normalized_url, lastmod, now, now, now, now))
+                inserted += 1
+
+            conn.commit()
+            return inserted
 
     def update_sitemap_source(self, source_id: str, account_id: str = "acc_default", **kwargs) -> Optional[Dict[str, Any]]:
         valid_keys = {"name", "is_enabled", "refresh_enabled", "refresh_interval_days", "missing_threshold", "status", "last_checked_at", "last_successful_refresh_at", "next_check_at", "error_summary"}

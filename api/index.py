@@ -410,10 +410,21 @@ async def kb_resolve_escalation(payload: EscalationResolveRequest):
     }
 
 # Ingestion & Sitemap Endpoints
-try:
-    from ingestion.crawler import crawler
-except Exception:
-    crawler = None
+crawler = None
+
+def get_crawler():
+    global crawler
+    if crawler is None:
+        try:
+            from ingestion.crawler import crawler as c_inst
+            crawler = c_inst
+        except Exception as e:
+            try:
+                from ingestion.crawler import PoliteResumableCrawler
+                crawler = PoliteResumableCrawler()
+            except Exception as e2:
+                raise HTTPException(status_code=500, detail=f"Crawler engine initialization failed: {str(e2)}")
+    return crawler
 
 class IngestionRunPayload(BaseModel):
     sitemap_urls: Optional[List[str]] = None
@@ -430,85 +441,76 @@ class SitemapInspectPayload(BaseModel):
 
 @kb_router.post("/ingestion/inspect")
 async def kb_ingestion_inspect(payload: SitemapInspectPayload):
-    if crawler:
-        try:
-            return crawler.inspect_sitemap(payload.sitemap_url, url_pattern=payload.url_pattern)
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
-    # Fallback simulation
-    return {
-        "sitemap_url": payload.sitemap_url,
-        "total_sitemaps_found": 1,
-        "total_urls_found": 1540,
-        "first_url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682659-google-sitemap-generator",
-        "last_url": "https://support.brilliantdirectories.com/support/solutions/articles/5000684199-custom-css-head-tags",
-        "speed_estimates": {
-            "pages_per_5_min": 50,
-            "pages_per_hour": 600,
-            "pages_per_24_hours": 14400,
-            "estimated_time_text": "2 hours 34 mins (±1 day)"
-        },
-        "sample_urls": [
-            "https://support.brilliantdirectories.com/support/solutions/articles/5000682659-google-sitemap-generator",
-            "https://support.brilliantdirectories.com/support/solutions/articles/5000684199-custom-css-head-tags"
-        ]
-    }
+    c = get_crawler()
+    try:
+        return c.inspect_sitemap(payload.sitemap_url, url_pattern=payload.url_pattern)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Sitemap inspection failed: {str(e)}")
 
 @kb_router.post("/ingestion/run")
 async def kb_ingestion_run(payload: IngestionRunPayload):
-    if crawler:
-        import asyncio
-        if crawler.is_running:
-            return {"status": "already_running", "message": "An ingestion crawl is already in progress."}
-        missing_p = payload.missing_retention_policy if payload.missing_retention_policy is not None else 15
-        asyncio.create_task(
-            asyncio.to_thread(
-                crawler.crawl,
-                limit=payload.limit,
-                force_reindex=payload.force_reindex,
-                delay=payload.delay_seconds,
-                sitemap_urls=payload.sitemap_urls,
-                url_pattern=payload.url_pattern,
-                missing_checks_threshold=missing_p
-            )
+    c = get_crawler()
+    if c.is_running:
+        return {"status": "already_running", "message": "An ingestion crawl is already in progress."}
+    missing_p = payload.missing_retention_policy if payload.missing_retention_policy is not None else 15
+    import asyncio
+    asyncio.create_task(
+        asyncio.to_thread(
+            c.crawl,
+            limit=payload.limit,
+            force_reindex=payload.force_reindex,
+            delay=payload.delay_seconds,
+            sitemap_urls=payload.sitemap_urls,
+            url_pattern=payload.url_pattern,
+            missing_checks_threshold=missing_p
         )
-        count_sm = len(payload.sitemap_urls) if payload.sitemap_urls else "default"
-        return {
-            "status": "started", 
-            "message": f"Ingestion initiated for {count_sm} sitemap(s) (missing_retention={missing_p} checks, schedule={payload.update_frequency})."
-        }
-    return {"status": "started", "message": "Ingestion job dispatched."}
+    )
+    count_sm = len(payload.sitemap_urls) if payload.sitemap_urls else "default"
+    return {
+        "status": "started", 
+        "message": f"Ingestion initiated for {count_sm} sitemap(s) (missing_retention={missing_p} checks, schedule={payload.update_frequency})."
+    }
 
 @kb_router.get("/ingestion/status")
 async def kb_ingestion_status():
-    if crawler:
-        st = crawler.get_status()
+    try:
+        c = get_crawler()
+        st = c.get_status()
         archived = vector_store.get_archived_articles()
         st["archived_articles_count"] = len(archived)
         return st
-    return {
-        "status": "idle",
-        "is_running": False,
-        "total_sitemap_urls": 20,
-        "crawled_count": 20,
-        "failed_count": 0,
-        "chunk_count": 120,
-        "active_articles": 20,
-        "last_run": datetime.now(timezone.utc).isoformat(),
-        "configured_sitemaps": ["https://support.brilliantdirectories.com/support/sitemap.xml"],
-        "archived_articles_count": 0
-    }
+    except Exception as e:
+        stats = vector_store.get_stats()
+        return {
+            "status": "idle",
+            "is_running": False,
+            "total_sitemap_urls": 0,
+            "crawled_count": 0,
+            "failed_count": 0,
+            "chunk_count": stats.get("active_chunks", 0),
+            "active_articles": stats.get("active_articles", 0),
+            "last_run": None,
+            "configured_sitemaps": [],
+            "archived_articles_count": 0,
+            "error": str(e)
+        }
 
 @kb_router.get("/ingestion/sitemaps")
 async def kb_ingestion_sitemaps():
-    if crawler:
-        return crawler.get_sitemaps()
-    return [{
-        "url": "https://support.brilliantdirectories.com/support/sitemap.xml",
-        "last_synced": datetime.now(timezone.utc).isoformat(),
-        "urls_count": 20,
-        "status": "synced"
-    }]
+    try:
+        c = get_crawler()
+        return c.get_sitemaps()
+    except Exception:
+        sources = vector_store.list_sitemap_sources()
+        return [
+            {
+                "url": s["root_sitemap_url"],
+                "last_synced": s.get("last_successful_refresh_at"),
+                "urls_count": 0,
+                "status": s.get("status", "active")
+            }
+            for s in sources
+        ]
 
 @kb_router.get("/storage-status")
 async def kb_storage_status():
@@ -1586,7 +1588,8 @@ async def inbox_oauth_authorize(request: Request):
 @inbox_router.get("/oauth/callback")
 async def inbox_oauth_callback(code: Optional[str] = None, state: Optional[str] = None, error: Optional[str] = None, request: Request = None):
     if error:
-        return RedirectResponse(url=f"/dashboard/public/index.html?oauth_error={error}")
+        err_param = urllib.parse.quote_plus(str(error))
+        return RedirectResponse(url=f"/?oauth_error={err_param}")
     if not code or not state or state not in OAUTH_STATES:
         raise HTTPException(status_code=400, detail="Invalid OAuth state or expired authorization code")
     
@@ -1640,10 +1643,14 @@ async def inbox_oauth_callback(code: Optional[str] = None, state: Optional[str] 
                 account_id=acc["id"],
                 metadata={"email": user_email}
             )
+    except HTTPException as he:
+        err_param = urllib.parse.quote_plus(str(he.detail))
+        return RedirectResponse(url=f"/?oauth_error={err_param}")
     except Exception as e:
-        return RedirectResponse(url=f"/dashboard/public/index.html?oauth_error={str(e)}")
+        err_param = urllib.parse.quote_plus(str(e))
+        return RedirectResponse(url=f"/?oauth_error={err_param}")
 
-    return RedirectResponse(url="/dashboard/public/index.html?gmail_connected=true")
+    return RedirectResponse(url="/?gmail_connected=true")
 
 @inbox_router.get("/oauth/status")
 async def inbox_oauth_status(user: UserIdentity = Depends(require_auth)):
@@ -2025,6 +2032,15 @@ async def root_health(request: Request):
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "routes": ["/api/kb", "/api/inbox", "/api/scope"]
     }
+
+# Backward-compatibility alias for legacy dashboard route
+@app.get("/dashboard/public/index.html")
+@app.get("/dashboard/public")
+@app.get("/dashboard/public/")
+async def legacy_dashboard_redirect(request: Request):
+    q = str(request.url.query)
+    target = f"/?{q}" if q else "/"
+    return RedirectResponse(url=target, status_code=302)
 
 # Mount static frontend
 PUBLIC_DIR = BASE_DIR / "public"
