@@ -17,6 +17,103 @@ DOMAIN_STOP_WORDS = {
     "help", "system", "override", "ignore", "previous", "instructions", "many", "much"
 }
 
+class DatabaseRow:
+    """Provides complete API equivalence with sqlite3.Row for both index and key access."""
+    def __init__(self, cols: List[str], values: List[Any]):
+        self._cols = list(cols)
+        self._values = list(values)
+        self._map = dict(zip(self._cols, self._values))
+
+    def __getitem__(self, key: Any) -> Any:
+        if isinstance(key, int):
+            return self._values[key]
+        return self._map[key]
+
+    def keys(self):
+        return self._map.keys()
+
+    def values(self):
+        return self._map.values()
+
+    def items(self):
+        return self._map.items()
+
+    def __iter__(self):
+        return iter(self._cols)
+
+    def __len__(self) -> int:
+        return len(self._values)
+
+    def get(self, key: str, default: Any = None) -> Any:
+        return self._map.get(key, default)
+
+    def __repr__(self) -> str:
+        return f"<DatabaseRow {self._map}>"
+
+
+class LibsqlCursorAdapter:
+    def __init__(self, client):
+        self.client = client
+        self._last_result = None
+        self._row_idx = 0
+
+    def execute(self, sql: str, params: Any = None):
+        if params is None:
+            p = []
+        elif isinstance(params, (list, tuple)):
+            p = list(params)
+        elif isinstance(params, dict):
+            p = params
+        else:
+            p = [params]
+        self._last_result = self.client.execute(sql, p)
+        self._row_idx = 0
+        return self
+
+    def fetchone(self):
+        if not self._last_result or self._row_idx >= len(self._last_result.rows):
+            return None
+        raw_row = self._last_result.rows[self._row_idx]
+        self._row_idx += 1
+        return DatabaseRow(self._last_result.columns, list(raw_row))
+
+    def fetchall(self):
+        if not self._last_result:
+            return []
+        cols = self._last_result.columns
+        rows = [
+            DatabaseRow(cols, list(r))
+            for r in self._last_result.rows[self._row_idx:]
+        ]
+        self._row_idx = len(self._last_result.rows)
+        return rows
+
+
+class LibsqlConnectionAdapter:
+    def __init__(self, client):
+        self.client = client
+
+    def cursor(self):
+        return LibsqlCursorAdapter(self.client)
+
+    def execute(self, sql: str, params: Any = None):
+        c = self.cursor()
+        c.execute(sql, params)
+        return c
+
+    def commit(self):
+        pass
+
+    def rollback(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+
 class KnowledgeVectorStore:
     def __init__(self, db_path: Optional[Path] = None):
         self.turso_url = os.environ.get("TURSO_DATABASE_URL") or os.environ.get("DATABASE_URL")
@@ -28,7 +125,25 @@ class KnowledgeVectorStore:
         except Exception:
             pass
 
-    def _get_connection(self) -> sqlite3.Connection:
+    def _get_connection(self):
+        if self.turso_url:
+            if not self.turso_token:
+                is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
+                if is_prod:
+                    raise RuntimeError("TURSO_DATABASE_URL is set for production, but TURSO_AUTH_TOKEN is missing. Production requires valid authentication token.")
+            else:
+                try:
+                    import libsql_client
+                    client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
+                    is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
+                    if is_prod:
+                        client.execute("SELECT 1")
+                    return LibsqlConnectionAdapter(client)
+                except Exception as e:
+                    is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
+                    if is_prod:
+                        raise RuntimeError(f"Failed to connect to persistent Turso database: {str(e)}")
+        
         try:
             conn = sqlite3.connect(self.db_path, timeout=10.0)
         except Exception:
@@ -46,38 +161,82 @@ class KnowledgeVectorStore:
         has_turso = bool(self.turso_url and self.turso_token)
         clean_path = self.db_path.replace("\\", "/").lower()
         is_tmp = "/tmp" in clean_path or "temp" in clean_path
-        is_durable = has_turso or (not is_tmp and Path(self.db_path).exists())
+        is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
         
+        status = "connected"
+        connection_health = "healthy"
         journal_mode = "unknown"
         applied_migrations = []
+        error_msg = None
+        
         try:
             with self._get_connection() as conn:
                 c = conn.cursor()
-                c.execute("PRAGMA journal_mode;")
-                r = c.fetchone()
-                if r:
-                    journal_mode = str(r[0])
+                if not has_turso:
+                    try:
+                        c.execute("PRAGMA journal_mode;")
+                        r = c.fetchone()
+                        if r:
+                            journal_mode = str(r[0])
+                    except Exception:
+                        pass
+                else:
+                    journal_mode = "remote_libsql"
+                
                 c.execute("SELECT version, name, applied_at FROM schema_migrations ORDER BY applied_at ASC;")
                 applied_migrations = [dict(m) for m in c.fetchall()]
-        except Exception:
-            pass
+        except Exception as e:
+            status = "error"
+            connection_health = f"unhealthy: {type(e).__name__}"
+            error_msg = str(e)
             
+        is_durable = (has_turso and status == "connected") or (not is_tmp and Path(self.db_path).exists() and not is_prod)
+        
         recs = []
-        if not is_durable:
+        if has_turso and status != "connected":
+            recs.append("CRITICAL: Turso connection configured but health check failed. Inspect credentials and network connectivity.")
+        elif not is_durable:
             recs.append("CRITICAL: Active database is stored on an ephemeral path (/tmp) on serverless microVMs. State will reset on container recycling.")
-            recs.append("Set TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in Vercel environment variables for managed persistent edge storage.")
+            recs.append("Configure TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in Vercel environment variables for managed persistent edge storage.")
             recs.append("Alternatively, deploy on persistent container hosting (Railway/Render/AWS) with a persistent volume.")
             
-        return {
-            "status": "connected",
-            "engine": "turso_libsql" if has_turso else ("sqlite_local" if not is_tmp else "sqlite_ephemeral"),
+        engine = "turso_libsql" if has_turso else ("sqlite_local" if not is_tmp else "sqlite_ephemeral")
+        masked_path = self.db_path
+        if has_turso:
+            host = self.turso_url.split("://")[-1].split("/")[0]
+            masked_path = f"libsql://{host}"
+
+        res = {
+            "status": status,
+            "engine": engine,
             "is_durable": is_durable,
-            "database_path": self.db_path if not has_turso else f"libsql://{self.turso_url.split('://')[-1][:12]}...",
+            "database_path": masked_path,
             "journal_mode": journal_mode,
             "migrations_count": len(applied_migrations),
             "migrations": applied_migrations,
+            "connection_health": connection_health,
             "recommendations": recs
         }
+        if error_msg:
+            res["error"] = error_msg
+        return res
+
+    def list_active_articles(self, limit: int = 50, account_id: str = "acc_default") -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            c = conn.cursor()
+            c.execute(
+                "SELECT id, url, title, category, screenshot_count, is_active, updated_at "
+                "FROM articles WHERE is_active = 1 AND (account_id = ? OR account_id = 'acc_default') "
+                "ORDER BY updated_at DESC LIMIT ?",
+                (account_id, limit)
+            )
+            return [dict(row) for row in c.fetchall()]
+
+    def list_escalations(self, limit: int = 50) -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            c = conn.cursor()
+            c.execute("SELECT * FROM escalations ORDER BY created_at DESC LIMIT ?", (limit,))
+            return [dict(row) for row in c.fetchall()]
 
     def _init_db(self):
         with self._get_connection() as conn:

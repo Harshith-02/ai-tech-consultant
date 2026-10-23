@@ -19,6 +19,7 @@ from urllib.parse import urlencode
 import httpx
 from fastapi import FastAPI, APIRouter, HTTPException, Query, Request, Depends
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -383,26 +384,18 @@ async def kb_query(payload: QueryRequest):
     }
 
 @kb_router.get("/articles")
-async def kb_articles(limit: int = 50):
+async def kb_articles(limit: int = 50, user: UserIdentity = Depends(require_auth)):
     try:
-        with sqlite3.connect(str(ACTIVE_DB_PATH)) as conn:
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-            cursor.execute("SELECT id, url, title, category, screenshot_count, is_active, updated_at FROM articles WHERE is_active = 1 LIMIT ?", (limit,))
-            articles = [dict(row) for row in cursor.fetchall()]
-            return {"total": len(articles), "articles": articles}
+        articles = vector_store.list_active_articles(limit=limit, account_id=user.account_id)
+        return {"total": len(articles), "articles": articles}
     except Exception as e:
         return {"total": 0, "articles": [], "error": str(e)}
 
 @kb_router.get("/escalations")
-async def kb_escalations():
+async def kb_escalations(user: UserIdentity = Depends(require_auth)):
     try:
-        with sqlite3.connect(str(ACTIVE_DB_PATH)) as conn:
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM escalations ORDER BY created_at DESC LIMIT 50")
-            items = [dict(row) for row in cursor.fetchall()]
-            return {"total": len(items), "escalations": items}
+        items = vector_store.list_escalations(limit=50)
+        return {"total": len(items), "escalations": items}
     except Exception:
         return {"total": 0, "escalations": []}
 
@@ -2022,7 +2015,6 @@ app.include_router(scope_router, prefix="/scope")
 @app.get("/api/health")
 @app.get("/health")
 @app.get("/api")
-@app.get("/")
 async def root_health(request: Request):
     return {
         "status": "ok",
@@ -2033,3 +2025,8 @@ async def root_health(request: Request):
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "routes": ["/api/kb", "/api/inbox", "/api/scope"]
     }
+
+# Mount static frontend
+PUBLIC_DIR = BASE_DIR / "public"
+if PUBLIC_DIR.exists():
+    app.mount("/", StaticFiles(directory=str(PUBLIC_DIR), html=True), name="static")

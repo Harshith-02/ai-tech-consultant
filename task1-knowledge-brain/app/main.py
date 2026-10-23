@@ -37,12 +37,8 @@ async def health_check():
 
 @app.get("/articles", tags=["Articles Inspection"])
 async def list_articles(limit: int = 50):
-    with sqlite3.connect(str(settings.DB_PATH)) as conn:
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, url, title, category, screenshot_count, is_active, updated_at FROM articles WHERE is_active = 1 LIMIT ?", (limit,))
-        articles = [dict(row) for row in cursor.fetchall()]
-        return {"total": len(articles), "articles": articles}
+    articles = vector_store.list_active_articles(limit=limit)
+    return {"total": len(articles), "articles": articles}
 
 if __name__ == "__main__":
     import uvicorn
