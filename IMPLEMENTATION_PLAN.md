@@ -1,8 +1,8 @@
-# IMPLEMENTATION PLAN — AI TECH CONSULTANT UPGRADE
+# IMPLEMENTATION PLAN — AI TECH CONSULTANT UPGRADE & SECURITY HARDENING
 **Author:** AI Tech Consultant Core Team  
 **Status:** In Progress / Active Implementation  
-**Version:** 2.0.0  
-**Target Environments:** Local Multi-Service Development & Vercel Serverless Production ([https://ai-tech-consultant-mu.vercel.app/](https://ai-tech-consultant-mu.vercel.app/))
+**Version:** 2.1.0  
+**Target Environments:** Local Multi-Service Development (`localhost:5000` / `:8000`, `:3001`, `:8002`) & Vercel Serverless Production ([https://ai-tech-consultant-mu.vercel.app/](https://ai-tech-consultant-mu.vercel.app/))
 
 ---
 
@@ -15,142 +15,159 @@ The **AI Tech Consultant** is a unified multi-agent web platform designed to str
 * **Unified Gateway (`api/index.py`)**: Central FastAPI application orchestrating all services under `/api/kb`, `/api/inbox`, and `/api/scope`, supporting both local execution and Vercel serverless deployment.
 * **Frontend (`public/` and `dashboard/public/`)**: Modern, high-performance vanilla JS/CSS glassmorphic dashboard with authentic Gmail 3-pane layout, interactive RAG parameter sliders, multimodal vision inspection, and proposal approval flows.
 
-### Baseline Audit & Test Results
-* **Task 1 Knowledge Brain Evaluation**: 22/22 Test Cases Passed (100.0%) | 58.9ms Median Latency.
-* **Task 2 Inbox Agent Evaluation**: 50/50 Emails Classified (100.0%) | 0 Safety Violations | 0.03ms Latency.
+### Baseline Audit & Test Verification Results
+* **Task 1 Knowledge Brain Evaluation**: 22/22 Test Cases Passed (100.0%) | 54.15ms Median Latency.
+* **Task 2 Inbox Agent Evaluation**: 50/50 Emails Classified (100.0%) | 0 Safety Violations | 0.02ms Latency.
 * **Task 3 Meeting to Scope Evaluation**: 22/22 Test Cases Passed (100.0%) | Net Delta & Scope Diff Engine Verified.
-* **Pytest Baseline**: 4/4 Passed (100.0%).
+* **Pytest Baseline**: 8/8 Passed (100.0%).
 
 ---
 
-## 2. Existing Functionality to Preserve
+## 2. Confirmed Implementation Gaps (from Audit)
 
-1. **Task 1 Hybrid Search & Multimodal Retrieval**: FTS5 full-text + dense cosine vector similarity, multimodal screenshot query analysis, and escalation ticket center.
-2. **Task 2 Safety Guardrails & Business Intent Risk**: Classification into technical categories and business intents (`refund_cancellation`, `complaint`, `project_request`, `quote_request`), keeping high-risk categories permanently locked from autonomous sending.
-3. **Task 3 Meeting-to-Scope Orchestration**: Multi-agent pipeline processing Meetings A, B, and C with 3-point hour estimates, milestone costings, and SOW diff reports.
-4. **Unified API Gateway & Frontend Parity**: All endpoints exposed via `api/index.py` and synchronized between `public/` and `dashboard/public/`.
-
----
-
-## 3. Upgrade A: Advanced Sitemap Discovery, Ingestion & Incremental Refresh
-
-### 3.1 Multiple Sitemap Sources & Schema
-* Support multiple independent sitemap sources (e.g. documentation, blog, help center, developer docs).
-* Database tables:
-  * `sitemap_sources`: Stores root sitemap URL, name, refresh schedule, missing URL threshold, status, and metrics.
-  * `sitemap_urls`: Stores URL, source relation, `lastmod`, ETag, content hash, consecutive missing checks count, and status (`active`, `pending`, `archived`).
-  * `sitemap_refresh_runs`: Audit trail of discovery and refresh runs (started, completed, discovered, new, changed, missing, archived, errors).
-  * `url_archive` / `archived_articles`: Historical archive preserving removed URLs, removal reason, missing checks count, and content hash (Table #2).
-
-### 3.2 Recursive Sitemap Discovery & SSRF Protection
-* Traverses `<sitemapindex>` and child `<sitemap>` documents recursively up to 3 levels deep.
-* **SSRF Defense**: Validates every URL and redirect destination against private IP blocks (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`, `localhost`, link-local `169.254.0.0/16`).
-* Handles `.xml` and `.xml.gz` sitemaps, duplicate URLs, cycle loops, and malformed XML.
-
-### 3.3 Discovery Preview & Manual Confirmation
-* UI Card shows:
-  * Total sub-sitemaps found & total page URLs found.
-  * First URL & Last URL.
-  * Sample URL list with links.
-  * Measured ingestion throughput and ETA.
-  * Confirmation required before full crawl commences.
-
-### 3.4 Measured Ingestion Throughput & Realistic ETA
-* Instead of hardcoded arbitrary numbers, throughput is derived from rolling execution measurements:
-  * `pages_per_5_min` (default baseline: 50 pages)
-  * `pages_per_hour` (default baseline: 600 pages)
-  * `pages_per_24_hours` (default baseline: 14,400 pages)
-* Formats ETA dynamically: `X hours Y mins (±1 day)` or `Z days (±1 day)`.
-
-### 3.5 Incremental 3-Case Change Detection & 15-Check Policy
-* **Case 1 (New URL)**: Discovered URL not in database $\to$ added and queued for ingestion.
-* **Case 2 (Changed URL)**: `lastmod` updated or content hash changed $\to$ page re-fetched and chunks/embeddings refreshed atomically.
-* **Case 3 (Missing URL)**:
-  * Incomplete / failed crawls never trigger deletion.
-  * When a full successful refresh is completed and a registered URL is absent, increment `consecutive_missing_checks`.
-  * URL remains active until reaching the configured threshold (default: **15 consecutive successful checks**).
-  * Upon reaching threshold, URL is deactivated from Knowledge Base #1 and archived into **Table #2 (`archived_articles`)** for historical compliance.
-  * Shared URLs active in another sitemap source remain active in knowledge retrieval.
+1. **Security & Cryptography**:
+   * Fallback to static plaintext passphrase `"ai-tech-consultant-oauth-secret-key-2026"` in `GMAIL_ENCRYPTION_KEY`.
+   * Custom HMAC-SHA256 keystream XOR cipher instead of standard authenticated encryption (`AES-256-GCM`).
+   * Potential SSRF on HTTP 301/302 redirects in `crawler.py` (destination not re-checked against private/loopback/cloud-metadata blocks).
+   * Missing authentication & authorization middleware on protected `/api/kb/*` and `/api/inbox/*` management endpoints.
+2. **Persistence & Autonomy Engine**:
+   * Volatile in-memory dictionaries in `api/index.py` (`AUTONOMY_CONFIG`, `AUTONOMY_DATA`, `FEEDBACK_RULES`, `STARRED_EMAIL_IDS`, `TRASH_EMAIL_IDS`) that vanish on process restarts or serverless execution.
+   * Autonomy streak prematurely incremented before `client.post(".../messages/send")` and not rolled back on Gmail API failure.
+   * Autonomy streak not reset when drafts are edited during review.
+   * `billing` category was not permanently guarded against autonomous sending.
+3. **Category Taxonomy**:
+   * Prompt requires 9 user-configurable topic labels: `Filters`, `Home Page`, `Domain Management`, `Header`, `Main Menu`, `Footer`, `General Settings`, `Design Settings`, `Managers`.
+   * Existing implementation collapsed Header/Menu/Footer into `header_footer` and omitted `Managers`.
+4. **Sitemap Throughput & Scheduling**:
+   * Static throughput constants (`50 pages / 5 min`, `0.5s per article`) rather than rolling measured download + chunk + embed latencies.
+   * Absence of an active background loop or scheduled cron triggering refreshes for `next_check_at`.
+   * Missing UI indicators for Spam folder and duplicate URL source cross-references.
 
 ---
 
-## 4. Upgrade B: Real Gmail Integration & Intelligent Email Assistant
+## 3. Phased Implementation Roadmap
 
-### 4.1 Gmail OAuth 2.0 & Token Security
-* Integrates Google OAuth 2.0 flow:
-  * `GET /api/inbox/oauth/authorize`: Generates state and returns Google consent URL.
-  * `GET /api/inbox/oauth/callback`: Exchanges authorization code for access and refresh tokens.
-  * `GET /api/inbox/oauth/status`: Returns connected email, status, and last sync timestamp without exposing tokens.
-  * `POST /api/inbox/oauth/disconnect`: Revokes and wipes tokens.
-* Scopes: Minimum required scopes (`gmail.readonly`, `gmail.compose`, `gmail.modify`, `gmail.send`).
-* Encrypted token storage: Refresh tokens and access tokens encrypted using Fernet (symmetric AES-128-CBC) with `GMAIL_ENCRYPTION_KEY`.
+### Phase 1 — Security Hardening
+* **AES-256-GCM Cryptographic Engine**:
+  * Replace custom cipher with `cryptography.hazmat.primitives.ciphers.aead.AESGCM` (using 256-bit derived key from `GMAIL_ENCRYPTION_KEY`, versioned format `v1:<base64(nonce+ciphertext+tag)>`, safe rejection and backward-compatibility decryption helper).
+  * Require valid encryption key in production; fail safely without silent fallback.
+* **SSRF Redirect Interceptor**:
+  * Implement `safe_fetch_url()` in `crawler.py` with manual redirect loop following up to 5 hops, re-validating every redirect target against `is_safe_external_url()` before connecting.
+  * Re-validate schemes, ports, and private/loopback/cloud-metadata IPs.
+* **Authentication & Authorization**:
+  * Implement authentication middleware on `/api/kb/*` (except `/health`) and `/api/inbox/*` (except `/health`).
+  * Support session/API token authentication (`Authorization: Bearer <token>` or `X-API-Key`).
+  * Return HTTP 401 Unauthorized for missing/invalid credentials and HTTP 403 Forbidden for unauthorized actions.
+* **Security Test Suite**:
+  * Add unit tests in `tests/test_security_hardening.py` verifying key validation, AES-256-GCM tampering detection, redirect SSRF blocking, and authentication enforcement.
 
-### 4.2 Inbox Synchronization & Familiar UI
-* **Synchronization**: Uses Gmail Messages API (`users.messages.list`) and History API (`users.history.list`) with pagination and persistent cursor.
-* **Familiar Gmail UI**:
-  * Top-right profile avatar (`Harshith - Solutions Architect`) opening Account & Autonomy Settings.
-  * Left sidebar: ➕ **Compose**, **Inbox**, **Starred**, **Drafts**, **Sent**, **Trash**, plus **8 Setting Labels**.
-  * Center pane: Selection checkbox, star toggle, sender, subject/body snippet, date.
-  * Right pane: Original email, classification badges, streak meter, grounded draft response, action buttons.
+### Phase 2 — Durable Email State & Autonomy Correctness
+* **SQLite Persistence for Autonomy & Feedback**:
+  * Migrate `AUTONOMY_DATA`, `AUTONOMY_CONFIG`, `FEEDBACK_RULES`, `STARRED_EMAIL_IDS`, `TRASH_EMAIL_IDS`, and `SPAM_EMAIL_IDS` into SQLite tables in `vector_store.py`:
+    * `autonomy_settings`
+    * `feedback_rules`
+    * `email_folder_state`
+    * `autonomy_global_config`
+* **Atomic Autonomy Streak Machine**:
+  * Only increment consecutive approval streak *after* Gmail API send is successfully confirmed.
+  * Roll back or do not increment on send exception.
+  * Reset streak to 0 upon human draft edit.
+  * Permanently guard `billing` (`is_guarded = 1`).
 
-### 4.3 Eight Setting Classification Labels & Real Drafts in Gmail
-* **Setting Labels**:
-  1. `filters` (Search & Filters)
-  2. `home_page` (Home Page & Hero)
-  3. `domain_management` (Domain & DNS)
-  4. `header_footer` (Header & Footer)
-  5. `billing` (Billing & Plans)
-  6. `staging` (Staging & Dev)
-  7. `general_settings` (General Settings)
-  8. `design_settings` (Design & CSS)
-* **Real Gmail Draft Creation**: When an email arrives, after Knowledge Brain grounding, the assistant creates a genuine Gmail draft via `users.drafts.create` with appropriate RFC 2822 headers (`In-Reply-To`, `References`, `Subject`, `To`).
+### Phase 3 — Reliable Sitemap Scheduler
+* **Active Refresh Scheduling**:
+  * Background worker / timer polling `sitemap_sources` where `next_check_at <= now()`.
+  * Compute and update `next_check_at` based on `refresh_interval_days` (1, 7, 15, or 30 days).
+  * Handle worker concurrency locks and safe retries without incrementing missing URL counters on incomplete/failed runs.
 
-### 4.4 Configurable Per-Category Autonomy ($X$) & Learning Engine
-* Configurable threshold $X$ (default: `3` unedited sends).
-* **Unedited Approval**: If approved and sent without modification, streak increments by 1. When streak reaches $X$, `isEligibleForAutonomy` becomes `True`.
-* **Autonomous Sending**: Next email in that category is automatically sent via `users.drafts.send`, recorded in **Sent**, and tagged with `⚡ Autonomous Auto-Sent`.
-* **Human Edit & AI Learning Engine**:
-  * If edited before sending, the exact diff is extracted and saved to `FEEDBACK_RULES[category]`.
-  * Streak resets to `0/X`.
-  * The very next draft in that category immediately incorporates the learned supervisor rule.
-* **Permanent Restrictions**: High-risk categories (`refund_cancellation`, `complaint`, `project_request`, `quote_request`) are permanently restricted from autonomous sending regardless of streak.
-* **Emergency Stop**: Global master toggle (`auto_send_enabled`) instantly halts all autonomous dispatches.
+### Phase 4 — Dynamic Ingestion Metrics
+* **Measured Pipeline Throughput**:
+  * Track actual rolling latencies for HTTP page fetch, text extraction, chunking, and embedding generation.
+  * Compute dynamic `pages_per_5_min`, `pages_per_hour`, and estimated completion timestamp (`expected_completion_datetime`).
+  * Return provisional estimate with uncertainty bounds when historical sample size is small.
+
+### Phase 5 — Sitemap Lifecycle Completeness
+* **HTTP 301 & 404 Lifecycle Handling**:
+  * Record 301 canonical URL targets and redirect history.
+  * Record 404 status codes and apply configurable retention thresholds (1, 2, 15, or 30 checks).
+  * Ensure shared URLs referenced in another enabled sitemap source are never deleted while needed.
+  * Dedicated archive search and content restoration validation.
+
+### Phase 6 — Email UI & Classification Completeness
+* **9 Configurable Categories Alignment**:
+  * Split `header_footer` into `Header`, `Main Menu`, and `Footer`.
+  * Add `Managers` category.
+  * Support `Spam` folder in backend and frontend.
+  * Update UI in `public/index.html`, `public/app.js`, and sync to `dashboard/public/`.
+
+### Phase 7 — Feedback & Safe Self-Improvement
+* **Controlled Supervisor Feedback**:
+  * Record structured diffs between AI draft and sent email into SQLite `feedback_rules`.
+  * Retrieve relevant category rules during draft generation.
+  * Separate AI confidence score (0.00 - 1.00) from approval streak counter ($N / X$).
+  * Enforce safety blockades for high-risk categories (`refund_cancellation`, `complaint`, `project_request`, `quote_request`, `billing`).
+
+### Phase 8 — Full Regression & Acceptance Testing
+* **Test Suite Verification**:
+  * Execute all pytest suites, Task 1 evals, Task 2 evals, Task 3 evals.
+  * Update `IMPLEMENTATION_AUDIT.md` with verified evidence and updated statuses.
 
 ---
 
-## 5. Implementation Milestones
+## 4. Database Schema Changes & Migrations
 
-| Milestone | Deliverables | Status |
-| :--- | :--- | :--- |
-| **M1: Baseline Audit & Foundations** | Code inspection, evaluation baseline, `IMPLEMENTATION_PLAN.md` | **COMPLETED** |
-| **M2: Advanced Sitemap Discovery** | Recursive `<sitemapindex>` parsing, SSRF defense, discovery preview | **COMPLETED** |
-| **M3: Measured Throughput & ETA** | Rolling throughput calculation (5m, 1h, 24h), dynamic ETA formatting | **COMPLETED** |
-| **M4: Incremental Refresh & Archival** | 3-case change detection, 15-check missing URL threshold, Table #2 archival | **COMPLETED** |
-| **M5: Gmail OAuth & Real Sync Engine** | OAuth flow, encrypted token store, real Gmail draft creation, sync cursor | **COMPLETED** |
-| **M6: Gmail Familiar UI & Classification** | 3-pane Gmail layout, 8 setting labels, top-right profile avatar | **COMPLETED** |
-| **M7: Autonomy Threshold & Feedback Store** | Configurable $X$, draft vs sent diff learning, streak reset, safety locks | **COMPLETED** |
-| **M8: End-to-End Validation & Acceptance** | Automated test suite, live test personas, Google Cloud setup docs | **COMPLETED** |
-| **M9: Persistent Historical Archive** | Full content preservation, Knowledge Base Archive UI, restore, version history, cross-source safety, explicit purge | **COMPLETED** |
+```sql
+-- Autonomy Settings Table
+CREATE TABLE IF NOT EXISTS autonomy_settings (
+    category TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    icon TEXT,
+    threshold_x INTEGER DEFAULT 3,
+    consecutive_streak INTEGER DEFAULT 0,
+    is_eligible INTEGER DEFAULT 0,
+    is_guarded INTEGER DEFAULT 0,
+    is_enabled INTEGER DEFAULT 1,
+    total_approved INTEGER DEFAULT 0,
+    total_edited INTEGER DEFAULT 0,
+    confidence_score REAL DEFAULT 0.85,
+    last_approved_at TEXT,
+    updated_at TEXT NOT NULL
+);
+
+-- Feedback Rules Table
+CREATE TABLE IF NOT EXISTS feedback_rules (
+    id TEXT PRIMARY KEY,
+    category TEXT NOT NULL,
+    email_id TEXT,
+    rule_text TEXT NOT NULL,
+    original_draft TEXT,
+    final_sent TEXT,
+    diff_summary TEXT,
+    account_id TEXT,
+    created_at TEXT NOT NULL
+);
+
+-- Email Folder & Flag State
+CREATE TABLE IF NOT EXISTS email_folder_state (
+    email_id TEXT PRIMARY KEY,
+    folder TEXT DEFAULT 'inbox',
+    is_starred INTEGER DEFAULT 0,
+    is_read INTEGER DEFAULT 1,
+    setting_label TEXT,
+    raw_json TEXT,
+    updated_at TEXT NOT NULL
+);
+
+-- Global Autonomy Configuration
+CREATE TABLE IF NOT EXISTS autonomy_global_config (
+    key TEXT PRIMARY KEY,
+    value TEXT
+);
+```
 
 ---
 
-## 6. Testing Strategy
-
-* **Unit & Integration Tests**:
-  * `tests/test_crawler_change_detection.py`: Verifies Case 1 (new), Case 2 (updated lastmod), Case 3 (missing 15 checks $\to$ Table #2 archival).
-  * `tests/test_sitemap_and_gmail_engine.py`: 
-    * Test 1: Sitemap inspection & rolling ETA calculation.
-    * Test 2: Interactive chat AI reasoning engine & prompt engineering.
-    * Test 3: Authentic Gmail engine, 8 setting labels, autonomy streak unlock at $X=3$, streak reset on edit, and feedback rule injection.
-    * Test 4: Multi-source sitemap management and scheduling.
-    * Test 5: OAuth token encryption, HMAC authentication, and sync endpoints.
-    * Test 6: Email audit logging.
-    * Test 7: Persistent historical sitemap archive, full content preservation, exclusion from ordinary retrieval, dedicated historical search, cross-source protection, restoration, and authorized permanent deletion.
-* **Evaluation Benchmarks**:
-  * Task 1: 22 cases (`run_evals.py` $\to$ 100% pass rate).
-  * Task 2: 50 emails (`run-evals.js` $\to$ 100% pass rate).
-  * Task 3: 22 cases (`run_evals.py` $\to$ 100% pass rate).
-* **Live Acceptance Testing**:
-  * Knowledge Base $\to$ 🏛️ Historical Archive modal with live search, inspection preview, restoration, and permanent delete.
-  * Quick-fill personas for Fiona, Alex, David, Elena.
-  * Real Gmail OAuth connection with live incoming message verification.
+## 5. Security Architecture
+* **Encryption**: AES-256-GCM authenticated cipher with 96-bit unique nonces and 128-bit authentication tags.
+* **SSRF Prevention**: Scheme validation (`http`, `https`), DNS resolution, IP range check (filtering private, loopback, link-local, multicast, metadata ranges), and strict redirect re-validation per hop.
+* **Authentication**: Token-based authentication verifying incoming `Authorization: Bearer <token>` or `X-API-Key` headers on all sensitive administrative and data endpoints.

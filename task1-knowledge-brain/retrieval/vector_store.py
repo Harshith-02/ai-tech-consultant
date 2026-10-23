@@ -4,7 +4,7 @@ import json
 import uuid
 import re
 import hashlib
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 from app.config import settings
@@ -243,6 +243,71 @@ class KnowledgeVectorStore:
             );
             """)
 
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS autonomy_settings (
+                category TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                icon TEXT,
+                threshold_x INTEGER DEFAULT 3,
+                consecutive_streak INTEGER DEFAULT 0,
+                is_eligible INTEGER DEFAULT 0,
+                is_guarded INTEGER DEFAULT 0,
+                is_enabled INTEGER DEFAULT 1,
+                total_approved INTEGER DEFAULT 0,
+                total_edited INTEGER DEFAULT 0,
+                confidence_score REAL DEFAULT 0.85,
+                last_approved_at TEXT,
+                updated_at TEXT NOT NULL
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS feedback_rules (
+                id TEXT PRIMARY KEY,
+                category TEXT NOT NULL,
+                email_id TEXT,
+                rule_text TEXT NOT NULL,
+                original_draft TEXT,
+                final_sent TEXT,
+                diff_summary TEXT,
+                account_id TEXT,
+                created_at TEXT NOT NULL
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS email_folder_state (
+                email_id TEXT PRIMARY KEY,
+                folder TEXT DEFAULT 'inbox',
+                is_starred INTEGER DEFAULT 0,
+                is_read INTEGER DEFAULT 1,
+                setting_label TEXT,
+                raw_json TEXT,
+                updated_at TEXT NOT NULL
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sent_emails (
+                id TEXT PRIMARY KEY,
+                email_id TEXT,
+                recipient TEXT NOT NULL,
+                subject TEXT NOT NULL,
+                body TEXT NOT NULL,
+                category TEXT,
+                is_autonomous INTEGER DEFAULT 0,
+                gmail_message_id TEXT,
+                created_at TEXT NOT NULL
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS autonomy_global_config (
+                key TEXT PRIMARY KEY,
+                value TEXT
+            );
+            """)
+
             # Seed default documentation source if empty
             cursor.execute("SELECT COUNT(*) FROM sitemap_sources")
             if cursor.fetchone()[0] == 0:
@@ -251,6 +316,30 @@ class KnowledgeVectorStore:
                 INSERT INTO sitemap_sources (id, name, root_sitemap_url, is_enabled, refresh_enabled, refresh_interval_days, missing_threshold, status, created_at, updated_at)
                 VALUES ('src_default_bd', 'Brilliant Directories Documentation', 'https://support.brilliantdirectories.com/support/sitemap.xml', 1, 1, 7, 15, 'active', ?, ?)
                 """, (now_str, now_str))
+
+            # Seed default autonomy categories if empty
+            cursor.execute("SELECT COUNT(*) FROM autonomy_settings")
+            if cursor.fetchone()[0] == 0:
+                now_str = datetime.now(timezone.utc).isoformat()
+                initial_cats = [
+                    ("filters", "Filters & Facets", "🔍", 3, 0, 0, 0.88),
+                    ("home_page", "Home Page Layout", "🏠", 3, 0, 0, 0.85),
+                    ("domain_management", "Domain & DNS Management", "🌐", 3, 0, 0, 0.90),
+                    ("header", "Header Layout & Logo", "📑", 3, 0, 0, 0.87),
+                    ("main_menu", "Main Menu & Navigation", "🧭", 3, 0, 0, 0.86),
+                    ("footer", "Footer Layout & Links", "🦶", 3, 0, 0, 0.85),
+                    ("general_settings", "General Settings", "⚙️", 3, 0, 0, 0.82),
+                    ("design_settings", "Design & CSS Settings", "🎨", 3, 0, 0, 0.84),
+                    ("managers", "Managers & Admin Roles", "👥", 3, 0, 0, 0.89),
+                    ("billing", "Billing & Subscriptions", "💳", 3, 0, 1, 0.95),
+                    ("staging", "Staging & Development", "🧪", 3, 0, 0, 0.80),
+                ]
+                for cat_id, cat_name, cat_icon, th_x, el, gd, conf in initial_cats:
+                    cursor.execute("""
+                    INSERT OR IGNORE INTO autonomy_settings 
+                    (category, name, icon, threshold_x, consecutive_streak, is_eligible, is_guarded, is_enabled, confidence_score, updated_at)
+                    VALUES (?, ?, ?, ?, 0, ?, ?, 1, ?, ?)
+                    """, (cat_id, cat_name, cat_icon, th_x, el, gd, conf, now_str))
 
             conn.commit()
 
@@ -620,13 +709,15 @@ class KnowledgeVectorStore:
         missing_threshold: int = 15
     ) -> Dict[str, Any]:
         src_id = f"src_{uuid.uuid4().hex[:8]}"
-        now = datetime.now(timezone.utc).isoformat()
+        now_dt = datetime.now(timezone.utc)
+        now_str = now_dt.isoformat()
+        next_check = (now_dt + timedelta(days=refresh_interval_days)).isoformat()
         with self._get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-            INSERT INTO sitemap_sources (id, name, root_sitemap_url, is_enabled, refresh_enabled, refresh_interval_days, missing_threshold, status, created_at, updated_at)
-            VALUES (?, ?, ?, 1, 1, ?, ?, 'active', ?, ?)
-            """, (src_id, name, root_url, refresh_interval_days, missing_threshold, now, now))
+            INSERT INTO sitemap_sources (id, name, root_sitemap_url, is_enabled, refresh_enabled, refresh_interval_days, missing_threshold, next_check_at, status, created_at, updated_at)
+            VALUES (?, ?, ?, 1, 1, ?, ?, ?, 'active', ?, ?)
+            """, (src_id, name, root_url, refresh_interval_days, missing_threshold, next_check, now_str, now_str))
             conn.commit()
         return self.get_sitemap_source(src_id)
 
@@ -674,6 +765,12 @@ class KnowledgeVectorStore:
         updates = {k: v for k, v in kwargs.items() if k in valid_keys}
         if not updates:
             return self.get_sitemap_source(source_id)
+        if "refresh_interval_days" in updates and "next_check_at" not in updates:
+            try:
+                days = int(updates["refresh_interval_days"])
+                updates["next_check_at"] = (datetime.now(timezone.utc) + timedelta(days=days)).isoformat()
+            except Exception:
+                pass
         updates["updated_at"] = datetime.now(timezone.utc).isoformat()
         set_clause = ", ".join(f"{k} = ?" for k in updates.keys())
         values = list(updates.values()) + [source_id]
@@ -1007,6 +1104,197 @@ class KnowledgeVectorStore:
             """, (audit_id, account_id, email_id, event_type, actor_type, decision, reason, meta_json, now))
             conn.commit()
         return audit_id
+
+    def get_autonomy_settings(self, category: Optional[str] = None) -> Dict[str, Any]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            if category:
+                cursor.execute("SELECT * FROM autonomy_settings WHERE category = ?", (category,))
+                row = cursor.fetchone()
+                return dict(row) if row else {}
+            cursor.execute("SELECT * FROM autonomy_settings ORDER BY name ASC")
+            rows = cursor.fetchall()
+            return {r["category"]: dict(r) for r in rows}
+
+    def save_autonomy_setting(self, category: str, **kwargs) -> Dict[str, Any]:
+        now = datetime.now(timezone.utc).isoformat()
+        current = self.get_autonomy_settings(category)
+        if not current:
+            current = {
+                "category": category,
+                "name": kwargs.get("name", category.replace("_", " ").title()),
+                "icon": kwargs.get("icon", "⚙️"),
+                "threshold_x": 3,
+                "consecutive_streak": 0,
+                "is_eligible": 0,
+                "is_guarded": 1 if category == "billing" else 0,
+                "is_enabled": 1,
+                "total_approved": 0,
+                "total_edited": 0,
+                "confidence_score": 0.85,
+                "last_approved_at": None,
+                "updated_at": now
+            }
+        current.update(kwargs)
+        current["updated_at"] = now
+        
+        # Enforce billing is guarded
+        if category == "billing":
+            current["is_guarded"] = 1
+            current["is_eligible"] = 0
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO autonomy_settings 
+            (category, name, icon, threshold_x, consecutive_streak, is_eligible, is_guarded, is_enabled, total_approved, total_edited, confidence_score, last_approved_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(category) DO UPDATE SET
+                name = excluded.name,
+                icon = excluded.icon,
+                threshold_x = excluded.threshold_x,
+                consecutive_streak = excluded.consecutive_streak,
+                is_eligible = excluded.is_eligible,
+                is_guarded = excluded.is_guarded,
+                is_enabled = excluded.is_enabled,
+                total_approved = excluded.total_approved,
+                total_edited = excluded.total_edited,
+                confidence_score = excluded.confidence_score,
+                last_approved_at = excluded.last_approved_at,
+                updated_at = excluded.updated_at
+            """, (
+                current["category"], current["name"], current["icon"], current["threshold_x"],
+                current["consecutive_streak"], current["is_eligible"], current["is_guarded"],
+                current["is_enabled"], current["total_approved"], current["total_edited"],
+                current["confidence_score"], current.get("last_approved_at"), current["updated_at"]
+            ))
+            conn.commit()
+        return current
+
+    def get_global_config(self, key: str, default: Any = None) -> Any:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT value FROM autonomy_global_config WHERE key = ?", (key,))
+            row = cursor.fetchone()
+            if not row:
+                return default
+            try:
+                return json.loads(row["value"])
+            except Exception:
+                return row["value"]
+
+    def set_global_config(self, key: str, value: Any) -> None:
+        val_str = json.dumps(value) if not isinstance(value, str) else value
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO autonomy_global_config (key, value) VALUES (?, ?)
+            ON CONFLICT(key) DO UPDATE SET value = excluded.value
+            """, (key, val_str))
+            conn.commit()
+
+    def add_feedback_rule(
+        self,
+        category: str,
+        email_id: str,
+        rule_text: str,
+        original_draft: str = "",
+        final_sent: str = "",
+        diff_summary: str = "",
+        account_id: str = ""
+    ) -> str:
+        rule_id = f"fb_{uuid.uuid4().hex[:8]}"
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO feedback_rules (id, category, email_id, rule_text, original_draft, final_sent, diff_summary, account_id, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (rule_id, category, email_id, rule_text, original_draft, final_sent, diff_summary, account_id, now))
+            conn.commit()
+        return rule_id
+
+    def get_feedback_rules(self, category: Optional[str] = None) -> Dict[str, List[Dict[str, Any]]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            if category:
+                cursor.execute("SELECT * FROM feedback_rules WHERE category = ? ORDER BY created_at DESC", (category,))
+            else:
+                cursor.execute("SELECT * FROM feedback_rules ORDER BY created_at DESC")
+            rows = cursor.fetchall()
+            out: Dict[str, List[Dict[str, Any]]] = {}
+            for r in rows:
+                c = r["category"]
+                d = dict(r)
+                d["rule"] = d.get("rule_text", "")
+                out.setdefault(c, []).append(d)
+            return out
+
+    def save_email_folder_state(
+        self,
+        email_id: str,
+        folder: Optional[str] = None,
+        is_starred: Optional[int] = None,
+        is_read: Optional[int] = None,
+        setting_label: Optional[str] = None,
+        raw_json: Optional[str] = None
+    ) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM email_folder_state WHERE email_id = ?", (email_id,))
+            existing = cursor.fetchone()
+            if existing:
+                f_val = folder if folder is not None else existing["folder"]
+                s_val = is_starred if is_starred is not None else existing["is_starred"]
+                r_val = is_read if is_read is not None else existing["is_read"]
+                l_val = setting_label if setting_label is not None else existing["setting_label"]
+                j_val = raw_json if raw_json is not None else existing["raw_json"]
+                cursor.execute("""
+                UPDATE email_folder_state 
+                SET folder = ?, is_starred = ?, is_read = ?, setting_label = ?, raw_json = ?, updated_at = ?
+                WHERE email_id = ?
+                """, (f_val, s_val, r_val, l_val, j_val, now, email_id))
+            else:
+                cursor.execute("""
+                INSERT INTO email_folder_state (email_id, folder, is_starred, is_read, setting_label, raw_json, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (email_id, folder or 'inbox', is_starred or 0, is_read if is_read is not None else 1, setting_label, raw_json, now))
+            conn.commit()
+
+    def get_email_folder_states(self) -> Dict[str, Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM email_folder_state")
+            rows = cursor.fetchall()
+            return {r["email_id"]: dict(r) for r in rows}
+
+    def save_sent_email_record(
+        self,
+        email_id: str,
+        recipient: str,
+        subject: str,
+        body: str,
+        category: str,
+        is_autonomous: bool = False,
+        gmail_message_id: Optional[str] = None
+    ) -> str:
+        record_id = f"sent_{uuid.uuid4().hex[:8]}"
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO sent_emails (id, email_id, recipient, subject, body, category, is_autonomous, gmail_message_id, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (record_id, email_id, recipient, subject, body, category, 1 if is_autonomous else 0, gmail_message_id, now))
+            conn.commit()
+        return record_id
+
+    def list_sent_email_records(self, limit: int = 100) -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM sent_emails ORDER BY created_at DESC LIMIT ?", (limit,))
+            return [dict(r) for r in cursor.fetchall()]
 
     def get_email_audit_logs(self, limit: int = 50) -> List[Dict[str, Any]]:
         with self._get_connection() as conn:

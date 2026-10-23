@@ -4,6 +4,26 @@ const API_KB = isLocalMultiPort ? "http://127.0.0.1:8000" : "/api/kb";
 const API_INBOX = isLocalMultiPort ? "http://127.0.0.1:3001" : "/api/inbox";
 const API_SCOPE = isLocalMultiPort ? "http://127.0.0.1:8002" : "/api/scope";
 
+// Global Authenticated Fetch Interceptor
+const AUTH_TOKEN = localStorage.getItem("auth_token") || "lead-consultant-sec-token-2026";
+const _origFetch = window.fetch;
+window.fetch = async function(input, init) {
+  init = init || {};
+  init.headers = init.headers || {};
+  if (init.headers instanceof Headers) {
+    if (!init.headers.has("Authorization")) {
+      init.headers.set("Authorization", `Bearer ${AUTH_TOKEN}`);
+    }
+  } else if (Array.isArray(init.headers)) {
+    init.headers.push(["Authorization", `Bearer ${AUTH_TOKEN}`]);
+  } else {
+    if (!init.headers["Authorization"]) {
+      init.headers["Authorization"] = `Bearer ${AUTH_TOKEN}`;
+    }
+  }
+  return _origFetch(input, init);
+};
+
 let currentSelectedEmail = null;
 let currentTranscriptChoice = "A";
 let activeProposalId = null;
@@ -862,14 +882,18 @@ let currentGmailSearch = "";
 let currentThresholdX = 3;
 
 const SETTING_LABELS_MAP = {
-  "filters": { name: "Search & Filters", icon: "🔍", color: "#38bdf8" },
-  "home_page": { name: "Home Page & Hero", icon: "🏠", color: "#818cf8" },
+  "filters": { name: "Filters & Facets", icon: "🔍", color: "#38bdf8" },
+  "home_page": { name: "Home Page Layout", icon: "🏠", color: "#818cf8" },
   "domain_management": { name: "Domain & DNS", icon: "🌐", color: "#34d399" },
-  "header_footer": { name: "Header & Footer", icon: "📑", color: "#fbbf24" },
-  "billing": { name: "Billing & Plans", icon: "💳", color: "#f472b6" },
-  "staging": { name: "Staging & Dev", icon: "🧪", color: "#c084fc" },
+  "header": { name: "Header Layout & Logo", icon: "📑", color: "#38bdf8" },
+  "main_menu": { name: "Main Menu & Navigation", icon: "🧭", color: "#a78bfa" },
+  "footer": { name: "Footer Layout & Links", icon: "🦶", color: "#f59e0b" },
   "general_settings": { name: "General Settings", icon: "⚙️", color: "#94a3b8" },
-  "design_settings": { name: "Design & CSS", icon: "🎨", color: "#fb7185" }
+  "design_settings": { name: "Design Settings", icon: "🎨", color: "#fb7185" },
+  "managers": { name: "Managers & Admin Roles", icon: "👥", color: "#10b981" },
+  "billing": { name: "Billing & Subscriptions", icon: "💳", color: "#f472b6" },
+  "staging": { name: "Staging & Dev", icon: "🧪", color: "#c084fc" },
+  "header_footer": { name: "Header, Menu & Footer", icon: "📑", color: "#fbbf24" }
 };
 
 async function loadInboxEmails() {
@@ -918,6 +942,7 @@ async function updateFolderCounts() {
     setBadge("badge-count-drafts", counts.drafts);
     setBadge("badge-count-sent", counts.sent);
     setBadge("badge-count-trash", counts.trash);
+    setBadge("badge-count-spam", counts.spam);
   } catch (err) {
     // Ignore offline errors
   }

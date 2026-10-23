@@ -12,40 +12,43 @@ An autonomous, multi-agent AI tech consultancy system that unifies company produ
 ### Upgrade A: Advanced Sitemap Discovery, Ingestion & Automatic Refresh
 - **Multi-Source Sitemap Support:** Add, inspect, and track multiple independent sitemap origins (`sitemap_sources` table).
 - **Recursive Sitemap Traversal:** Automatically navigates nested `<sitemapindex>` hierarchies down to terminal page URLs.
-- **SSRF Safeguards:** Strict validation blocking private IP blocks (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), localhost/loopback, link-local metadata (`169.254.169.254`), and cloud internal domains (`metadata.google.internal`).
-- **Discovery Preview & Explicit Confirmation:** Displays total URLs discovered, first/last URL sample, speed estimates, and estimated completion time before any crawling begins.
-- **Dynamic Measured ETA:** Calculations based on observed throughput (`50 pages / 5 mins`, `600 pages / 1 hour`, `14.4k pages / 24 hours`) reporting realistic completion estimates (`X hours Y mins (±1 day)`).
+- **SSRF Safeguards & Redirect Defense:** Per-hop IP and hostname re-validation for every HTTP redirect (301/302/307/308), strictly blocking private IP blocks (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), localhost/loopback, link-local metadata (`169.254.169.254`), and cloud internal destinations.
+- **Discovery Preview & Explicit Confirmation:** Displays total URLs discovered, first/last URL sample, speed estimates, pipeline stages, and expected completion datetime before any crawling begins.
+- **Dynamic Measured ETA:** Calculations based on observed rolling throughput across page fetching, parsing, chunk generation, embedding generation, and indexing, reporting realistic completion estimates (`X hours Y mins (±1 day)`).
 - **3-Case Incremental Change Detection:**
   - *Case 1 (New URLs):* Automatically fetched, parsed, chunked, embedded, and added to the Knowledge Brain.
   - *Case 2 (Changed URLs):* Verified via conditional re-validation and SHA-256 content hashes, updating index chunks atomically.
-  - *Case 3 (Missing URLs):* Absence is tracked across consecutive runs. URLs are preserved and **only archived after 15 consecutive successful checks** by default.
+  - *Case 3 (Missing URLs):* Absence is tracked across consecutive runs. Configurable retention thresholds (1, 2, 15, or 30 consecutive checks; default 15) before historical archival.
   - *Cross-Source Protection:* Shared URLs referenced by another active source remain active.
-- **Table #2 Archival:** Missing URLs that cross the threshold are retired from active retrieval (Table #1) and safely preserved in Table #2 (`archived_articles`) for historical audit trails.
-- **Automatic Scheduled Refreshes:** Enabled by default (Weekly default; configurable to Daily, Weekly, Every 15 Days, or Every 30 Days).
+- **Table #2 Archival:** Missing URLs that cross the threshold are retired from active retrieval (Table #1) and safely preserved in Table #2 (`archived_articles`) with version history for audit and one-click restoration.
+- **Durable Background Refresh Scheduler:** Configurable schedules (Daily, Weekly, Every 15 Days, or Every 30 Days) with `/api/kb/sitemap/refresh-due` handling concurrency locks, missed runs, and process restarts.
 
 ### Upgrade B: Real Gmail Integration & Intelligent Email Assistant
 - **Google OAuth 2.0 Integration:** Secure connection flow requesting minimum necessary scopes (`gmail.readonly`, `gmail.compose`, `gmail.modify`, `userinfo.email`) with CSRF state protection.
-- **Symmetric Token Encryption:** Standard-library HMAC-SHA256 authenticated keystream encryption with random 16-byte IVs for all stored access and refresh tokens.
-- **Real Inbox Synchronization:** Fetches live Gmail messages via Gmail API / History cursor, extracts thread context, and prevents duplicate records.
-- **8 Configurable Setting Classification Labels:**
-  1. `filters` — Search, facets, dropdowns, schema breadcrumbs, categories.
-  2. `home_page` — Homepage layout, hero banners, sliders, cover images.
-  3. `domain_management` — Domain records, DNS, nameservers, SSL, forwarding.
-  4. `header_footer` — Main menu, navigation links, social media icons, footer.
-  5. `billing` — Subscription plans, invoices, Stripe, membership pricing.
-  6. `staging` — Sandbox clone, developer environments, MySQL migrations.
-  7. `general_settings` — Timezone, company information, reCAPTCHA, CSV import.
-  8. `design_settings` — CSS stylesheets, typography, color themes, hover styles.
-- **Grounded Draft Generation in Real Gmail:** AI draft replies are generated using Knowledge Brain hybrid retrieval and immediately created in the user's authentic **Gmail Drafts folder** (`users.drafts.create`).
+- **Standard AES-256-GCM Authenticated Encryption:** AES-256-GCM AEAD encryption with cryptographically secure 96-bit nonces, 128-bit authentication tags, and versioned `v1:` ciphertext. Zero hardcoded secrets, fail-safe environment variable enforcement.
+- **Real Inbox Synchronization:** Fetches live Gmail messages via Gmail API / History cursor, extracts thread context, and supports Inbox, Starred, Drafts, Sent, Spam, and Trash.
+- **9 Configurable Topic Classification Categories:**
+  1. `filters` — Filters & Facets, search dropdowns, breadcrumbs, ranking.
+  2. `home_page` — Home Page Layout, hero banners, sliders, cover images.
+  3. `domain_management` — Domain & DNS Management, SSL, nameservers, MX records.
+  4. `header` — Header Layout, logo branding, header top bar.
+  5. `main_menu` — Main Menu & Navigation navbar, menu links, dropdowns.
+  6. `footer` — Footer Layout, copyright, social media links, bottom bar.
+  7. `general_settings` — General Settings, timezone, company info, CSV import.
+  8. `design_settings` — Design Settings, CSS overrides, typography, theme colors.
+  9. `managers` — Managers & Admin Roles, staff access permissions.
+  *(Plus permanently guarded `billing` for subscriptions and payments).*
+- **Grounded Draft Generation in Real Gmail:** AI draft replies are generated using Knowledge Brain hybrid retrieval and created in authentic **Gmail Drafts folder** (`users.drafts.create`).
 - **Configurable Autonomy Threshold X:**
   - Default: $X = 3$ consecutive unedited sent responses.
   - Configurable per category or globally in Settings.
-  - When $X$ is reached, the category unlocks autonomous sending for eligible emails.
+  - Safe State Machine: approval streaks only commit upon confirmed external send.
 - **AI Learning Engine (Draft vs. Sent Diffs):**
-  - If a supervisor edits an AI draft before sending, the system captures the difference, extracts the preference into `FEEDBACK_RULES`, and resets the category streak to 0.
+  - If a supervisor edits an AI draft before sending, the system captures the difference, persists the rule to SQLite `feedback_rules`, and resets the category streak to 0.
   - Subsequent drafts incorporate the learned supervisor rule directly.
-- **Permanent Policy Restrictions:** High-risk categories (`refund_cancellation`, `complaint`, `project_request`, `quote_request`) permanently require human review and cannot be bypassed.
-- **Comprehensive Audit Logs:** All connection changes, approvals, manual edits, sends, and streak resets are persisted in `email_audit_log`.
+- **Permanent Policy Restrictions:** High-risk categories (`refund_cancellation`, `complaint`, `project_request`, `quote_request`, `billing`) permanently require human review and cannot be bypassed.
+- **Durable Persistence & Audit Logs:** Streaks, feedback rules, folder states, sent emails, and audit trails are persisted in SQLite (`knowledge_brain.db`).
+- **Application Security & Authorization:** Protected `/api/kb/*` and `/api/inbox/*` endpoints require authentication headers with account-level isolation.
 
 ---
 

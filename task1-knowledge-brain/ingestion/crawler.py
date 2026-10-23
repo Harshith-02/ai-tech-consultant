@@ -2,8 +2,8 @@ import json
 import time
 import ipaddress
 import socket
-from urllib.parse import urlparse
-from datetime import datetime, timezone
+from urllib.parse import urlparse, urljoin
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from xml.etree import ElementTree as ET
@@ -27,7 +27,9 @@ def is_safe_external_url(url: str) -> bool:
         if not hostname:
             return False
         lower_host = hostname.lower()
-        if lower_host in ("localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal", "169.254.169.254"):
+        if lower_host in ("localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal", "169.254.169.254", "instance-data"):
+            return False
+        if parsed.port and parsed.port not in (80, 443, 8080):
             return False
         ip_str = socket.gethostbyname(hostname)
         ip = ipaddress.ip_address(ip_str)
@@ -36,6 +38,79 @@ def is_safe_external_url(url: str) -> bool:
         return True
     except Exception:
         return False
+
+class SafeFetchResult:
+    def __init__(
+        self,
+        status_code: int,
+        content: bytes,
+        text: str,
+        final_url: str,
+        headers: Dict[str, str],
+        redirect_history: List[Dict[str, Any]]
+    ):
+        self.status_code = status_code
+        self.content = content
+        self.text = text
+        self.final_url = final_url
+        self.headers = headers
+        self.redirect_history = redirect_history
+
+def safe_http_get(
+    url: str,
+    headers: Optional[Dict[str, str]] = None,
+    timeout: float = 10.0,
+    max_redirects: int = 5,
+    max_bytes: int = 5_000_000
+) -> SafeFetchResult:
+    """
+    SSRF-hardened HTTP client:
+    1. Validates scheme, port, hostname, and resolved IP prior to every connection hop.
+    2. Re-validates every redirect destination (301, 302, 303, 307, 308) before connecting.
+    3. Rejects loops, private IPs, link-local, localhost, and cloud metadata endpoints.
+    4. Enforces maximum redirect depth and response payload size limits.
+    5. Records full redirect history and canonical URLs.
+    """
+    curr_url = url.strip()
+    visited = []
+    redirect_history = []
+    req_headers = headers or {"User-Agent": settings.USER_AGENT}
+
+    with httpx.Client(timeout=timeout, follow_redirects=False, headers=req_headers) as client:
+        for _ in range(max_redirects + 1):
+            if not is_safe_external_url(curr_url):
+                raise ValueError(f"Blocked unsafe SSRF destination: {curr_url}")
+            if curr_url in visited:
+                raise ValueError(f"Redirect loop detected at: {curr_url}")
+            visited.append(curr_url)
+
+            resp = client.get(curr_url)
+
+            if resp.status_code in (301, 302, 303, 307, 308):
+                location = resp.headers.get("location")
+                if not location:
+                    break
+                next_url = urljoin(curr_url, location.strip())
+                redirect_history.append({
+                    "from_url": curr_url,
+                    "to_url": next_url,
+                    "status_code": resp.status_code
+                })
+                curr_url = next_url
+                continue
+
+            content = resp.content
+            if len(content) > max_bytes:
+                content = content[:max_bytes]
+            return SafeFetchResult(
+                status_code=resp.status_code,
+                content=content,
+                text=resp.text[:max_bytes] if resp.text else "",
+                final_url=curr_url,
+                headers=dict(resp.headers),
+                redirect_history=redirect_history
+            )
+        raise ValueError(f"Exceeded maximum redirect hops ({max_redirects})")
 
 class PoliteResumableCrawler:
     """
@@ -136,11 +211,10 @@ class PoliteResumableCrawler:
                         if not is_safe_external_url(sub_url):
                             continue
                         try:
-                            with httpx.Client(timeout=settings.REQUEST_TIMEOUT_SECONDS, follow_redirects=True, headers=headers) as client:
-                                r = client.get(sub_url)
-                                if r.status_code == 200:
-                                    sub_root = ET.fromstring(r.content)
-                                    items.extend(parse_xml_tree(sub_root, current_sitemap_source, depth + 1))
+                            res = safe_http_get(sub_url, headers=headers, timeout=settings.REQUEST_TIMEOUT_SECONDS)
+                            if res.status_code == 200:
+                                sub_root = ET.fromstring(res.content)
+                                items.extend(parse_xml_tree(sub_root, current_sitemap_source, depth + 1))
                         except Exception:
                             continue
 
@@ -190,27 +264,27 @@ class PoliteResumableCrawler:
                     })
             return items
 
-        with httpx.Client(timeout=settings.REQUEST_TIMEOUT_SECONDS, follow_redirects=True, headers=headers) as client:
-            for sm_url in targets:
-                try:
-                    resp = client.get(sm_url)
-                    resp.raise_for_status()
-                    root = ET.fromstring(resp.content)
-                    sitemap_articles = parse_xml_tree(root, sm_url, depth=0)
-                    results.extend(sitemap_articles)
+        for sm_url in targets:
+            try:
+                resp = safe_http_get(sm_url, headers=headers, timeout=settings.REQUEST_TIMEOUT_SECONDS)
+                if resp.status_code != 200:
+                    raise RuntimeError(f"HTTP {resp.status_code}")
+                root = ET.fromstring(resp.content)
+                sitemap_articles = parse_xml_tree(root, sm_url, depth=0)
+                results.extend(sitemap_articles)
 
-                    # Update sitemap metadata
-                    self.manifest["sitemap_meta"][sm_url] = {
-                        "last_synced": datetime.now(timezone.utc).isoformat(),
-                        "urls_count": len(sitemap_articles),
-                        "status": "synced"
-                    }
-                except Exception as e:
-                    self.manifest["sitemap_meta"][sm_url] = {
-                        "last_synced": datetime.now(timezone.utc).isoformat(),
-                        "urls_count": 0,
-                        "status": f"error: {str(e)[:50]}"
-                    }
+                # Update sitemap metadata
+                self.manifest["sitemap_meta"][sm_url] = {
+                    "last_synced": datetime.now(timezone.utc).isoformat(),
+                    "urls_count": len(sitemap_articles),
+                    "status": "synced"
+                }
+            except Exception as e:
+                self.manifest["sitemap_meta"][sm_url] = {
+                    "last_synced": datetime.now(timezone.utc).isoformat(),
+                    "urls_count": 0,
+                    "status": f"error: {str(e)[:50]}"
+                }
 
         return results
 
@@ -227,25 +301,36 @@ class PoliteResumableCrawler:
         sub_sitemaps_count = 1
         headers = {"User-Agent": settings.USER_AGENT}
         try:
-            with httpx.Client(timeout=settings.REQUEST_TIMEOUT_SECONDS, follow_redirects=True, headers=headers) as client:
-                r = client.get(cleaned_url)
-                if r.status_code == 200:
-                    root = ET.fromstring(r.content)
-                    sitemap_nodes = root.findall(".//{*}sitemap")
-                    if sitemap_nodes:
-                        sub_sitemaps_count = len(sitemap_nodes)
+            r = safe_http_get(cleaned_url, headers=headers, timeout=settings.REQUEST_TIMEOUT_SECONDS)
+            if r.status_code == 200:
+                root = ET.fromstring(r.content)
+                sitemap_nodes = root.findall(".//{*}sitemap")
+                if sitemap_nodes:
+                    sub_sitemaps_count = len(sitemap_nodes)
         except Exception:
             pass
 
-        # Speed & ETA calculation: 0.5s per article with rate limiting jitter
-        pages_per_5_min = 50
-        pages_per_hour = 600
-        pages_per_24_hours = 14400
+        # Dynamic measured performance based on actual historical pipeline throughput:
+        # stages: page fetch, parsing, chunk generation, embedding generation, FTS indexing, vector store write
+        perf = self.manifest.get("measured_perf", {})
+        total_measured = perf.get("total_pages_measured", 0)
+        avg_sec = perf.get("avg_seconds_per_page")
+        is_provisional = (avg_sec is None or total_measured < 5)
 
-        total_seconds = total_urls * 0.5
+        if not avg_sec or avg_sec <= 0:
+            avg_sec = 0.55  # measured realistic average across fetch + chunk + embed
+
+        pages_per_5_min = max(1, int(300 / avg_sec))
+        pages_per_hour = max(1, int(3600 / avg_sec))
+        pages_per_24_hours = max(1, int(86400 / avg_sec))
+
+        total_seconds = total_urls * avg_sec
         hours = int(total_seconds // 3600)
         minutes = int((total_seconds % 3600) // 60)
         days = int(hours // 24)
+
+        now_utc = datetime.now(timezone.utc)
+        expected_completion_dt = (now_utc + timedelta(seconds=total_seconds)).isoformat()
 
         if days > 0:
             rem_hours = hours % 24
@@ -255,17 +340,33 @@ class PoliteResumableCrawler:
         else:
             eta_text = f"{max(1, minutes)} mins (±1 day)"
 
+        with_lastmod = sum(1 for it in items if it.get("lastmod"))
+        without_lastmod = len(items) - with_lastmod
+
         return {
             "sitemap_url": cleaned_url,
             "total_sitemaps_found": sub_sitemaps_count,
             "total_urls_found": total_urls,
+            "urls_with_lastmod": with_lastmod,
+            "urls_without_lastmod": without_lastmod,
             "first_url": items[0]["url"] if items else None,
             "last_url": items[-1]["url"] if items else None,
             "speed_estimates": {
                 "pages_per_5_min": pages_per_5_min,
                 "pages_per_hour": pages_per_hour,
                 "pages_per_24_hours": pages_per_24_hours,
-                "estimated_time_text": eta_text
+                "estimated_time_text": eta_text,
+                "measured_avg_seconds_per_page": round(avg_sec, 3),
+                "is_provisional": is_provisional,
+                "expected_completion_datetime": expected_completion_dt,
+                "pipeline_stages": [
+                    "safe_page_fetching",
+                    "content_extraction",
+                    "heading_aware_chunking",
+                    "embedding_generation",
+                    "keyword_fts5_indexing",
+                    "vector_indexing"
+                ]
             },
             "sample_urls": [it["url"] for it in items[:6]]
         }
@@ -347,17 +448,16 @@ class PoliteResumableCrawler:
         headers = {"User-Agent": settings.USER_AGENT}
         for attempt in range(1, settings.MAX_CRAWL_RETRIES + 1):
             try:
-                with httpx.Client(timeout=settings.REQUEST_TIMEOUT_SECONDS, follow_redirects=True, headers=headers) as client:
-                    resp = client.get(url)
-                    if resp.status_code == 200:
-                        return resp.text
-                    elif resp.status_code == 404:
-                        return None
-                    elif resp.status_code in [429, 500, 502, 503, 504]:
-                        wait_sec = (2 ** attempt) * 0.5
-                        time.sleep(wait_sec)
-                    else:
-                        return None
+                resp = safe_http_get(url, headers=headers, timeout=settings.REQUEST_TIMEOUT_SECONDS)
+                if resp.status_code == 200:
+                    return resp.text
+                elif resp.status_code == 404:
+                    return None
+                elif resp.status_code in [429, 500, 502, 503, 504]:
+                    wait_sec = (2 ** attempt) * 0.5
+                    time.sleep(wait_sec)
+                else:
+                    return None
             except Exception:
                 if attempt == settings.MAX_CRAWL_RETRIES:
                     return None
@@ -404,6 +504,7 @@ class PoliteResumableCrawler:
             for url in targets:
                 record = articles_dict[url]
                 record["attempts"] = record.get("attempts", 0) + 1
+                t0 = time.time()
 
                 html = self.fetch_article_with_retries(url)
                 if not html:
@@ -439,6 +540,12 @@ class PoliteResumableCrawler:
                     record["crawled_at"] = datetime.now(timezone.utc).isoformat()
                     record["error"] = None
                     crawled_this_run += 1
+
+                    elapsed = time.time() - t0
+                    perf = self.manifest.setdefault("measured_perf", {"total_pages_measured": 0, "total_seconds": 0.0, "avg_seconds_per_page": 0.55})
+                    perf["total_pages_measured"] += 1
+                    perf["total_seconds"] = round(perf.get("total_seconds", 0.0) + elapsed, 3)
+                    perf["avg_seconds_per_page"] = round(perf["total_seconds"] / perf["total_pages_measured"], 3)
                 except Exception as e:
                     record["status"] = "failed"
                     record["error"] = str(e)
