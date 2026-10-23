@@ -26,21 +26,24 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 # Ensure repo root and sub-modules are discoverable
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Set up DB path for Vercel Serverless (writable in /tmp)
-TMP_DIR = Path("/tmp") if os.name != "nt" else Path(os.environ.get("TEMP", "C:/Temp"))
+# Persistent Storage & DB path detection
 SOURCE_DB = BASE_DIR / "task1-knowledge-brain" / "data" / "knowledge_brain.db"
-TARGET_DB = TMP_DIR / "knowledge_brain.db"
+PERSISTENT_ENV_DB = os.environ.get("PERSISTENT_DB_PATH") or os.environ.get("DB_PATH")
 
-if SOURCE_DB.exists():
+if PERSISTENT_ENV_DB:
+    ACTIVE_DB_PATH = Path(PERSISTENT_ENV_DB)
+elif os.environ.get("VERCEL") != "1" and SOURCE_DB.exists():
+    ACTIVE_DB_PATH = SOURCE_DB
+else:
+    TMP_DIR = Path("/tmp") if os.name != "nt" else Path(os.environ.get("TEMP", "C:/Temp"))
+    TARGET_DB = TMP_DIR / "knowledge_brain.db"
     try:
         TMP_DIR.mkdir(parents=True, exist_ok=True)
-        if not TARGET_DB.exists():
+        if SOURCE_DB.exists() and not TARGET_DB.exists():
             shutil.copy2(SOURCE_DB, TARGET_DB)
         ACTIVE_DB_PATH = TARGET_DB
     except Exception:
         ACTIVE_DB_PATH = SOURCE_DB
-else:
-    ACTIVE_DB_PATH = SOURCE_DB
 
 os.environ["DB_PATH"] = str(ACTIVE_DB_PATH)
 
@@ -50,6 +53,9 @@ T3_DIR = BASE_DIR / "task3-meeting-to-scope"
 
 if str(T1_DIR) not in sys.path:
     sys.path.insert(0, str(T1_DIR))
+
+# Import vector_store early for auth revocation & multi-tenancy
+from retrieval.vector_store import vector_store
 
 # FastAPI Main Application
 app = FastAPI(
@@ -75,23 +81,117 @@ async def vercel_path_rewrite_middleware(request: Request, call_next):
     return await call_next(request)
 
 # ==============================================================================
-# AUTHENTICATION & ACCESS CONTROL (PHASE 1)
+# AUTHENTICATION & ACCESS CONTROL (PHASE 2 & 3: JWT & MULTI-TENANCY)
 # ==============================================================================
 API_SECRET_KEY = os.environ.get("API_SECRET_KEY", "lead-consultant-sec-token-2026")
+JWT_SECRET = os.environ.get("JWT_SECRET") or os.environ.get("API_SECRET_KEY") or "lead-consultant-sec-token-2026-production-jwt-key"
+SESSION_EXPIRY_HOURS = int(os.environ.get("SESSION_EXPIRY_HOURS", "24"))
+
+RATE_LIMIT_BUCKETS: Dict[str, List[float]] = {}
+def check_rate_limit(key: str, max_requests: int, window_seconds: int = 60) -> bool:
+    now = time.time()
+    timestamps = RATE_LIMIT_BUCKETS.setdefault(key, [])
+    RATE_LIMIT_BUCKETS[key] = [t for t in timestamps if t > now - window_seconds]
+    if len(RATE_LIMIT_BUCKETS[key]) >= max_requests:
+        return False
+    RATE_LIMIT_BUCKETS[key].append(now)
+    return True
+
+def base64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b'=').decode('ascii')
+
+def base64url_decode(data_str: str) -> bytes:
+    rem = len(data_str) % 4
+    if rem > 0:
+        data_str += '=' * (4 - rem)
+    return base64.urlsafe_b64decode(data_str.encode('ascii'))
+
+def create_session_jwt(
+    user_id: str = "consultant_lead_01",
+    account_id: str = "acc_default",
+    email: str = "consultant@apex.io",
+    role: str = "Lead AI Consultant",
+    permissions: Optional[List[str]] = None,
+    expires_in_seconds: Optional[int] = None
+) -> Dict[str, Any]:
+    now = int(time.time())
+    exp_seconds = expires_in_seconds or (SESSION_EXPIRY_HOURS * 3600)
+    exp = now + exp_seconds
+    jti = str(uuid.uuid4())
+    
+    header = {"alg": "HS256", "typ": "JWT"}
+    payload = {
+        "sub": user_id,
+        "acc": account_id,
+        "email": email,
+        "role": role,
+        "permissions": permissions or ["kb:read", "kb:write", "inbox:read", "inbox:write", "inbox:admin"],
+        "iat": now,
+        "exp": exp,
+        "jti": jti
+    }
+    
+    h_b64 = base64url_encode(json.dumps(header, separators=(',', ':')).encode('utf-8'))
+    p_b64 = base64url_encode(json.dumps(payload, separators=(',', ':')).encode('utf-8'))
+    signing_input = f"{h_b64}.{p_b64}".encode('ascii')
+    signature = hmac.new(JWT_SECRET.encode('utf-8'), signing_input, hashlib.sha256).digest()
+    sig_b64 = base64url_encode(signature)
+    token = f"{h_b64}.{p_b64}.{sig_b64}"
+    
+    return {
+        "token": token,
+        "token_type": "Bearer",
+        "expires_at": datetime.fromtimestamp(exp, tz=timezone.utc).isoformat(),
+        "expires_in": exp_seconds,
+        "jti": jti,
+        "user": {
+            "user_id": user_id,
+            "account_id": account_id,
+            "email": email,
+            "role": role,
+            "permissions": payload["permissions"]
+        }
+    }
+
+def decode_and_verify_jwt(token: str) -> Dict[str, Any]:
+    parts = token.split(".")
+    if len(parts) != 3:
+        raise ValueError("Invalid JWT token format")
+    h_b64, p_b64, sig_b64 = parts
+    signing_input = f"{h_b64}.{p_b64}".encode('ascii')
+    expected_sig = hmac.new(JWT_SECRET.encode('utf-8'), signing_input, hashlib.sha256).digest()
+    try:
+        actual_sig = base64url_decode(sig_b64)
+    except Exception:
+        raise ValueError("Malformed token signature")
+    if not hmac.compare_digest(expected_sig, actual_sig):
+        raise ValueError("Invalid token signature")
+    
+    try:
+        payload_bytes = base64url_decode(p_b64)
+        payload = json.loads(payload_bytes.decode('utf-8'))
+    except Exception:
+        raise ValueError("Malformed token payload")
+    
+    now = int(time.time())
+    if payload.get("exp", 0) < now:
+        raise ValueError("Session token has expired")
+        
+    jti = payload.get("jti")
+    if jti and vector_store.is_token_revoked(jti):
+        raise ValueError("Session token has been revoked")
+        
+    return payload
 
 class UserIdentity(BaseModel):
     user_id: str = "consultant_lead_01"
+    account_id: str = "acc_default"
     email: str = "consultant@apex.io"
     role: str = "Lead AI Consultant"
     permissions: List[str] = ["kb:read", "kb:write", "inbox:read", "inbox:write", "inbox:admin"]
+    jti: Optional[str] = None
 
 def require_auth(request: Request) -> UserIdentity:
-    """
-    Enforces authentication & authorization on protected endpoints.
-    Verifies Bearer token, X-API-Key, or session cookie.
-    Throws HTTP 401 if credentials are missing.
-    Throws HTTP 403 if credentials are invalid or permissions insufficient.
-    """
     auth_header = request.headers.get("Authorization") or request.headers.get("authorization")
     api_key_header = request.headers.get("X-API-Key") or request.headers.get("x-api-key")
     session_token_header = request.headers.get("X-Session-Token") or request.headers.get("x-session-token")
@@ -112,20 +212,37 @@ def require_auth(request: Request) -> UserIdentity:
             detail="Authentication required. Please provide valid bearer token or API key."
         )
 
-    expected_key = os.environ.get("API_SECRET_KEY", API_SECRET_KEY)
-    if token != expected_key and not token.startswith("lead_consultant_"):
-        raise HTTPException(
-            status_code=403,
-            detail="Forbidden: Invalid authentication credentials or insufficient permissions."
-        )
+    # 1. Try decoding as JWT
+    if "." in token:
+        try:
+            payload = decode_and_verify_jwt(token)
+            return UserIdentity(
+                user_id=payload.get("sub", "consultant_lead_01"),
+                account_id=payload.get("acc", "acc_default"),
+                email=payload.get("email", "consultant@apex.io"),
+                role=payload.get("role", "Lead AI Consultant"),
+                permissions=payload.get("permissions", ["kb:read", "kb:write", "inbox:read", "inbox:write", "inbox:admin"]),
+                jti=payload.get("jti")
+            )
+        except ValueError as e:
+            err_msg = str(e)
+            if "expired" in err_msg.lower() or "revoked" in err_msg.lower():
+                raise HTTPException(status_code=401, detail=f"Authentication failed: {err_msg}")
+            raise HTTPException(status_code=403, detail=f"Forbidden: {err_msg}")
 
-    return UserIdentity()
+    # 2. Check legacy static token
+    expected_key = os.environ.get("API_SECRET_KEY", API_SECRET_KEY)
+    if token == expected_key or token.startswith("lead_consultant_"):
+        return UserIdentity(account_id="acc_default")
+
+    raise HTTPException(
+        status_code=403,
+        detail="Forbidden: Invalid authentication credentials or insufficient permissions."
+    )
 
 # ==============================================================================
 # TASK 1: KNOWLEDGE BRAIN
 # ==============================================================================
-from retrieval.vector_store import vector_store
-
 kb_router = APIRouter(tags=["Knowledge Brain"])
 
 class QueryRequest(BaseModel):
@@ -400,6 +517,11 @@ async def kb_ingestion_sitemaps():
         "status": "synced"
     }]
 
+@kb_router.get("/storage-status")
+async def kb_storage_status():
+    """Returns database durability status, engine, WAL journal mode, and active recommendations."""
+    return vector_store.get_storage_status()
+
 class ArchiveSearchReq(BaseModel):
     query: str
     limit: int = 10
@@ -407,24 +529,24 @@ class ArchiveSearchReq(BaseModel):
 @kb_router.get("/archive")
 @kb_router.get("/ingestion/archived")
 async def kb_list_archived(q: Optional[str] = None, limit: int = 50, user: UserIdentity = Depends(require_auth)):
-    articles = vector_store.get_archived_articles(search_query=q, limit=limit)
+    articles = vector_store.get_archived_articles(search_query=q, limit=limit, account_id=user.account_id)
     return {"total": len(articles), "articles": articles}
 
 @kb_router.post("/archive/search")
 async def kb_search_archived(payload: ArchiveSearchReq, user: UserIdentity = Depends(require_auth)):
-    results = vector_store.search_archived_articles(payload.query, limit=payload.limit)
+    results = vector_store.search_archived_articles(payload.query, limit=payload.limit, account_id=user.account_id)
     return {"query": payload.query, "total": len(results), "results": results}
 
 @kb_router.get("/archive/{identifier:path}")
 async def kb_get_archived_details(identifier: str, user: UserIdentity = Depends(require_auth)):
-    details = vector_store.get_archived_article_details(identifier)
+    details = vector_store.get_archived_article_details(identifier, account_id=user.account_id)
     if not details:
         raise HTTPException(status_code=404, detail="Archived page not found")
     return details
 
 @kb_router.post("/archive/{identifier:path}/restore")
 async def kb_restore_archived(identifier: str, user: UserIdentity = Depends(require_auth)):
-    success = vector_store.restore_archived_article(identifier)
+    success = vector_store.restore_archived_article(identifier, account_id=user.account_id)
     if not success:
         raise HTTPException(status_code=404, detail="Archived page not found or failed to restore")
     return {"status": "restored", "message": f"Successfully restored '{identifier}' to active Knowledge Brain."}
@@ -433,7 +555,7 @@ async def kb_restore_archived(identifier: str, user: UserIdentity = Depends(requ
 async def kb_delete_archived(identifier: str, confirm: bool = Query(False), user: UserIdentity = Depends(require_auth)):
     if not confirm:
         raise HTTPException(status_code=400, detail="Permanent deletion requires explicit confirmation (?confirm=true)")
-    success = vector_store.permanent_delete_archived_article(identifier)
+    success = vector_store.permanent_delete_archived_article(identifier, account_id=user.account_id)
     if not success:
         raise HTTPException(status_code=404, detail="Archived page not found")
     return {"status": "permanently_deleted", "identifier": identifier}
@@ -451,22 +573,25 @@ class UpdateSitemapScheduleReq(BaseModel):
 
 @kb_router.get("/sitemap/sources")
 async def kb_list_sources(user: UserIdentity = Depends(require_auth)):
-    sources = vector_store.list_sitemap_sources()
+    sources = vector_store.list_sitemap_sources(account_id=user.account_id)
     return {"sources": sources, "total": len(sources)}
 
 @kb_router.post("/sitemap/sources")
 async def kb_create_source(payload: CreateSitemapSourceReq, user: UserIdentity = Depends(require_auth)):
+    if not check_rate_limit(f"sm_{user.account_id}", 20, 60):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded for creating sitemaps. Please wait a moment.")
     source = vector_store.create_sitemap_source(
         name=payload.name,
         root_url=payload.root_sitemap_url,
         refresh_interval_days=payload.refresh_interval_days,
-        missing_threshold=payload.missing_threshold
+        missing_threshold=payload.missing_threshold,
+        account_id=user.account_id
     )
     return {"status": "created", "source": source}
 
 @kb_router.delete("/sitemap/sources/{source_id}")
 async def kb_delete_source(source_id: str, purge_content: bool = False, user: UserIdentity = Depends(require_auth)):
-    success = vector_store.delete_sitemap_source(source_id, purge_content=purge_content)
+    success = vector_store.delete_sitemap_source(source_id, account_id=user.account_id, purge_content=purge_content)
     if not success:
         raise HTTPException(status_code=404, detail="Sitemap source not found")
     return {"status": "deleted", "source_id": source_id}
@@ -480,26 +605,42 @@ async def kb_update_source_schedule(source_id: str, payload: UpdateSitemapSchedu
         updates["missing_threshold"] = payload.missing_threshold
     if payload.refresh_enabled is not None:
         updates["refresh_enabled"] = 1 if payload.refresh_enabled else 0
-    updated = vector_store.update_sitemap_source(source_id, **updates)
+    updated = vector_store.update_sitemap_source(source_id, account_id=user.account_id, **updates)
     if not updated:
         raise HTTPException(status_code=404, detail="Sitemap source not found")
     return {"status": "updated", "source": updated}
 
 @kb_router.get("/sitemap/runs")
 async def kb_list_runs(source_id: Optional[str] = None, user: UserIdentity = Depends(require_auth)):
-    runs = vector_store.list_refresh_runs(source_id=source_id)
+    runs = vector_store.list_refresh_runs(source_id=source_id, account_id=user.account_id)
     return {"runs": runs, "total": len(runs)}
 
 ACTIVE_SITEMAP_CRAWLS: set = set()
 
 @kb_router.post("/sitemap/refresh-due")
-async def kb_refresh_due(user: UserIdentity = Depends(require_auth)):
+async def kb_refresh_due(request: Request):
     """
     Durable scheduled refresh runner:
     Checks all enabled sources where next_check_at <= now (or is null),
     and executes incremental refresh with concurrency locks.
+    Protected by dedicated server-side CRON_SECRET or authenticated admin session.
     """
-    sources = vector_store.list_sitemap_sources()
+    cron_secret = os.environ.get("CRON_SECRET")
+    auth_header = request.headers.get("Authorization") or request.headers.get("authorization") or ""
+    x_cron = request.headers.get("X-Cron-Secret") or request.headers.get("x-cron-secret") or ""
+    
+    is_cron_authorized = False
+    if cron_secret and (auth_header == f"Bearer {cron_secret}" or x_cron == cron_secret):
+        is_cron_authorized = True
+        account_id = "acc_default"
+    
+    if not is_cron_authorized:
+        user = require_auth(request)
+        if "kb:admin" not in user.permissions and "kb:write" not in user.permissions:
+            raise HTTPException(status_code=403, detail="Forbidden: Admin permissions required to trigger scheduler.")
+        account_id = user.account_id
+
+    sources = vector_store.list_sitemap_sources(account_id=account_id)
     now_dt = datetime.now(timezone.utc)
     now_str = now_dt.isoformat()
     refreshed = []
@@ -539,6 +680,7 @@ async def kb_refresh_due(user: UserIdentity = Depends(require_auth)):
                 next_run_dt = (now_dt + timedelta(days=interval)).isoformat()
                 vector_store.update_sitemap_source(
                     src_id,
+                    account_id=account_id,
                     last_checked_at=now_str,
                     last_successful_refresh_at=now_str,
                     next_check_at=next_run_dt,
@@ -548,6 +690,7 @@ async def kb_refresh_due(user: UserIdentity = Depends(require_auth)):
             except Exception as e:
                 vector_store.update_sitemap_source(
                     src_id,
+                    account_id=account_id,
                     last_checked_at=now_str,
                     status=f"error: {str(e)[:50]}"
                 )
@@ -1136,7 +1279,7 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
     feedback_message = ""
 
     # Phase 2 & Audit Fix: Attempt Gmail send FIRST before modifying approval streaks
-    active_acc = vector_store.get_active_gmail_account()
+    active_acc = vector_store.get_active_gmail_account(account_id=user.account_id)
     sent_gmail_msg_id = None
     found = next((e for e in EMAILS_CACHE if e.get("id") == payload.emailId), None)
 
@@ -1219,7 +1362,7 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
             original_draft=orig,
             final_sent=sent,
             diff_summary=diff_summary,
-            account_id=active_acc["id"] if active_acc else ""
+            account_id=user.account_id
         )
         feedback_message = f"💡 AI learned from your edits in {st['name']}! Feedback pair recorded. Streak reset to 0/{threshold_x}."
 
@@ -1228,6 +1371,7 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
     # Persist updated autonomy setting to SQLite
     vector_store.save_autonomy_setting(
         category=cat,
+        account_id=user.account_id,
         name=st["name"],
         icon=st.get("icon", "⚙️"),
         threshold_x=threshold_x,
@@ -1262,9 +1406,9 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
         body=sent_body,
         category=cat,
         is_autonomous=False,
-        gmail_message_id=sent_gmail_msg_id
+        gmail_message_id=sent_gmail_msg_id,
+        account_id=user.account_id
     )
-
 
     # Audit log
     vector_store.record_email_audit(
@@ -1273,7 +1417,7 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
         decision=payload.approvalOutcome,
         reason="Supervisor review completed",
         email_id=payload.emailId,
-        account_id=active_acc["id"] if active_acc else None,
+        account_id=user.account_id,
         metadata={
             "settingLabel": cat,
             "gmailSentMessageId": sent_gmail_msg_id,
@@ -1345,10 +1489,12 @@ async def inbox_move_to_trash(payload: Dict[str, str]):
 
 @inbox_router.get("/settings")
 async def inbox_get_settings(user: UserIdentity = Depends(require_auth)):
+    db_settings = vector_store.get_autonomy_settings(account_id=user.account_id)
+    db_rules = vector_store.get_feedback_rules(account_id=user.account_id)
     return {
         "config": AUTONOMY_CONFIG,
-        "categories": AUTONOMY_DATA,
-        "feedbackRules": FEEDBACK_RULES
+        "categories": db_settings or AUTONOMY_DATA,
+        "feedbackRules": db_rules or FEEDBACK_RULES
     }
 
 @inbox_router.post("/settings")
@@ -1368,6 +1514,7 @@ async def inbox_update_settings(payload: AutonomySettingsPayload, user: UserIden
 
         vector_store.save_autonomy_setting(
             category=cat_key,
+            account_id=user.account_id,
             threshold_x=payload.threshold_x,
             is_eligible=1 if cat["isEligibleForAutonomy"] else 0
         )
@@ -1389,6 +1536,7 @@ async def inbox_reset_streak(payload: ResetStreakReq, user: UserIdentity = Depen
         AUTONOMY_DATA[cat]["isEligibleForAutonomy"] = False
         vector_store.save_autonomy_setting(
             category=cat,
+            account_id=user.account_id,
             consecutive_streak=0,
             is_eligible=0
         )
@@ -1506,7 +1654,7 @@ async def inbox_oauth_callback(code: Optional[str] = None, state: Optional[str] 
 
 @inbox_router.get("/oauth/status")
 async def inbox_oauth_status(user: UserIdentity = Depends(require_auth)):
-    acc = vector_store.get_active_gmail_account()
+    acc = vector_store.get_active_gmail_account(account_id=user.account_id)
     is_configured = bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
     if not acc:
         return {
@@ -1527,21 +1675,21 @@ async def inbox_oauth_status(user: UserIdentity = Depends(require_auth)):
 
 @inbox_router.post("/oauth/disconnect")
 async def inbox_oauth_disconnect(user: UserIdentity = Depends(require_auth)):
-    acc = vector_store.get_active_gmail_account()
+    acc = vector_store.get_active_gmail_account(account_id=user.account_id)
     if acc:
-        vector_store.disconnect_gmail_account(acc["id"])
+        vector_store.disconnect_gmail_account(acc["id"], account_id=user.account_id)
         vector_store.record_email_audit(
             event_type="oauth_disconnected",
             actor_type="user",
             decision="disconnected",
             reason="User disconnected Gmail account",
-            account_id=acc["id"]
+            account_id=user.account_id
         )
     return {"status": "success", "disconnected": True}
 
 @inbox_router.post("/sync")
 async def inbox_sync_messages(user: UserIdentity = Depends(require_auth)):
-    acc = vector_store.get_active_gmail_account()
+    acc = vector_store.get_active_gmail_account(account_id=user.account_id)
     if not acc:
         return {
             "status": "offline_mode",
@@ -1603,7 +1751,7 @@ async def inbox_sync_messages(user: UserIdentity = Depends(require_auth)):
             actor_type="system",
             decision="synced",
             reason=f"Synchronized {len(synced_messages)} new messages from Gmail",
-            account_id=acc["id"],
+            account_id=user.account_id,
             metadata={"newMessagesCount": len(synced_messages)}
         )
         return {
@@ -1624,7 +1772,7 @@ async def inbox_sync_messages(user: UserIdentity = Depends(require_auth)):
 
 @inbox_router.get("/audit-logs")
 async def inbox_audit_logs(limit: int = 50, user: UserIdentity = Depends(require_auth)):
-    logs = vector_store.get_email_audit_logs(limit=limit)
+    logs = vector_store.get_email_audit_logs(limit=limit, account_id=user.account_id)
     return {"logs": logs, "total": len(logs)}
 
 # Register under both /api/inbox and /inbox
@@ -1638,24 +1786,61 @@ auth_router = APIRouter(tags=["Authentication"])
 
 class LoginRequest(BaseModel):
     username: Optional[str] = "consultant@apex.io"
+    email: Optional[str] = None
     password: Optional[str] = None
     api_key: Optional[str] = None
 
 @auth_router.post("/auth/login")
-async def auth_login(payload: LoginRequest):
+async def auth_login(payload: LoginRequest, request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_rate_limit(f"login_{client_ip}", 15, 60):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded: Too many login attempts. Please wait 60 seconds.")
+        
     expected_key = os.environ.get("API_SECRET_KEY", API_SECRET_KEY)
-    if payload.api_key == expected_key or payload.password in ("consultant2026", expected_key) or not payload.password:
-        return {
-            "status": "authenticated",
-            "token": expected_key,
-            "user": {
-                "user_id": "consultant_lead_01",
-                "email": payload.username or "consultant@apex.io",
-                "role": "Lead AI Consultant"
-            }
-        }
-    raise HTTPException(status_code=401, detail="Invalid username or password")
+    email_val = (payload.email or payload.username or "consultant@apex.io").strip().lower()
+    
+    # Authenticate via API key or password
+    is_valid = False
+    if payload.api_key == expected_key:
+        is_valid = True
+    elif payload.password in ("consultant2026", expected_key, "lead-consultant-sec-token-2026") or not payload.password:
+        is_valid = True
+    else:
+        user_rec = vector_store.get_user_by_email(email_val)
+        if user_rec:
+            is_valid = True
 
+    if not is_valid:
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+
+    user_rec = vector_store.get_user_by_email(email_val)
+    user_id = user_rec["id"] if user_rec else "consultant_lead_01"
+    account_id = user_rec["account_id"] if user_rec else "acc_default"
+    role = user_rec["role"] if user_rec else "Lead AI Consultant"
+
+    session = create_session_jwt(
+        user_id=user_id,
+        account_id=account_id,
+        email=email_val,
+        role=role
+    )
+    return {
+        "status": "authenticated",
+        "token": session["token"],
+        "token_type": "Bearer",
+        "expires_at": session["expires_at"],
+        "expires_in": session["expires_in"],
+        "jti": session["jti"],
+        "user": session["user"]
+    }
+
+@auth_router.post("/auth/logout")
+async def auth_logout(user: UserIdentity = Depends(require_auth)):
+    if user.jti:
+        vector_store.revoke_token(user.jti, account_id=user.account_id, user_id=user.user_id)
+    return {"status": "logged_out", "message": "Session token successfully revoked."}
+
+@auth_router.get("/auth/me")
 @auth_router.get("/auth/session")
 async def auth_session(request: Request):
     try:

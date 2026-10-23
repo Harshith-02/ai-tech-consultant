@@ -2,7 +2,7 @@
   "total_cases": 22,
   "passed": 22,
   "pass_rate_pct": 100.0,
-  "median_pipeline_latency_ms": 8530.15,
+  "median_pipeline_latency_ms": 8647.64,
   "results": [
     {
       "case_id": "TC-SC-001",

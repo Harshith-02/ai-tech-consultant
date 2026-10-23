@@ -5,5 +5,11 @@
       "source": "/api/:path*",
       "destination": "/api?path=:path*"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/kb/sitemap/refresh-due",
+      "schedule": "0 2 * * *"
+    }
   ]
 }

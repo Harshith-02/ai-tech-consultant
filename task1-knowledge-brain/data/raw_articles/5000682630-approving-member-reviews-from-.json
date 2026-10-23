@@ -3,65 +3,67 @@
   "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000682630-approving-member-reviews-from-the-admin",
   "title": "Approving Member Reviews from the Admin",
   "category": "Section: Interactions >> Member Reviews >> Approving Member Reviews from the Admin",
-  "content_hash": "5aabdc6455c4887f92e5256d24e526dc6c6d886a811c7c11d5738824b2d2873f",
-  "raw_text": "Approving Member Reviews from the Admin\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682630\nWhen a review is submitted, the member who received the review can manage it directly from their Member Dashboard. Depending on the review settings, members may have the ability to approve or decline reviews submitted to their profile.\nSite administrators can also review, approve, or decline reviews from the Admin Area.\nAfter receiving a review notification, members can log in to their account and review the submission.\nAvailable actions include:\n\u2022 Approve the review\n\u2022 Decline the review\nThis allows members to manage reviews associated with their profile.\nThis allows members who signed up on the site to effectively manage their online reputation.\nAlternatively, reviews can be approved by the administrator of the site.\nManaging Reviews from the Admin Area\nAdministrators can manage all submitted reviews from:\nInteractions \u2192 Member Reviews\nThis section displays all reviews submitted to the website and provides options to review, approve, or decline individual submissions.\nThe status can be changed per review:\nEmail Notification Options\nWhen a review status is updated manually, the following notification options become available:\n\u2022 Do Not Send Email Notifications\n\u2022 Email Member About This Update\n\u2022 Email Reviewer About This Update\n\u2022 Email Member and Reviewer About This Update\nSelect the preferred option before saving the status change.\nAlso, there is an option to bulk change the status:",
+  "content_hash": "1f44db4c6bc27da8ae430e02a5d733d4b0f39f788b8881ebe2e84deab8f572da",
+  "raw_text": "Approving Member Reviews from the Admin\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000682630\nWhen a review is submitted, it can be approved by the member who received it, by a site administrator, or both, depending on the membership plan's review settings. See Setting Up How Member Reviews Are Approved On The Website .\n\n## Managing Reviews From the Member Dashboard\nWhen members can accept and delete their reviews, they get a notification about a new review and can log in to their account to handle it. On the Manage Reviews page of the member dashboard, a new review shows two buttons:\n\u2022 Acceptpublishes the review on the member's listing.\n\u2022 Deleteerases the review.\nThis lets members manage their own online reputation.\n\n## Managing Reviews From the Admin Area\nAdministrators manage every review on the website from Interactions \u00bb Member Reviews . The number next to Member Reviews in the menu counts the reviews waiting for a decision: reviews that are Pending (waiting for the member) or in Admin Review (waiting for an administrator).\nTo see only those reviews, pick Admin Review or Pending in the status filter above the list.\n\n## Approving or Declining One Review\n\u2022 Click the status of the review in the list, EGPendingorAdmin Review.\n\u2022 Choose the new status:Acceptedpublishes the review,Declinedkeeps it off the website.\n\u2022 TheChange Review Statuswindow opens. When the new status isAccepted, choose who gets an email about the change inSend email notifications?:Do not send email notificationsEmail member about this updateEmail reviewer about this updateEmail member and reviewer about this update\n\u2022 Do not send email notifications\n\u2022 Email member about this update\n\u2022 Email reviewer about this update\n\u2022 Email member and reviewer about this update\n\u2022 ClickUpdate Status.\n\u2022 Do not send email notifications\n\u2022 Email member about this update\n\u2022 Email reviewer about this update\n\u2022 Email member and reviewer about this update\nThe status can also be changed inside the review itself: click the review's title to open its details, pick the new status in Review Status , and click Save .\n\n## Changing the Status of Several Reviews\nTo change many reviews at once, tick the box at the start of each review (or the box in the header row to select the whole page), choose Change Status in Select Action and click Apply . The same status and email choices apply to every selected review.\nMore about the Member Reviews page: Interactions \u00bb Member Reviews .",
   "sections": [
     {
       "heading": "Overview",
       "paragraphs": [
         "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000682630",
-        "When a review is submitted, the member who received the review can manage it directly from their Member Dashboard. Depending on the review settings, members may have the ability to approve or decline reviews submitted to their profile.",
-        "Site administrators can also review, approve, or decline reviews from the Admin Area.",
-        "After receiving a review notification, members can log in to their account and review the submission.",
-        "Available actions include:",
-        "\u2022 Approve the review\n\u2022 Decline the review",
-        "This allows members to manage reviews associated with their profile.",
-        "This allows members who signed up on the site to effectively manage their online reputation.",
-        "Alternatively, reviews can be approved by the administrator of the site.",
-        "Managing Reviews from the Admin Area",
-        "Administrators can manage all submitted reviews from:",
-        "Interactions \u2192 Member Reviews",
-        "This section displays all reviews submitted to the website and provides options to review, approve, or decline individual submissions.",
-        "The status can be changed per review:",
-        "Email Notification Options",
-        "When a review status is updated manually, the following notification options become available:",
-        "\u2022 Do Not Send Email Notifications\n\u2022 Email Member About This Update\n\u2022 Email Reviewer About This Update\n\u2022 Email Member and Reviewer About This Update",
-        "Select the preferred option before saving the status change.",
-        "Also, there is an option to bulk change the status:"
+        "When a review is submitted, it can be approved by the member who received it, by a site administrator, or both, depending on the membership plan's review settings. See Setting Up How Member Reviews Are Approved On The Website ."
       ],
       "images": [
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092491678/original/uG9qzIdSm08KfaTtEgi2eHdzA3TL6n4Yuw.png?1620744226",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052211/original/2xN1rM7AIHnw1aINLlO06aXPqGj7zUirUA.png?1792461883",
+          "alt": "Member dashboard Manage Reviews page with the Accept and Delete buttons on a new review.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12127616620/original/2wRai_ikPUKwc5c0A4u1-jX9qCd6vfvXYg.jpeg?1687995341",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052212/original/7wm1ghYRyIY60_hbE8tMJzXp9fCE6UMrVQ.png?1792461885",
+          "alt": "Change Review Status window with Accepted selected and the Send email notifications? choice highlighted.",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'the review'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12127616622/original/9wIbffNH9MLT8CNfQRIPgx1cA9NIaPPCsQ.jpeg?1687995351",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092494337/original/xgGoC2w0vJTOizN5xKb4mktTrgy5Jm8yNw.png?1620746481",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12127616626/original/yv_Nliy4RqbOE3LFUS1_7GdsnWyxMoa19Q.png?1687995377",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12092494390/original/WnvxAxpGbwL0_H7JmFQoPyer3e385xM0bg.png?1620746526",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052213/original/NKq84v72ztjhqWFYY9kkC6FMweq8dwMCzA.png?1792461886",
+          "alt": "Two reviews selected, with the bar showing 2 selected, Cancel, Select Action and Apply highlighted.",
           "description": "Interface view for 'Overview'."
         }
       ]
+    },
+    {
+      "heading": "Managing Reviews From the Member Dashboard",
+      "paragraphs": [
+        "When members can accept and delete their reviews, they get a notification about a new review and can log in to their account to handle it. On the Manage Reviews page of the member dashboard, a new review shows two buttons:",
+        "\u2022 Acceptpublishes the review on the member's listing.\n\u2022 Deleteerases the review.",
+        "This lets members manage their own online reputation."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Managing Reviews From the Admin Area",
+      "paragraphs": [
+        "Administrators manage every review on the website from Interactions \u00bb Member Reviews . The number next to Member Reviews in the menu counts the reviews waiting for a decision: reviews that are Pending (waiting for the member) or in Admin Review (waiting for an administrator).",
+        "To see only those reviews, pick Admin Review or Pending in the status filter above the list."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Approving or Declining One Review",
+      "paragraphs": [
+        "\u2022 Click the status of the review in the list, EGPendingorAdmin Review.\n\u2022 Choose the new status:Acceptedpublishes the review,Declinedkeeps it off the website.\n\u2022 TheChange Review Statuswindow opens. When the new status isAccepted, choose who gets an email about the change inSend email notifications?:Do not send email notificationsEmail member about this updateEmail reviewer about this updateEmail member and reviewer about this update\n\u2022 Do not send email notifications\n\u2022 Email member about this update\n\u2022 Email reviewer about this update\n\u2022 Email member and reviewer about this update\n\u2022 ClickUpdate Status.",
+        "\u2022 Do not send email notifications\n\u2022 Email member about this update\n\u2022 Email reviewer about this update\n\u2022 Email member and reviewer about this update",
+        "The status can also be changed inside the review itself: click the review's title to open its details, pick the new status in Review Status , and click Save ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Changing the Status of Several Reviews",
+      "paragraphs": [
+        "To change many reviews at once, tick the box at the start of each review (or the box in the header row to select the whole page), choose Change Status in Select Action and click Apply . The same status and email choices apply to every selected review.",
+        "More about the Member Reviews page: Interactions \u00bb Member Reviews ."
+      ],
+      "images": []
     }
   ],
-  "screenshot_count": 6
+  "screenshot_count": 3
 }

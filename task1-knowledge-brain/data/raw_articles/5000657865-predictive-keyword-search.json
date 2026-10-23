@@ -3,107 +3,124 @@
   "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000657865-predictive-keyword-search",
   "title": "Predictive Keyword Search",
   "category": "Add-On Documentation >> Predictive Keyword Search >> Predictive Keyword Search",
-  "content_hash": "a81ca1f6819214799cafbd75829d1574606d12e87d7039b7e4329416c0708f68",
-  "raw_text": "Predictive Keyword Search\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000657865\nSearch functionality is a key element of any directory website\u2026 It\u2019s how the users are able to find the information they need.\nThe Predictive Keyword Search add-on can help users find information on the website even faster. With this add-on, as a user begins typing their search term into the website\u2019s search field they will instantly be presented with potential search results.\n\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Predictive Keyword Search Add-On\n\n## Enabling the Add-On\nTo customize the auto-suggest on the website please follow these steps:\n\u2022 Go to Developers Tools:\n\u2022 Click on Autosuggest Settings:\nThese are the default options that we provide:\nWhen any of the default options is being edited or created, they all have the same setting options:\nUse a Class or ID: It is always recommend to select \"Class\".\nEnable Auto-Suggest After How Many Characters: This is the number of characters a website visitor needs to enter before the auto-suggest starts to show options.\nMaximum Auto-Suggest Limit: The total number allowed to be shown. If there area total of 25 possible results, but the limit is 10, only ten lines will show(1 header and 9 results), respected the order that it was set in the \"Select the features the admin would like to be searched in the autosuggest rule\" section. Keep in mind that the number set here includes the heading of each section.\nExample: If the maximum Autosuggest limit is set to 2\nIt will show the Header and just one listing.\nAuto-Suggest Rule Settings\nEnable Listings: This decides whether or not listings will appear in the auto-suggest. The same setting is available for all features and categories as well.\nLimit: The amount of listings that will display so long as the max limit has not already been reached.\nPhoto: This allows the admin to decide whether or not a photo will display in the auto-suggest. We suggest turning this on for Listings and all features.\nLink: Turning this on will automatically take the visitor to the next page. Turning this off will auto-fill the box with that entry, but still allow the visitor to add a location. We suggest setting categories to \"no\" and the rest \"yes\".\nShow Header: The \"Header\" is the main title for that section. The following image shows three features that have \"Show Header\" as \"Yes\".\nLocation: If \"Yes\" is selected, the location for that member or data post will show in the auto-suggest. In the image above, \"Listings\" have this set to \"yes\".\nDetails : This will add a second line of information in the auto-suggest. The details vary on the item selected:\n\u2022 Listing Details = The top-level category\n\u2022 Sub-Categories Details = The top-level category. If it is a sub-sub, it will show the parent category (sub-level)\n\u2022 All Feature Details = They will show the name of the Feature. Some customers prefer to use this instead of the \"Show Header\" option.\nThe highlighted modules are the ones active on the rule that's being edited:\nThis tool will reset all the settings to their default version and delete any updates the admin have completed so far.\nTo learn more about this add-on, please read this article: How To Edit Keyword Search Autosuggest Settings For Member Searches",
+  "content_hash": "5620712b490e5bd860e363fb5546f0872b848207e471ac4f284b51c1f94b41e5",
+  "raw_text": "Predictive Keyword Search\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000657865\nSearch functionality is a key element of any directory website. It is how visitors find the information they need.\nThe Predictive Keyword Search add-on helps visitors find information even faster. As a visitor types into a keyword search field, the website instantly shows suggested results: members, categories and posts that match what has been typed so far. Each search field gets its suggestions from an autosuggest rule , and the rules are managed on the Autosuggest Settings page.\n\n## How To Get This Add-On\n\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Predictive Keyword Search Add-On\n\n## Opening the Autosuggest Settings\n\u2022 In the admin menu, clickDeveloper Hub.\n\u2022 On theAutosuggest Settingscard, clickManage Autosuggest.\n\n## The Autosuggest Rules Table\nThe page lists every autosuggest rule on the website. A website starts with a default rule for each of its main search fields, such as member_search for member searches and coupons_search for coupon searches.\n\u2022 New Autosuggest Rule:Opens a panel to create a new rule.\n\u2022 Restore Default:Resets all rules to the defaults (see Restoring the Default Rules below).\n\u2022 Table columns:ID,Rule variable(hover over a rule variable to show a button that copies it),Used as(Class or ID),Post types(the post types the rule suggests) andUpdated(when the rule was last saved, in the website's time zone). TheSearchbox and theDate updatedfilter above the table narrow the list.\n\u2022 Actions:Each row's menu hasEdit RuleandDelete Rule. Clicking a rule variable also opens the rule for editing.\nThe global_search rule only appears in the table when the Global Website Search add-on is active.\n\n## Creating a Rule\n\u2022 ClickNew Autosuggest Rule.\n\u2022 Enter theRule variableand chooseClassorID.\n\u2022 AdjustSuggest afterandMaximumif needed.\n\u2022 UnderPost Types to Include, switch on each post type the rule should suggest, and open its settings to fine-tune it.\n\u2022 ClickSave.\nThe rule saves without reloading the page: a confirmation message appears and the table updates. A new rule's panel closes after saving. When editing an existing rule, the panel stays open after saving so more changes can be made; click Close when finished. Ctrl+S ( Cmd+S on a Mac) also saves the open panel.\n\n## Rule Settings\nNew and existing rules use the same settings panel. The panel title shows New Autosuggest Rule or Edit Autosuggest Rule # followed by the rule ID.\n\u2022 Rule variable:The name that links the rule to a search field. The search field carries this name as its class or ID, soClassorIDin the drop-down must match how the field uses it. A class can go on many search fields, while an ID can only be used on one field per page, soClassis recommended. The rule variable is required, must start with a letter, can only contain letters, numbers, hyphens (-) and underscores (_), and must be different from every other rule's variable.\n\u2022 Suggest after:How many letters a visitor types before suggestions show, from 1 to 5. New rules start at 2.\n\u2022 Maximum:The total number of lines the suggestion list shows, from 1 to 20. Heading titles count toward this total. For example, with a maximum of 10 and one heading title, the list shows the heading and 9 suggestions. Results are filled in the order of the post types below, so a post type further down the list may not appear once the maximum is reached. New rules start at 3.\n\u2022 Post Types to Include:Switch on each post type the rule should suggest; the counter at the top right shows how many are on. Drag a post type by its handle (the dotted grip on the left) to change the order its suggestions appear in. A new rule lists the post types alphabetically; an existing rule shows its saved order. Click the arrow on the right of a post type to open its settings (see below).\nEvery number field takes whole numbers only. The panel also has an Advanced section with Suggestion HTML markup , for a custom layout of each suggestion; leave it empty to use the default layout.\n\n## Finding a Search Field's Rule Variable\nThe default rules already match the website's default search fields. For example, the keyword field in the header search carries the class member_search , so the member_search rule controls its suggestions. To check which rule a search field uses, right-click the field on the website, choose Inspect , and read the class or id of the highlighted input. To give a custom search field its own suggestions, create a rule and add its rule variable to the field's class (or ID).\n\n## Post Type Settings\nEach post type in a rule has its own settings, shown when its row is opened:\n\u2022 Show title / Hide title:Shows or hides the heading title above this post type's suggestions. The text box sets the heading title; leave it blank to use the post type's name. Some admins hide the heading and turn onShow additional detailsinstead.\n\u2022 Max. suggestions:The most suggestions this post type can show, from 1 to 20, as long as the rule'sMaximumhas not already been reached.\n\u2022 Show photo:Shows a photo next to each suggestion. Recommended for members and posts.\n\u2022 Show location:Shows the location of the member or post under its name.\n\u2022 Show additional details:Adds a line of extra information under each suggestion, such as a member's company name.\n\u2022 Open page on click:When on, clicking a suggestion takes the visitor straight to that page. When off, clicking a suggestion fills the search field with it, so the visitor can still add a location before searching. Turning this off is recommended for categories and on for everything else.\n\n## Deleting a Rule\n\u2022 Open the rule'sActionsmenu and clickDelete Rule.\n\u2022 ClickDelete Ruleagain to confirm. Search fields that use the rule stop showing suggestions, and this cannot be undone.\n\n## Restoring the Default Rules\nClick Restore Default at the top of the page, then Restore Default again to confirm. All rules are reset to the defaults, and every rule the admin added is deleted.\nTo learn more about how suggestions behave, read How To Edit Keyword Search Autosuggest Settings For Member Searches .",
   "sections": [
     {
       "heading": "Overview",
       "paragraphs": [
         "Link: https://support.brilliantdirectories.com/support/solutions/articles/5000657865",
-        "Search functionality is a key element of any directory website\u2026 It\u2019s how the users are able to find the information they need.",
-        "The Predictive Keyword Search add-on can help users find information on the website even faster. With this add-on, as a user begins typing their search term into the website\u2019s search field they will instantly be presented with potential search results.",
-        "\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Predictive Keyword Search Add-On"
+        "Search functionality is a key element of any directory website. It is how visitors find the information they need.",
+        "The Predictive Keyword Search add-on helps visitors find information even faster. As a visitor types into a keyword search field, the website instantly shows suggested results: members, categories and posts that match what has been typed so far. Each search field gets its suggestions from an autosuggest rule , and the rules are managed on the Autosuggest Settings page."
       ],
       "images": [
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447705/original/MO8UE9DMqNGpwPTxPv8dkNZFpJk0G2PQLA.png?1630107474",
-          "alt": "",
-          "description": "Interface view for 'Overview'. Visual prompt to click/select 'on Autosuggest Settings'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447698/original/XMwffWbkT0Xvo432CfqzoKzjXazkabyUOQ.png?1630107427",
-          "alt": "",
-          "description": "Interface view for 'Overview'. Visual prompt to click/select 'on Autosuggest Settings'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/5033775196/original/blob1440439599892.gif?1440439611",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736389/original/Yq_j755kJCuLRyEu_ijV-SrTH-1TcnsVWw.png?1791934484",
+          "alt": "The Developer Hub page with the Developer Hub menu item marked 1 and the Autosuggest Settings card and its Manage Autosuggest button marked 2.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447732/original/bF9iJ6eZ4D05RwuPrj6_edS7Yfjs3W2-zg.png?1630107528",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736397/original/d-a4hePJR-TKD3hO9GA5D15QRVlcgfhLwg.png?1791934485",
+          "alt": "The Autosuggest Settings page listing the rules, with New Autosuggest Rule, Restore Default, the table column headings and a row's Actions button numbered 1 to 4.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12118956367/original/CUjAROnYyA7KyAp4ZQuTGUGcgo3K3IiMCA.png?1671733677",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736413/original/3HXUVSufW6e5PaJ99HU26P1pJzMJHrigdg.png?1791934486",
+          "alt": "A rule's Actions menu open, showing the Edit Rule and Delete Rule options.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12119086796/original/5vl4aYAaUQPLKu8LNaGZHXl0W_WOenZBsg.png?1672168400",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736414/original/chSoOlpdBjp0AUynCOjPg6njf7GklH9ZVQ.png?1791934487",
+          "alt": "The Edit Autosuggest Rule #44 panel with the Rule variable, Suggest after, Maximum and Post Types to Include settings numbered 1 to 4.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12119087135/original/x7M723z0wlml-JNdQmoPDxLeUCpHRMIeyA.png?1672168781",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736415/original/GmxoRJ_LbZu26Kl5L5nPTvhGNcJNLV2c7g.png?1791934489",
+          "alt": "The website header's Name or Keyword search field, with a note that its member_search class ties it to the member_search rule.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12086685851/original/xoFeXeZl7NF5oAFIn53s-JHs5P6GYN_3VA.png?1608734906",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736416/original/dmOjA_Uh9RcT7TZbLxvsgQDQ_Q2fLTaiMw.png?1791934489",
+          "alt": "The Listings post type opened inside a rule, with its six settings numbered: Show title and heading title, Max. suggestions, Show photo, Show location, Show additional details and Open page on click.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447784/original/--FhxQfia9JAahVz2ug664v1yzZdGLv_-A.png?1630107934",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12075252347/original/ylWjmcI79liIL7FiexS-0UPUdchDT4_S2A.gif?1584457149",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12075252142/original/Sv_4CP7qAeFT8Kv1yy94Jt8fdXOYp-dC-w.png?1584456928",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12097447789/original/3H4ZnzpcTByfTgvm-ZLImGevpBGK41Qg3g.png?1630107990",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12186736417/original/eS2mTZHf3Z_i3G3XyCBZ7Xuaf7OpAQxdVA.png?1791934490",
+          "alt": "The Restore Default Rules confirmation dialog warning that all rules are reset and rules the admin added are deleted.",
           "description": "Interface view for 'Overview'."
         }
       ]
     },
     {
-      "heading": "Enabling the Add-On",
+      "heading": "How To Get This Add-On",
       "paragraphs": [
-        "To customize the auto-suggest on the website please follow these steps:",
-        "\u2022 Go to Developers Tools:\n\u2022 Click on Autosuggest Settings:",
-        "These are the default options that we provide:",
-        "When any of the default options is being edited or created, they all have the same setting options:",
-        "Use a Class or ID: It is always recommend to select \"Class\".",
-        "Enable Auto-Suggest After How Many Characters: This is the number of characters a website visitor needs to enter before the auto-suggest starts to show options.",
-        "Maximum Auto-Suggest Limit: The total number allowed to be shown. If there area total of 25 possible results, but the limit is 10, only ten lines will show(1 header and 9 results), respected the order that it was set in the \"Select the features the admin would like to be searched in the autosuggest rule\" section. Keep in mind that the number set here includes the heading of each section.",
-        "Example: If the maximum Autosuggest limit is set to 2",
-        "It will show the Header and just one listing.",
-        "Auto-Suggest Rule Settings",
-        "Enable Listings: This decides whether or not listings will appear in the auto-suggest. The same setting is available for all features and categories as well.",
-        "Limit: The amount of listings that will display so long as the max limit has not already been reached.",
-        "Photo: This allows the admin to decide whether or not a photo will display in the auto-suggest. We suggest turning this on for Listings and all features.",
-        "Link: Turning this on will automatically take the visitor to the next page. Turning this off will auto-fill the box with that entry, but still allow the visitor to add a location. We suggest setting categories to \"no\" and the rest \"yes\".",
-        "Show Header: The \"Header\" is the main title for that section. The following image shows three features that have \"Show Header\" as \"Yes\".",
-        "Location: If \"Yes\" is selected, the location for that member or data post will show in the auto-suggest. In the image above, \"Listings\" have this set to \"yes\".",
-        "Details : This will add a second line of information in the auto-suggest. The details vary on the item selected:",
-        "\u2022 Listing Details = The top-level category\n\u2022 Sub-Categories Details = The top-level category. If it is a sub-sub, it will show the parent category (sub-level)\n\u2022 All Feature Details = They will show the name of the Feature. Some customers prefer to use this instead of the \"Show Header\" option.",
-        "The highlighted modules are the ones active on the rule that's being edited:",
-        "This tool will reset all the settings to their default version and delete any updates the admin have completed so far.",
-        "To learn more about this add-on, please read this article: How To Edit Keyword Search Autosuggest Settings For Member Searches"
+        "\u2022 Websites with the VIP Add-Ons Club automatically have this add-on available:Join The VIP Add-Ons Club\n\u2022 Purchase Individually:Predictive Keyword Search Add-On"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Opening the Autosuggest Settings",
+      "paragraphs": [
+        "\u2022 In the admin menu, clickDeveloper Hub.\n\u2022 On theAutosuggest Settingscard, clickManage Autosuggest."
+      ],
+      "images": []
+    },
+    {
+      "heading": "The Autosuggest Rules Table",
+      "paragraphs": [
+        "The page lists every autosuggest rule on the website. A website starts with a default rule for each of its main search fields, such as member_search for member searches and coupons_search for coupon searches.",
+        "\u2022 New Autosuggest Rule:Opens a panel to create a new rule.\n\u2022 Restore Default:Resets all rules to the defaults (see Restoring the Default Rules below).\n\u2022 Table columns:ID,Rule variable(hover over a rule variable to show a button that copies it),Used as(Class or ID),Post types(the post types the rule suggests) andUpdated(when the rule was last saved, in the website's time zone). TheSearchbox and theDate updatedfilter above the table narrow the list.\n\u2022 Actions:Each row's menu hasEdit RuleandDelete Rule. Clicking a rule variable also opens the rule for editing.",
+        "The global_search rule only appears in the table when the Global Website Search add-on is active."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Creating a Rule",
+      "paragraphs": [
+        "\u2022 ClickNew Autosuggest Rule.\n\u2022 Enter theRule variableand chooseClassorID.\n\u2022 AdjustSuggest afterandMaximumif needed.\n\u2022 UnderPost Types to Include, switch on each post type the rule should suggest, and open its settings to fine-tune it.\n\u2022 ClickSave.",
+        "The rule saves without reloading the page: a confirmation message appears and the table updates. A new rule's panel closes after saving. When editing an existing rule, the panel stays open after saving so more changes can be made; click Close when finished. Ctrl+S ( Cmd+S on a Mac) also saves the open panel."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Rule Settings",
+      "paragraphs": [
+        "New and existing rules use the same settings panel. The panel title shows New Autosuggest Rule or Edit Autosuggest Rule # followed by the rule ID.",
+        "\u2022 Rule variable:The name that links the rule to a search field. The search field carries this name as its class or ID, soClassorIDin the drop-down must match how the field uses it. A class can go on many search fields, while an ID can only be used on one field per page, soClassis recommended. The rule variable is required, must start with a letter, can only contain letters, numbers, hyphens (-) and underscores (_), and must be different from every other rule's variable.\n\u2022 Suggest after:How many letters a visitor types before suggestions show, from 1 to 5. New rules start at 2.\n\u2022 Maximum:The total number of lines the suggestion list shows, from 1 to 20. Heading titles count toward this total. For example, with a maximum of 10 and one heading title, the list shows the heading and 9 suggestions. Results are filled in the order of the post types below, so a post type further down the list may not appear once the maximum is reached. New rules start at 3.\n\u2022 Post Types to Include:Switch on each post type the rule should suggest; the counter at the top right shows how many are on. Drag a post type by its handle (the dotted grip on the left) to change the order its suggestions appear in. A new rule lists the post types alphabetically; an existing rule shows its saved order. Click the arrow on the right of a post type to open its settings (see below).",
+        "Every number field takes whole numbers only. The panel also has an Advanced section with Suggestion HTML markup , for a custom layout of each suggestion; leave it empty to use the default layout."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Finding a Search Field's Rule Variable",
+      "paragraphs": [
+        "The default rules already match the website's default search fields. For example, the keyword field in the header search carries the class member_search , so the member_search rule controls its suggestions. To check which rule a search field uses, right-click the field on the website, choose Inspect , and read the class or id of the highlighted input. To give a custom search field its own suggestions, create a rule and add its rule variable to the field's class (or ID)."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Post Type Settings",
+      "paragraphs": [
+        "Each post type in a rule has its own settings, shown when its row is opened:",
+        "\u2022 Show title / Hide title:Shows or hides the heading title above this post type's suggestions. The text box sets the heading title; leave it blank to use the post type's name. Some admins hide the heading and turn onShow additional detailsinstead.\n\u2022 Max. suggestions:The most suggestions this post type can show, from 1 to 20, as long as the rule'sMaximumhas not already been reached.\n\u2022 Show photo:Shows a photo next to each suggestion. Recommended for members and posts.\n\u2022 Show location:Shows the location of the member or post under its name.\n\u2022 Show additional details:Adds a line of extra information under each suggestion, such as a member's company name.\n\u2022 Open page on click:When on, clicking a suggestion takes the visitor straight to that page. When off, clicking a suggestion fills the search field with it, so the visitor can still add a location before searching. Turning this off is recommended for categories and on for everything else."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Deleting a Rule",
+      "paragraphs": [
+        "\u2022 Open the rule'sActionsmenu and clickDelete Rule.\n\u2022 ClickDelete Ruleagain to confirm. Search fields that use the rule stop showing suggestions, and this cannot be undone."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Restoring the Default Rules",
+      "paragraphs": [
+        "Click Restore Default at the top of the page, then Restore Default again to confirm. All rules are reset to the defaults, and every rule the admin added is deleted.",
+        "To learn more about how suggestions behave, read How To Edit Keyword Search Autosuggest Settings For Member Searches ."
       ],
       "images": []
     }
   ],
-  "screenshot_count": 12
+  "screenshot_count": 7
 }

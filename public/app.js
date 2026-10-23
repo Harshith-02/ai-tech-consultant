@@ -5,20 +5,21 @@ const API_INBOX = isLocalMultiPort ? "http://127.0.0.1:3001" : "/api/inbox";
 const API_SCOPE = isLocalMultiPort ? "http://127.0.0.1:8002" : "/api/scope";
 
 // Global Authenticated Fetch Interceptor
-const AUTH_TOKEN = localStorage.getItem("auth_token") || "lead-consultant-sec-token-2026";
+const getAuthToken = () => localStorage.getItem("auth_token") || "lead-consultant-sec-token-2026";
 const _origFetch = window.fetch;
 window.fetch = async function(input, init) {
   init = init || {};
   init.headers = init.headers || {};
+  const currentToken = getAuthToken();
   if (init.headers instanceof Headers) {
     if (!init.headers.has("Authorization")) {
-      init.headers.set("Authorization", `Bearer ${AUTH_TOKEN}`);
+      init.headers.set("Authorization", `Bearer ${currentToken}`);
     }
   } else if (Array.isArray(init.headers)) {
-    init.headers.push(["Authorization", `Bearer ${AUTH_TOKEN}`]);
+    init.headers.push(["Authorization", `Bearer ${currentToken}`]);
   } else {
     if (!init.headers["Authorization"]) {
-      init.headers["Authorization"] = `Bearer ${AUTH_TOKEN}`;
+      init.headers["Authorization"] = `Bearer ${currentToken}`;
     }
   }
   return _origFetch(input, init);

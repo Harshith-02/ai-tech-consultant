@@ -3,8 +3,8 @@
   "url": "https://support.brilliantdirectories.com/support/solutions/articles/5000673365-toolbox-sidebar-manager",
   "title": "Toolbox \u00bb Sidebar Manager",
   "category": "Section: Toolbox >> Sidebar Manager >> Toolbox \u00bb Sidebar Manager",
-  "content_hash": "9e936564977e783b107f2ee0ad85900ded5f0dbb0af041d69dd0ec165e974e99",
-  "raw_text": "Toolbox \u00bb Sidebar Manager\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673365\n\n## Where Can I Access This Tool?\nAccess this tool from the admin section by navigating to Toolbox \u00bb Sidebar Manager .\nAll sites come with 4 default sidebars. Two of them, Global Website Search and Personal Post Feed , are only available when their add-ons are active on the site:\n\n## How To Edit These Sidebars\nDefault sidebars can be edited by clicking Customize in the Actions drop-down. Custom sidebars can be edited by clicking Edit :\nOnce the sidebar has been selected, search through the available widgets and drag and drop the desired module into position on the sidebar.\nFor this example, we located the \"Bootstrap Theme - Search Module - Local Radius Search\" widget for the Member Search Results sidebar:\nIt is also possible to delete unwanted widgets from the sidebar by clicking the X :\nThe front end before saving these changes:\nWith the new sidebar changes:\nImportant note: Only one dropdown search module will work properly per sidebar.\n\n## Other Options For The Sidebar Manager\nIn addition to the standard features, there are several other options available that allow for further modification.\n\n## Actions For Custom Sidebars\nRight next to the \" Edit \" button is the \" Actions \" option:\nUnder Actions, it is possible to:\n\u2022 Disable: Disables the sidebar if it is being used on the site. The system will use the default version of the sidebar instead.\n\u2022 Clone: The recommended way to create a new sidebar.\n\u2022 Copy Shortcode: Copies the sidebar's shortcode, which is helpful when the sidebar needs to be called on a web page or inside a widget.\n\u2022 Delete: Permanently removes the entire sidebar from the site.\n\n## Bulk Actions\nUse the checkboxes to individually select each sidebar, or use the main checkbox to select all:\nThen choose one of the available bulk actions and click Apply :\nThe selected bulk action is applied to the sidebars:\n\n## New Sidebar\nThe last option is to create a new sidebar manually by clicking the button on the far right:\n\n## Additional Information\n\u2022 How To Create A Sidebar\n\u2022 Popular Sidebar Widgets\n\n## Notes\n\u2022 The widgets that are allowed for use are those with \"Module\", \"Dynamic Category Filter\", and \"Banner\" in their names, as well as any custom widgets.",
+  "content_hash": "c1e7981f2baac9653f063713d46237eaaccaf3cc7bb96ad4331e854112ad1909",
+  "raw_text": "Toolbox \u00bb Sidebar Manager\n## Overview\nLink: https://support.brilliantdirectories.com/support/solutions/articles/5000673365\n\n## Overview\nA sidebar is a column of widgets shown next to the page content, such as a search form, a newsletter sign-up or a banner ad. The Sidebar Manager lists every sidebar on the website, and is where sidebars are created, edited, cloned, turned on and off, and deleted.\n\n## Where Can I Access This Tool?\nIn the admin area, navigate to Toolbox \u00bb Sidebar Manager .\n\n## The Sidebar List\nThe page has two tables: Custom Sidebars (sidebars made for this website) at the top, and Default Sidebars (the sidebars that come with the website) below it. Some default sidebars belong to add-ons: Global Website Search, for example, is listed only while the Global Website Search add-on is active.\n\u2022 New Sidebar:creates an empty custom sidebar. SeeHow to Create a Sidebar.\n\u2022 Status filter:showAny status, onlyEnabledor onlyDisabledsidebars.\n\u2022 Search:find sidebars by name, shortcode or ID. The search also filters the Default Sidebars table.\n\u2022 Date filter:chooseUpdatedorCreated, then pick a date range.\n\u2022 EditandActions:clickEdit(or the sidebar name) to open the sidebar. TheActionsmenu has the other options for that sidebar (see below).\n\u2022 Status:each custom sidebar isEnabledorDisabled.\n\u2022 CustomizeandActionsfor a default sidebar:Customizeopens it to make a custom copy for this website, andActionshasCopy Shortcode.\nHover over a sidebar name and click the clipboard icon next to it to copy its shortcode.\n\n## Actions for Custom Sidebars\nThe Actions menu of a custom sidebar has:\n\u2022 Copy Shortcode:copies the sidebar's shortcode (EG[sidebar=Blog Sidebar]), which places the sidebar on a web page or inside a widget.\n\u2022 Clone Sidebar:makes a copy namedCopy Offollowed by the sidebar's name, with the same widgets, and opens it. Cloning is the quickest way to start a sidebar that is close to an existing one.\n\u2022 Save History:lists the changes made to the sidebar (see Save History below).\n\u2022 Disable Sidebar/Enable Sidebar:turns the sidebar off or on. While a custom sidebar is disabled, the website does not use it. The change can take up to 1 minute to show on the website.\n\u2022 Delete Sidebar:permanently deletes the custom sidebar from the website. This cannot be undone.\n\n## Bulk Actions\nTo enable, disable or delete several custom sidebars at once:\n\u2022 Check the box next to each sidebar, or check the box in the header to select every sidebar on the page.\n\u2022 ChooseEnable,DisableorDeletefromSelect Action, then clickApply. ClickCancelto clear the selection.\n\n## Editing a Sidebar\nClick Edit on a custom sidebar, or Customize on a default sidebar, to open the sidebar editor:\n\u2022 Sidebar name:click the name (or the pencil icon) to rename a custom sidebar, then clickSave.\n\u2022 Switch Sidebar:opens another custom sidebar without going back to the list.\n\u2022 Actions:the same options as in the list:Copy Shortcode,Clone Sidebar,Save History,Disable Sidebar(orEnable Sidebar) andDelete Sidebar. Deleting from here returns to the Sidebar Manager list.\n\u2022 Add Widgets to Sidebar:search by widget name and pick a widget. New widgets are added to the end of the list.\n\u2022 Drag handle:drag a widget up or down to change its order.\n\u2022 Widget options:hover over a widget to copy its widget shortcode, open the widget for editing, or remove it from the sidebar with theX.\n\u2022 Preview:shows the widgets as they will look on the website, in their current order, including changes that are not saved yet. Click the enlarge icon at the right to view the preview in a larger window.\nAfter adding, removing or reordering widgets, click Save in the Unsaved changes bar to keep the changes, or Discard to undo them.\nThe ? next to Preview explains that some widgets only show on certain pages, so the preview can look different from the live website. That is expected: in the example below, the Dynamic Sidebar Search widget is in the sidebar but does not appear in the preview.\n\n## Customizing a Default Sidebar\nA default sidebar opens with a Default label and the note Make your changes, then save to create a custom copy for this site. (1). Saving creates a custom sidebar with the same name, which the website then uses in place of the default sidebar. The preview (2) shows the sidebar as it currently stands.\n\n## Disabled Sidebars\nA disabled custom sidebar shows a Disabled label and the note Your website does not use this sidebar until you enable it. Use Actions \u00bb Enable Sidebar to turn it back on.\n\n## Save History\nActions \u00bb Save History opens a panel listing when the sidebar was created and saved, which widgets were added, removed or reordered, and when it was enabled or disabled, with who made each change. Click Open Activity Log for the full log. Save History reads the website's activity log, so it is only offered to admins who can view the activity log.\n\n## Notes\n\u2022 Only one search dropdown widget works properly per sidebar. When a sidebar holds both a Dynamic Category Filter and another category search widget, saving asks for confirmation (Save Both Search Widgets?).\n\u2022 The widgets available to add are search modules, banners, modules and Dynamic Category Filter widgets (when the Dynamic Category Filtering add-on is active), plus the website's own custom widgets, which are listed underCustom Widgets.\n\n## Additional Information\n\u2022 How to Create a Sidebar\n\u2022 Popular Sidebar Widgets",
   "sections": [
     {
       "heading": "Overview",
@@ -13,162 +13,126 @@
       ],
       "images": [
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356608/original/2QK8Y4XJVCfiRU_joLVwjJ3DUR5hxlhRrw.png?1781307295",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052048/original/xYikc-NnXOWXR4ZhMUNHu5JIx5kj1V1-vQ.png?1792461718",
+          "alt": "The Sidebar Manager list with New Sidebar (1), the status filter (2), search (3), the date filter (4), a custom sidebar's Edit and Actions buttons (5), its Disabled status (6), and a default sidebar's Customize and Actions buttons (7).",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356622/original/RSVbH3WNVZmZFGeDpaDEx_vxttAksz9lWA.png?1781307390",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052049/original/9F8P-LjHkovHe74CW7-1glsTnzC4XqttzA.png?1792461720",
+          "alt": "The Actions menu of a custom sidebar listing Copy Shortcode, Clone Sidebar, Save History, Disable Sidebar and Delete Sidebar.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356645/original/MeT0MxFbv1Z1_MokIsjENtpYykZhtj-2kg.png?1781307595",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052050/original/i_bsihjs-KuKLqCnP_8XPhraqCKWkFKrCA.png?1792461721",
+          "alt": "Two custom sidebars selected with their checkboxes (1) and the bar showing 2 selected, Cancel, Select Action and Apply (2).",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356650/original/0Qm0zn4-paHnkiCyaztxIA1jIuChutTrKQ.png?1781307636",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052052/original/N3KoMCeXuYYXLpspTSKaY9OzZ3Q_HQaBww.png?1792461722",
+          "alt": "The sidebar editor with the sidebar name (1), Switch Sidebar (2), Actions (3), Add Widgets to Sidebar (4), a widget's drag handle (5), its copy, edit and remove icons (6), and the Preview heading with its enlarge icon (7).",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356655/original/ddpt9GyhqR1tq-jrvxDoQDX7Tb6ty_G2bw.png?1781307673",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052053/original/DpxlQo1Suj2eu4ylWfhE6uUZvCBI6fbB9w.png?1792461723",
+          "alt": "A default sidebar opened with Customize, showing the Default label and its note (1) and the live preview of its widgets (2).",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356680/original/ek31o01dq-iAJI88NSSqQRqlsL9cN0me8w.png?1781307698",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052054/original/_F6ebE2eBt9UBa9viuDIT5P8slRpxBH1CA.png?1792461724",
+          "alt": "A disabled custom sidebar showing the Disabled label and the note that the website does not use it until it is enabled.",
           "description": "Interface view for 'Overview'."
         },
         {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12156737485/original/513tYSyK2VZ_p2JgrTBvM_yzN9M-vdye4Q.png?1739208342",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12156737663/original/SvTohRtLpeiHSZVttlEkNsKERcGIxb5BqA.png?1739208487",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356728/original/miYU7PhaUbxZ0E3ZFQYJUyghzvBvJNmZmA.png?1781307832",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356743/original/QwMhNuiQK2dkgLBBmEqN2Bz5Bhj5kHgd4Q.png?1781307874",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356791/original/N3PumzZGjX0mL4NvEFw4cBji-bSGufTqRg.png?1781307993",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356754/original/FOtybLqAgtVh2PnMfx_mQUi3O30zTAuiSQ.png?1781307904",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356793/original/NKVvRxot3XD4D-12_zIP8JkcZEw67UfkxQ.png?1781308024",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356801/original/OS-JH54atFsOgMqfMFY6AXLXkqHBp-wgzQ.png?1781308085",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12180356850/original/NID8wovkgjyD8qlNhAq2rqz-R05tgfVn6g.png?1781308115",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12093127668/original/cOjMbGxER98an-7fKGkg1S72hQCAGl-8gg.png?1621958872",
-          "alt": "",
-          "description": "Interface view for 'Overview'."
-        },
-        {
-          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12093127716/original/w4UZXOwuY6DoT8umTq-wAiPyodcYiEkZcA.png?1621958910",
-          "alt": "",
+          "url": "https://s3.amazonaws.com/cdn.freshdesk.com/data/helpdesk/attachments/production/12187052055/original/fbfrdJ3kxFpvq5qS3eGTclm4xDWTcJ9lmA.png?1792461725",
+          "alt": "The Save History panel of a sidebar listing when it was created and which widgets were added, with the Open Activity Log button.",
           "description": "Interface view for 'Overview'."
         }
       ]
     },
     {
+      "heading": "Overview",
+      "paragraphs": [
+        "A sidebar is a column of widgets shown next to the page content, such as a search form, a newsletter sign-up or a banner ad. The Sidebar Manager lists every sidebar on the website, and is where sidebars are created, edited, cloned, turned on and off, and deleted."
+      ],
+      "images": []
+    },
+    {
       "heading": "Where Can I Access This Tool?",
       "paragraphs": [
-        "Access this tool from the admin section by navigating to Toolbox \u00bb Sidebar Manager .",
-        "All sites come with 4 default sidebars. Two of them, Global Website Search and Personal Post Feed , are only available when their add-ons are active on the site:"
+        "In the admin area, navigate to Toolbox \u00bb Sidebar Manager ."
       ],
       "images": []
     },
     {
-      "heading": "How To Edit These Sidebars",
+      "heading": "The Sidebar List",
       "paragraphs": [
-        "Default sidebars can be edited by clicking Customize in the Actions drop-down. Custom sidebars can be edited by clicking Edit :",
-        "Once the sidebar has been selected, search through the available widgets and drag and drop the desired module into position on the sidebar.",
-        "For this example, we located the \"Bootstrap Theme - Search Module - Local Radius Search\" widget for the Member Search Results sidebar:",
-        "It is also possible to delete unwanted widgets from the sidebar by clicking the X :",
-        "The front end before saving these changes:",
-        "With the new sidebar changes:",
-        "Important note: Only one dropdown search module will work properly per sidebar."
+        "The page has two tables: Custom Sidebars (sidebars made for this website) at the top, and Default Sidebars (the sidebars that come with the website) below it. Some default sidebars belong to add-ons: Global Website Search, for example, is listed only while the Global Website Search add-on is active.",
+        "\u2022 New Sidebar:creates an empty custom sidebar. SeeHow to Create a Sidebar.\n\u2022 Status filter:showAny status, onlyEnabledor onlyDisabledsidebars.\n\u2022 Search:find sidebars by name, shortcode or ID. The search also filters the Default Sidebars table.\n\u2022 Date filter:chooseUpdatedorCreated, then pick a date range.\n\u2022 EditandActions:clickEdit(or the sidebar name) to open the sidebar. TheActionsmenu has the other options for that sidebar (see below).\n\u2022 Status:each custom sidebar isEnabledorDisabled.\n\u2022 CustomizeandActionsfor a default sidebar:Customizeopens it to make a custom copy for this website, andActionshasCopy Shortcode.",
+        "Hover over a sidebar name and click the clipboard icon next to it to copy its shortcode."
       ],
       "images": []
     },
     {
-      "heading": "Other Options For The Sidebar Manager",
+      "heading": "Actions for Custom Sidebars",
       "paragraphs": [
-        "In addition to the standard features, there are several other options available that allow for further modification."
-      ],
-      "images": []
-    },
-    {
-      "heading": "Actions For Custom Sidebars",
-      "paragraphs": [
-        "Right next to the \" Edit \" button is the \" Actions \" option:",
-        "Under Actions, it is possible to:",
-        "\u2022 Disable: Disables the sidebar if it is being used on the site. The system will use the default version of the sidebar instead.",
-        "\u2022 Clone: The recommended way to create a new sidebar.",
-        "\u2022 Copy Shortcode: Copies the sidebar's shortcode, which is helpful when the sidebar needs to be called on a web page or inside a widget.",
-        "\u2022 Delete: Permanently removes the entire sidebar from the site."
+        "The Actions menu of a custom sidebar has:",
+        "\u2022 Copy Shortcode:copies the sidebar's shortcode (EG[sidebar=Blog Sidebar]), which places the sidebar on a web page or inside a widget.\n\u2022 Clone Sidebar:makes a copy namedCopy Offollowed by the sidebar's name, with the same widgets, and opens it. Cloning is the quickest way to start a sidebar that is close to an existing one.\n\u2022 Save History:lists the changes made to the sidebar (see Save History below).\n\u2022 Disable Sidebar/Enable Sidebar:turns the sidebar off or on. While a custom sidebar is disabled, the website does not use it. The change can take up to 1 minute to show on the website.\n\u2022 Delete Sidebar:permanently deletes the custom sidebar from the website. This cannot be undone."
       ],
       "images": []
     },
     {
       "heading": "Bulk Actions",
       "paragraphs": [
-        "Use the checkboxes to individually select each sidebar, or use the main checkbox to select all:",
-        "Then choose one of the available bulk actions and click Apply :",
-        "The selected bulk action is applied to the sidebars:"
+        "To enable, disable or delete several custom sidebars at once:",
+        "\u2022 Check the box next to each sidebar, or check the box in the header to select every sidebar on the page.\n\u2022 ChooseEnable,DisableorDeletefromSelect Action, then clickApply. ClickCancelto clear the selection."
       ],
       "images": []
     },
     {
-      "heading": "New Sidebar",
+      "heading": "Editing a Sidebar",
       "paragraphs": [
-        "The last option is to create a new sidebar manually by clicking the button on the far right:"
+        "Click Edit on a custom sidebar, or Customize on a default sidebar, to open the sidebar editor:",
+        "\u2022 Sidebar name:click the name (or the pencil icon) to rename a custom sidebar, then clickSave.\n\u2022 Switch Sidebar:opens another custom sidebar without going back to the list.\n\u2022 Actions:the same options as in the list:Copy Shortcode,Clone Sidebar,Save History,Disable Sidebar(orEnable Sidebar) andDelete Sidebar. Deleting from here returns to the Sidebar Manager list.\n\u2022 Add Widgets to Sidebar:search by widget name and pick a widget. New widgets are added to the end of the list.\n\u2022 Drag handle:drag a widget up or down to change its order.\n\u2022 Widget options:hover over a widget to copy its widget shortcode, open the widget for editing, or remove it from the sidebar with theX.\n\u2022 Preview:shows the widgets as they will look on the website, in their current order, including changes that are not saved yet. Click the enlarge icon at the right to view the preview in a larger window.",
+        "After adding, removing or reordering widgets, click Save in the Unsaved changes bar to keep the changes, or Discard to undo them.",
+        "The ? next to Preview explains that some widgets only show on certain pages, so the preview can look different from the live website. That is expected: in the example below, the Dynamic Sidebar Search widget is in the sidebar but does not appear in the preview."
       ],
       "images": []
     },
     {
-      "heading": "Additional Information",
+      "heading": "Customizing a Default Sidebar",
       "paragraphs": [
-        "\u2022 How To Create A Sidebar\n\u2022 Popular Sidebar Widgets"
+        "A default sidebar opens with a Default label and the note Make your changes, then save to create a custom copy for this site. (1). Saving creates a custom sidebar with the same name, which the website then uses in place of the default sidebar. The preview (2) shows the sidebar as it currently stands."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Disabled Sidebars",
+      "paragraphs": [
+        "A disabled custom sidebar shows a Disabled label and the note Your website does not use this sidebar until you enable it. Use Actions \u00bb Enable Sidebar to turn it back on."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Save History",
+      "paragraphs": [
+        "Actions \u00bb Save History opens a panel listing when the sidebar was created and saved, which widgets were added, removed or reordered, and when it was enabled or disabled, with who made each change. Click Open Activity Log for the full log. Save History reads the website's activity log, so it is only offered to admins who can view the activity log."
       ],
       "images": []
     },
     {
       "heading": "Notes",
       "paragraphs": [
-        "\u2022 The widgets that are allowed for use are those with \"Module\", \"Dynamic Category Filter\", and \"Banner\" in their names, as well as any custom widgets."
+        "\u2022 Only one search dropdown widget works properly per sidebar. When a sidebar holds both a Dynamic Category Filter and another category search widget, saving asks for confirmation (Save Both Search Widgets?).\n\u2022 The widgets available to add are search modules, banners, modules and Dynamic Category Filter widgets (when the Dynamic Category Filtering add-on is active), plus the website's own custom widgets, which are listed underCustom Widgets."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Additional Information",
+      "paragraphs": [
+        "\u2022 How to Create a Sidebar\n\u2022 Popular Sidebar Widgets"
       ],
       "images": []
     }
   ],
-  "screenshot_count": 17
+  "screenshot_count": 7
 }
