@@ -275,6 +275,141 @@ def test_audit_logging():
         print(f"Latest audit entry: event_type={data['logs'][0].get('event_type')}, actor={data['logs'][0].get('actor_type')}")
     print("✓ Test 6 Passed Completely!")
 
+def test_historical_sitemap_archive():
+    print("\n--- Test 7: Persistent Historical Sitemap Archive (Requirements #1 - #11) ---")
+    from retrieval.vector_store import vector_store
+
+    test_url = "https://support.brilliantdirectories.com/support/solutions/articles/12000099999-disappearing-feature-page"
+    test_title = "Historical Discontinued Feature Guide"
+    test_content = "This is a comprehensive guide to legacy widget settings that will disappear from the sitemap."
+    test_source = "https://support.brilliantdirectories.com/support/sitemap.xml"
+
+    # Step 1: Ingest active article with chunks
+    vector_store.upsert_article(
+        article_id="art_hist_test",
+        url=test_url,
+        title=test_title,
+        category="Legacy Configuration",
+        content_hash="hash_legacy_001",
+        raw_text=test_content,
+        screenshot_count=1,
+        chunks_data=[{
+            "id": "chk_hist_001",
+            "section_heading": "Legacy Widget Setup",
+            "content": test_content,
+            "image_urls": ["https://cdn.example.com/legacy_widget.png"],
+            "image_descriptions": ["Diagram of legacy widget settings"]
+        }],
+        sitemap_source=test_source
+    )
+
+    # Verify it is in normal search
+    normal_results = vector_store.hybrid_search("legacy widget settings", limit=5)
+    matched = any(r["url"] == test_url for r in normal_results)
+    assert matched, "Newly ingested test article should be visible in normal search"
+
+    # Step 2: Archive the article (simulate 15 missing checks)
+    archived = vector_store.archive_article(
+        test_url,
+        reason="Missing across 15 consecutive checks (threshold=15)",
+        checks_count=15,
+        source_url=test_source
+    )
+    assert archived is True, "archive_article should return True"
+
+    # Step 3: Verify requirement #6: EXCLUDED from normal search
+    normal_after = vector_store.hybrid_search("legacy widget settings", limit=5)
+    assert not any(r["url"] == test_url for r in normal_after), "Archived article MUST NOT appear in normal hybrid search!"
+
+    # Verify exclusion from /kb/query endpoint
+    chat_res = client.post("/kb/query", json={"question": "legacy widget settings disappearing feature"})
+    assert chat_res.status_code == 200
+    chat_urls = [s.get("url") for s in chat_res.json().get("sources", [])]
+    assert test_url not in chat_urls, "Archived article MUST NOT be returned in ordinary /kb/query sources"
+
+    # Step 4: Verify requirement #1 & #3: Archive inspection & list
+    list_res = client.get("/api/kb/archive")
+    assert list_res.status_code == 200
+    list_data = list_res.json()
+    assert list_data["total"] >= 1
+    arch_match = next((a for a in list_data["articles"] if a["url"] == test_url), None)
+    assert arch_match is not None, "Archived article must appear in /api/kb/archive list"
+    assert arch_match["consecutive_missing_checks"] == 15
+    assert "Missing across 15 consecutive checks" in arch_match["reason"]
+
+    # Step 5: Verify requirement #1 & #7: Complete preserved content in detail preview
+    detail_res = client.get(f"/api/kb/archive/{arch_match['id']}")
+    assert detail_res.status_code == 200
+    detail = detail_res.json()
+    assert detail["raw_text"] == test_content, "Complete raw text must be preserved"
+    assert len(detail["chunks"]) == 1, "Full extracted chunks with headings must be preserved"
+    assert detail["chunks"][0]["section_heading"] == "Legacy Widget Setup"
+    assert detail["content_hash"] is not None
+    assert detail["archived_at"] is not None
+
+    # Step 6: Verify requirement #6: Dedicated historical search mode
+    search_res = client.post("/api/kb/archive/search", json={"query": "legacy widget", "limit": 5})
+    assert search_res.status_code == 200
+    found_in_hist = any(r["url"] == test_url for r in search_res.json()["results"])
+    assert found_in_hist, "Archived article MUST be searchable in dedicated historical search mode"
+
+    # Step 7: Verify requirement #9: Cross-source protection
+    # If another enabled source still uses this URL, archival should NOT deactivate it
+    active_url_multi = "https://example.com/shared-doc"
+    vector_store.upsert_article(
+        article_id="art_shared_a",
+        url=active_url_multi,
+        title="Shared Article Across Sitemaps",
+        category="General",
+        content_hash="hash_shared_a",
+        raw_text="This article exists in both Source A and Source B sitemaps.",
+        screenshot_count=0,
+        chunks_data=[{"id": "chk_shared_1", "section_heading": "Intro", "content": "Shared content"}],
+        sitemap_source="https://source-a.com/sitemap.xml"
+    )
+    # Link to secondary active source
+    vector_store.link_url_to_source("https://source-b.com/sitemap.xml", active_url_multi)
+
+    # Source A reports it missing, but Source B still requires it -> should NOT archive
+    cross_protected = vector_store.archive_article(
+        active_url_multi,
+        reason="Missing from Source A",
+        checks_count=15,
+        source_url="https://source-a.com/sitemap.xml"
+    )
+    assert cross_protected is False, "Cross-source protection: Must not archive URL when another active source requires it"
+
+    # Step 8: Verify requirement #4: Restore to active Knowledge Base
+    restore_res = client.post(f"/api/kb/archive/{arch_match['id']}/restore")
+    assert restore_res.status_code == 200
+    assert restore_res.json()["status"] == "restored"
+
+    # Verify article is reactivated in hybrid search and FTS
+    restored_search = vector_store.hybrid_search("legacy widget settings", limit=5)
+    assert any(r["url"] == test_url for r in restored_search), "Restored article MUST immediately appear in normal search!"
+
+    # Verify it is no longer in archived list
+    list_after_restore = client.get("/api/kb/archive").json()
+    assert not any(a["url"] == test_url for a in list_after_restore["articles"])
+
+    # Step 9: Verify requirement #8: Separate archiving from permanent deletion
+    # Re-archive to test permanent deletion
+    vector_store.archive_article(test_url, reason="Re-archiving for deletion test")
+    arch_again = next(a for a in client.get("/api/kb/archive").json()["articles"] if a["url"] == test_url)
+
+    # Attempt delete without confirmation -> 400
+    bad_del = client.delete(f"/api/kb/archive/{arch_again['id']}?confirm=false")
+    assert bad_del.status_code == 400, "Permanent deletion without confirmation must be rejected"
+
+    # Authorized deletion with confirmation
+    ok_del = client.delete(f"/api/kb/archive/{arch_again['id']}?confirm=true")
+    assert ok_del.status_code == 200
+    assert ok_del.json()["status"] == "permanently_deleted"
+
+    # Verify completely purged
+    assert vector_store.get_archived_article_details(arch_again["id"]) is None
+    print("✓ Test 7 Passed Completely!")
+
 if __name__ == "__main__":
     test_sitemap_inspection()
     test_chat_ai_reasoning_engine()
@@ -282,7 +417,9 @@ if __name__ == "__main__":
     test_multi_source_sitemap_endpoints()
     test_oauth_encryption_and_endpoints()
     test_audit_logging()
+    test_historical_sitemap_archive()
     print("\n==========================================")
     print("ALL TESTS PASSED WITH 100% SUCCESS RATE!")
     print("==========================================")
+
 

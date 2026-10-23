@@ -325,14 +325,16 @@ class PoliteResumableCrawler:
                 miss_cnt = info.get("consecutive_missing_checks", 0) + 1
                 info["consecutive_missing_checks"] = miss_cnt
                 if miss_cnt >= missing_checks_threshold and info.get("status") not in ["removed", "archived"]:
-                    info["status"] = "archived"
-                    # Remove from KB #1 and save in Table #2 (archived_articles)
-                    vector_store.archive_article(
+                    # Remove from KB #1 and save in Table #2 (archived_articles) with cross-source safety
+                    archived = vector_store.archive_article(
                         stored_url, 
                         reason=f"Missing across {miss_cnt} consecutive checks (threshold={missing_checks_threshold})",
-                        checks_count=miss_cnt
+                        checks_count=miss_cnt,
+                        source_url=item_source
                     )
-                    archived_count += 1
+                    if archived:
+                        info["status"] = "archived"
+                        archived_count += 1
 
         self.manifest["last_sitemap_sync"] = datetime.now(timezone.utc).isoformat()
         stats = self.manifest.setdefault("stats", {})

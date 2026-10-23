@@ -482,6 +482,201 @@ async function loadConfiguredSitemaps() {
   }
 }
 
+// ==========================================
+// HISTORICAL SITEMAP ARCHIVE (Requirements #1 - #10)
+// ==========================================
+let currentArchivedArticle = null;
+let archiveSearchTimeout = null;
+
+function openArchiveModal() {
+  const modal = document.getElementById("modal-archive");
+  if (modal) {
+    modal.classList.add("open");
+    loadArchivedArticles();
+  }
+}
+
+function closeArchiveModal() {
+  const modal = document.getElementById("modal-archive");
+  if (modal) modal.classList.remove("open");
+  closeArchivePreview();
+}
+
+function searchArchivedArticles(query) {
+  clearTimeout(archiveSearchTimeout);
+  archiveSearchTimeout = setTimeout(() => {
+    loadArchivedArticles(query);
+  }, 250);
+}
+
+async function loadArchivedArticles(query = "") {
+  const container = document.getElementById("archive-items-list");
+  const countBadge = document.getElementById("archive-count-badge");
+  const totalBadge = document.getElementById("archive-total-badge");
+
+  try {
+    const url = query && query.trim() 
+      ? `${API_KB}/archive?q=${encodeURIComponent(query.trim())}&limit=50`
+      : `${API_KB}/archive?limit=50`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to load archive");
+    const data = await res.json();
+    const articles = data.articles || [];
+
+    if (countBadge) countBadge.textContent = data.total || articles.length;
+    if (totalBadge) totalBadge.textContent = `${data.total || articles.length} Page${(data.total || articles.length) === 1 ? '' : 's'} Archived`;
+
+    if (!container) return;
+
+    if (articles.length === 0) {
+      container.innerHTML = `
+        <div style="padding:24px;text-align:center;color:var(--text-muted);font-size:0.85rem;">
+          ${query ? `No archived pages found matching "${escapeHtml(query)}"` : 'No archived pages currently in durable storage. Pages missing for 15 consecutive refresh checks are archived automatically.'}
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = articles.map(art => {
+      const artId = escapeHtml(art.id || art.url);
+      const artUrl = escapeHtml(art.url || '');
+      const artTitle = escapeHtml(art.title || art.url || 'Untitled Document');
+      const snippet = escapeHtml(art.content_snippet || 'No text snippet available');
+      const reason = escapeHtml(art.reason || 'Missing from sitemap');
+      const dateStr = art.archived_at ? new Date(art.archived_at).toLocaleDateString() : 'N/A';
+      const versionStr = art.version ? `v${art.version}` : 'v1';
+
+      return `
+        <div class="sitemap-card-item" style="cursor:pointer;" onclick="previewArchivedArticle('${artId}')">
+          <div style="overflow:hidden;text-overflow:ellipsis;flex:1;">
+            <div class="sitemap-card-url" title="${artUrl}">
+              <span>🏛️</span> <strong>${artTitle}</strong>
+              <span class="badge-tag highlight" style="font-size:0.65rem;margin-left:6px;">${versionStr}</span>
+            </div>
+            <div style="font-size:0.73rem;color:#38bdf8;margin-top:2px;word-break:break-all;">
+              ${artUrl}
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+              ${snippet}...
+            </div>
+            <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;">
+              <span>Removed: <strong style="color:#fbbf24;">${reason}</strong></span>
+              <span>Archived: ${dateStr}</span>
+            </div>
+          </div>
+          <div class="sitemap-card-meta" style="flex-direction:column;gap:6px;align-items:flex-end;">
+            <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); restoreArchivedArticle('${artId}')" style="font-size:0.7rem;padding:3px 8px;background:#10b981;border-color:#10b981;">
+              ↺ Restore
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); deleteArchivedArticlePermanently('${artId}')" style="font-size:0.7rem;padding:3px 8px;color:#fb7185;border-color:rgba(251,113,133,0.3);">
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    if (container) {
+      container.innerHTML = `<div style="padding:16px;color:#f87171;font-size:0.8rem;">Archive unavailable: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+}
+
+async function previewArchivedArticle(identifier) {
+  try {
+    const res = await fetch(`${API_KB}/archive/${encodeURIComponent(identifier)}`);
+    if (!res.ok) throw new Error("Could not fetch archived article details");
+    const data = await res.json();
+    currentArchivedArticle = data;
+
+    const box = document.getElementById("archive-preview-box");
+    if (!box) return;
+
+    document.getElementById("archive-preview-title").textContent = data.title || data.url;
+    const urlElem = document.getElementById("archive-preview-url");
+    urlElem.textContent = data.url;
+    urlElem.href = data.url;
+    document.getElementById("archive-preview-date").textContent = data.archived_at ? new Date(data.archived_at).toLocaleString() : 'N/A';
+    document.getElementById("archive-preview-reason").textContent = data.reason || 'Missing';
+    document.getElementById("archive-preview-version").textContent = data.version ? `v${data.version}` : 'v1';
+    document.getElementById("archive-preview-hash").textContent = (data.content_hash || '').substring(0, 12) + '...';
+
+    // Format content with chunks/sections if available
+    let contentDisplay = data.raw_text || '';
+    if (data.chunks && data.chunks.length > 0) {
+      contentDisplay = data.chunks.map((chk, i) => {
+        return `--- [Section ${i + 1}: ${chk.section_heading || 'General'}] ---\n${chk.content}\n`;
+      }).join("\n");
+    }
+    document.getElementById("archive-preview-content").textContent = contentDisplay;
+
+    // Connect preview action buttons
+    const btnRestore = document.getElementById("btn-restore-preview");
+    if (btnRestore) {
+      btnRestore.onclick = () => restoreArchivedArticle(data.id || data.url);
+    }
+    const btnDelete = document.getElementById("btn-delete-preview");
+    if (btnDelete) {
+      btnDelete.onclick = () => deleteArchivedArticlePermanently(data.id || data.url);
+    }
+
+    box.style.display = "block";
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  } catch (err) {
+    alert(`Could not load preview: ${err.message}`);
+  }
+}
+
+function closeArchivePreview() {
+  const box = document.getElementById("archive-preview-box");
+  if (box) box.style.display = "none";
+  currentArchivedArticle = null;
+}
+
+async function restoreArchivedArticle(identifier) {
+  if (!confirm(`Restore this article to the active Knowledge Base?\n\nThis will re-validate its content and re-enable FTS5 semantic search.`)) {
+    return;
+  }
+  try {
+    const res = await fetch(`${API_KB}/archive/${encodeURIComponent(identifier)}/restore`, {
+      method: "POST"
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || "Restoration failed");
+    }
+    const result = await res.json();
+    alert(`✓ ${result.message || "Article successfully restored to active Knowledge Base!"}`);
+    closeArchivePreview();
+    loadArchivedArticles();
+    if (typeof loadConfiguredSitemaps === "function") loadConfiguredSitemaps();
+  } catch (err) {
+    alert(`Failed to restore archived page: ${err.message}`);
+  }
+}
+
+async function deleteArchivedArticlePermanently(identifier) {
+  const confirmed = confirm(
+    `⚠️ PERMANENT DELETION CONFIRMATION\n\nAre you sure you want to permanently delete this archived page?\n\nThis operation CANNOT be undone. All durable snapshots, chunk embeddings, and version history will be completely erased from disk.`
+  );
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(`${API_KB}/archive/${encodeURIComponent(identifier)}?confirm=true`, {
+      method: "DELETE"
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || "Deletion failed");
+    }
+    alert("✓ Archived page permanently deleted.");
+    closeArchivePreview();
+    loadArchivedArticles();
+  } catch (err) {
+    alert(`Failed to delete archived page: ${err.message}`);
+  }
+}
+
 async function inspectEnteredSitemap() {
   const urlInput = document.getElementById("input-sitemap-urls");
   const patternInput = document.getElementById("input-url-pattern");
@@ -1655,6 +1850,7 @@ async function approveCurrentProposal() {
 // Initial load on startup
 window.addEventListener("DOMContentLoaded", () => {
   loadConfiguredSitemaps();
+  loadArchivedArticles();
   loadInboxEmails();
   loadAutonomySettings(false);
   checkGmailOAuthStatus();

@@ -126,22 +126,31 @@ The **AI Tech Consultant** is a unified multi-agent web platform designed to str
 | **M2: Advanced Sitemap Discovery** | Recursive `<sitemapindex>` parsing, SSRF defense, discovery preview | **COMPLETED** |
 | **M3: Measured Throughput & ETA** | Rolling throughput calculation (5m, 1h, 24h), dynamic ETA formatting | **COMPLETED** |
 | **M4: Incremental Refresh & Archival** | 3-case change detection, 15-check missing URL threshold, Table #2 archival | **COMPLETED** |
-| **M5: Gmail OAuth & Real Sync Engine** | OAuth flow, encrypted token store, real Gmail draft creation, sync cursor | **IN PROGRESS** |
+| **M5: Gmail OAuth & Real Sync Engine** | OAuth flow, encrypted token store, real Gmail draft creation, sync cursor | **COMPLETED** |
 | **M6: Gmail Familiar UI & Classification** | 3-pane Gmail layout, 8 setting labels, top-right profile avatar | **COMPLETED** |
 | **M7: Autonomy Threshold & Feedback Store** | Configurable $X$, draft vs sent diff learning, streak reset, safety locks | **COMPLETED** |
 | **M8: End-to-End Validation & Acceptance** | Automated test suite, live test personas, Google Cloud setup docs | **COMPLETED** |
+| **M9: Persistent Historical Archive** | Full content preservation, Knowledge Base Archive UI, restore, version history, cross-source safety, explicit purge | **COMPLETED** |
 
 ---
 
 ## 6. Testing Strategy
 
-* **Unit Tests**:
+* **Unit & Integration Tests**:
   * `tests/test_crawler_change_detection.py`: Verifies Case 1 (new), Case 2 (updated lastmod), Case 3 (missing 15 checks $\to$ Table #2 archival).
-  * `tests/test_sitemap_and_gmail_engine.py`: Verifies sitemap inspection, AI reasoning engine, 8 setting classifications, autonomy unlock at $X=3$, streak reset on edit, and feedback rule injection.
+  * `tests/test_sitemap_and_gmail_engine.py`: 
+    * Test 1: Sitemap inspection & rolling ETA calculation.
+    * Test 2: Interactive chat AI reasoning engine & prompt engineering.
+    * Test 3: Authentic Gmail engine, 8 setting labels, autonomy streak unlock at $X=3$, streak reset on edit, and feedback rule injection.
+    * Test 4: Multi-source sitemap management and scheduling.
+    * Test 5: OAuth token encryption, HMAC authentication, and sync endpoints.
+    * Test 6: Email audit logging.
+    * Test 7: Persistent historical sitemap archive, full content preservation, exclusion from ordinary retrieval, dedicated historical search, cross-source protection, restoration, and authorized permanent deletion.
 * **Evaluation Benchmarks**:
   * Task 1: 22 cases (`run_evals.py` $\to$ 100% pass rate).
   * Task 2: 50 emails (`run-evals.js` $\to$ 100% pass rate).
   * Task 3: 22 cases (`run_evals.py` $\to$ 100% pass rate).
 * **Live Acceptance Testing**:
+  * Knowledge Base $\to$ 🏛️ Historical Archive modal with live search, inspection preview, restoration, and permanent delete.
   * Quick-fill personas for Fiona, Alex, David, Elena.
   * Real Gmail OAuth connection with live incoming message verification.

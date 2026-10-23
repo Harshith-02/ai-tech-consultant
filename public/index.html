@@ -85,6 +85,9 @@
           <button class="btn btn-secondary btn-sm" id="btn-open-sitemaps" onclick="openSitemapsModal()" style="display:inline-flex;align-items:center;gap:6px;" title="Add & manage custom XML sitemaps">
             <span>🌐</span> Sitemaps (<span id="sitemap-count-badge">1</span>)
           </button>
+          <button class="btn btn-secondary btn-sm" id="btn-open-archive" onclick="openArchiveModal()" style="display:inline-flex;align-items:center;gap:6px;" title="Historical Sitemap Archive">
+            <span>🏛️</span> Archive (<span id="archive-count-badge">0</span>)
+          </button>
 
           <!-- Top Right User Profile Avatar (Standard Web UX - Facebook/LinkedIn/Gmail style) -->
           <div class="user-profile-header" onclick="openAccountSettingsModal()" title="Account & AI Autonomy Settings">
@@ -570,11 +573,79 @@
           <span>Ready to inspect or sync</span>
         </div>
         <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary btn-sm" onclick="closeSitemapsModal(); openArchiveModal();">🏛️ Historical Archive</button>
           <button class="btn btn-secondary btn-sm" onclick="closeSitemapsModal()">Cancel</button>
           <button class="btn btn-primary btn-sm" id="btn-submit-sitemap-crawl" onclick="submitCustomSitemapsIngestion()">
             🚀 Confirm & Start Ingestion
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORICAL SITEMAP ARCHIVE MODAL (Requirement #3, #4, #8) -->
+  <div class="app-modal-backdrop" id="modal-archive">
+    <div class="app-modal-dialog" style="max-width:860px;">
+      <div class="app-modal-header">
+        <div>
+          <h3>🏛️ Persistent Historical Sitemap Archive</h3>
+          <span class="panel-subtitle">Durable storage for pages removed from source sitemaps after 15 consecutive missing checks</span>
+        </div>
+        <button class="app-modal-close" onclick="closeArchiveModal()" title="Close">✕</button>
+      </div>
+      <div class="app-modal-body">
+        <!-- Search & Filter Bar -->
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <input 
+            type="text" 
+            class="form-input" 
+            id="archive-search-input" 
+            placeholder="Search archived pages by title, content, URL, or removal reason..." 
+            oninput="searchArchivedArticles(this.value)"
+          />
+          <button class="btn btn-secondary btn-sm" onclick="loadArchivedArticles()">🔄 Refresh</button>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:0.78rem;color:var(--text-muted);">
+            Archived content is permanently preserved with full extracted text, section headings, and screenshots.
+          </span>
+          <span class="badge-tag highlight" id="archive-total-badge">0 Pages Archived</span>
+        </div>
+
+        <!-- Archive Items List -->
+        <div class="sitemap-cards" id="archive-items-list" style="max-height:360px;min-height:140px;">
+          <!-- Dynamically populated archived article cards -->
+        </div>
+
+        <!-- Selected Article Detail / Preview Box -->
+        <div id="archive-preview-box" style="display:none;margin-top:14px;padding:14px;background:#0f172a;border-radius:var(--radius-md);border:1px solid rgba(255,255,255,0.12);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <div>
+              <h4 id="archive-preview-title" style="color:#fff;font-size:0.95rem;margin-bottom:2px;">Article Title</h4>
+              <a href="#" id="archive-preview-url" target="_blank" style="font-size:0.75rem;color:#38bdf8;word-break:break-all;">https://example.com</a>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-primary btn-sm" id="btn-restore-preview" style="background:#10b981;border-color:#10b981;">↺ Restore to Brain</button>
+              <button class="btn btn-secondary btn-sm" id="btn-delete-preview" style="color:#fb7185;border-color:rgba(251,113,133,0.3);">🗑️ Permanent Delete</button>
+              <button class="btn btn-secondary btn-sm" onclick="closeArchivePreview()">✕ Close Preview</button>
+            </div>
+          </div>
+          <div style="font-size:0.74rem;color:var(--text-muted);display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+            <span>Archived Date: <strong id="archive-preview-date" style="color:#fff;">-</strong></span>
+            <span>Reason: <strong id="archive-preview-reason" style="color:#fbbf24;">-</strong></span>
+            <span>Version: <strong id="archive-preview-version" style="color:#a5b4fc;">v1</strong></span>
+            <span>Hash: <strong id="archive-preview-hash" style="color:#cbd5e1;">-</strong></span>
+          </div>
+          <div style="max-height:220px;overflow-y:auto;background:rgba(0,0,0,0.3);padding:10px;border-radius:6px;font-size:0.78rem;line-height:1.5;color:var(--text-secondary);white-space:pre-wrap;" id="archive-preview-content">
+          </div>
+        </div>
+      </div>
+      <div class="app-modal-footer">
+        <span style="font-size:0.75rem;color:var(--text-muted);">
+          Restoring re-validates extracted text and immediately reinstates FTS5 semantic search.
+        </span>
+        <button class="btn btn-secondary btn-sm" onclick="closeArchiveModal()">Close</button>
       </div>
     </div>
   </div>

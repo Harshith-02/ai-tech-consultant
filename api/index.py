@@ -85,6 +85,7 @@ class QueryRequest(BaseModel):
     top_k: int = 4
     min_confidence: float = 0.40
     image_data: Optional[str] = None
+    include_archived: bool = False
 
 class EscalationResolveRequest(BaseModel):
     escalation_id: str
@@ -166,6 +167,18 @@ async def kb_query(payload: QueryRequest):
             "url": r.get("url", "https://support.brilliantdirectories.com"),
             "image_description": (r.get("image_descriptions") and r["image_descriptions"][0]) if isinstance(r.get("image_descriptions"), list) and r["image_descriptions"] else None
         })
+
+    if payload.include_archived:
+        archived_matches = vector_store.search_archived_articles(search_query, limit=2)
+        for am in archived_matches:
+            sources.append({
+                "title": f"🏛️ [Historical Archive] {am.get('title', 'Archived Doc')}",
+                "section": f"Archived on {str(am.get('archived_at', ''))[:10]} ({am.get('reason', 'Missing URL')})",
+                "relevance": "Historical Match",
+                "snippet": am.get("matched_snippet", "")[:280] + ("..." if len(am.get("matched_snippet", "")) > 280 else ""),
+                "url": am.get("url", "#"),
+                "is_archived": True
+            })
 
     answer = ""
     if visual_analysis:
@@ -339,9 +352,43 @@ async def kb_ingestion_sitemaps():
         "status": "synced"
     }]
 
+class ArchiveSearchReq(BaseModel):
+    query: str
+    limit: int = 10
+
+@kb_router.get("/archive")
 @kb_router.get("/ingestion/archived")
-async def kb_ingestion_archived():
-    return vector_store.get_archived_articles()
+async def kb_list_archived(q: Optional[str] = None, limit: int = 50):
+    articles = vector_store.get_archived_articles(search_query=q, limit=limit)
+    return {"total": len(articles), "articles": articles}
+
+@kb_router.post("/archive/search")
+async def kb_search_archived(payload: ArchiveSearchReq):
+    results = vector_store.search_archived_articles(payload.query, limit=payload.limit)
+    return {"query": payload.query, "total": len(results), "results": results}
+
+@kb_router.get("/archive/{identifier:path}")
+async def kb_get_archived_details(identifier: str):
+    details = vector_store.get_archived_article_details(identifier)
+    if not details:
+        raise HTTPException(status_code=404, detail="Archived page not found")
+    return details
+
+@kb_router.post("/archive/{identifier:path}/restore")
+async def kb_restore_archived(identifier: str):
+    success = vector_store.restore_archived_article(identifier)
+    if not success:
+        raise HTTPException(status_code=404, detail="Archived page not found or failed to restore")
+    return {"status": "restored", "message": f"Successfully restored '{identifier}' to active Knowledge Brain."}
+
+@kb_router.delete("/archive/{identifier:path}")
+async def kb_delete_archived(identifier: str, confirm: bool = Query(False)):
+    if not confirm:
+        raise HTTPException(status_code=400, detail="Permanent deletion requires explicit confirmation (?confirm=true)")
+    success = vector_store.permanent_delete_archived_article(identifier)
+    if not success:
+        raise HTTPException(status_code=404, detail="Archived page not found")
+    return {"status": "permanently_deleted", "identifier": identifier}
 
 class CreateSitemapSourceReq(BaseModel):
     name: str

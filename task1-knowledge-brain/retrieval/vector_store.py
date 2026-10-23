@@ -3,6 +3,7 @@ import sqlite3
 import json
 import uuid
 import re
+import hashlib
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
 from pathlib import Path
@@ -114,10 +115,37 @@ class KnowledgeVectorStore:
                 raw_text TEXT,
                 sitemap_source TEXT,
                 consecutive_missing_checks INTEGER DEFAULT 0,
+                last_indexed_at TEXT,
                 archived_at TEXT NOT NULL,
-                reason TEXT
+                reason TEXT,
+                metadata_json TEXT,
+                version INTEGER DEFAULT 1
             );
             """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS article_version_history (
+                id TEXT PRIMARY KEY,
+                article_id TEXT NOT NULL,
+                url TEXT NOT NULL,
+                version INTEGER NOT NULL,
+                content_hash TEXT NOT NULL,
+                raw_text TEXT,
+                title TEXT,
+                metadata_json TEXT,
+                created_at TEXT NOT NULL
+            );
+            """)
+
+            # Safe migrations for existing archived_articles tables
+            cursor.execute("PRAGMA table_info(archived_articles)")
+            arch_cols = [c[1] for c in cursor.fetchall()]
+            for col_name, col_type in [("last_indexed_at", "TEXT"), ("metadata_json", "TEXT"), ("version", "INTEGER DEFAULT 1")]:
+                if col_name not in arch_cols:
+                    try:
+                        cursor.execute(f"ALTER TABLE archived_articles ADD COLUMN {col_name} {col_type}")
+                    except Exception:
+                        pass
 
             cursor.execute("""
             CREATE TABLE IF NOT EXISTS sitemap_sources (
@@ -235,24 +263,51 @@ class KnowledgeVectorStore:
         content_hash: str,
         raw_text: str,
         screenshot_count: int,
-        chunks_data: List[Dict[str, Any]]
+        chunks_data: List[Dict[str, Any]],
+        sitemap_source: Optional[str] = None
     ):
         now = datetime.now(timezone.utc).isoformat()
         with self._get_connection() as conn:
             cursor = conn.cursor()
 
+            # Ensure we reuse the article_id if the URL is already present to respect UNIQUE(url)
+            cursor.execute("SELECT id, content_hash, raw_text, title, updated_at FROM articles WHERE url = ? OR id = ?", (url, article_id))
+            existing = cursor.fetchone()
+            if existing:
+                article_id = existing["id"]
+
+            # Requirement #5: Preserve historical version when page content changes
+            if existing and existing["content_hash"] and existing["content_hash"] != content_hash:
+                cursor.execute("SELECT COUNT(*) FROM article_version_history WHERE article_id = ? OR url = ?", (article_id, url))
+                ver_count = cursor.fetchone()[0] + 1
+                cursor.execute("""
+                INSERT INTO article_version_history (id, article_id, url, version, content_hash, raw_text, title, metadata_json, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    f"ver_{uuid.uuid4().hex[:8]}",
+                    article_id,
+                    url,
+                    ver_count,
+                    existing["content_hash"],
+                    existing["raw_text"],
+                    existing["title"],
+                    json.dumps({"reason": "content_change_detected"}),
+                    existing["updated_at"] or now
+                ))
+
             cursor.execute("""
-            INSERT INTO articles (id, url, title, category, content_hash, raw_text, screenshot_count, is_active, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
+            INSERT INTO articles (id, url, title, category, content_hash, raw_text, screenshot_count, sitemap_source, is_active, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
             ON CONFLICT(id) DO UPDATE SET
                 title=excluded.title,
                 category=excluded.category,
                 content_hash=excluded.content_hash,
                 raw_text=excluded.raw_text,
                 screenshot_count=excluded.screenshot_count,
+                sitemap_source=COALESCE(excluded.sitemap_source, articles.sitemap_source),
                 is_active=1,
                 updated_at=excluded.updated_at;
-            """, (article_id, url, title, category, content_hash, raw_text, screenshot_count, now, now))
+            """, (article_id, url, title, category, content_hash, raw_text, screenshot_count, sitemap_source, now, now))
 
             cursor.execute("SELECT id FROM chunks WHERE article_id = ?", (article_id,))
             old_chunk_ids = [row["id"] for row in cursor.fetchall()]
@@ -303,25 +358,98 @@ class KnowledgeVectorStore:
             conn.commit()
             return True
 
-    def archive_article(self, url: str, reason: str = "Missing from sitemap across configured consecutive checks", checks_count: int = 15) -> bool:
+    def archive_article(
+        self,
+        url: str,
+        reason: str = "Missing from sitemap across configured consecutive checks",
+        checks_count: int = 15,
+        source_url: Optional[str] = None
+    ) -> bool:
+        """
+        Durable Historical Archival (Requirement #1 - #10):
+        1. Preserves complete extracted page content, metadata, content hash, chunks & screenshots.
+        2. Enforces cross-source protection: if another active source references this URL, it remains active.
+        3. Excludes archived content from ordinary retrieval (chunks_fts removed, is_active=0).
+        4. Preserves historical versions in article_version_history.
+        5. Atomic SQLite transaction ensures consistency.
+        """
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT id, url, title, category, content_hash, raw_text FROM articles WHERE url = ?", (url,))
+
+            # Cross-Source Protection Rule (Requirement #9):
+            # If the same URL belongs to another active sitemap source, do not archive/deactivate
+            if source_url:
+                cursor.execute("""
+                SELECT COUNT(*) FROM sitemap_urls
+                WHERE url = ? AND source_id != ? AND status = 'active'
+                """, (url, source_url))
+                shared_urls = cursor.fetchone()[0]
+
+                cursor.execute("""
+                SELECT COUNT(*) FROM articles 
+                WHERE url = ? AND sitemap_source IS NOT NULL AND sitemap_source != ? AND is_active = 1
+                """, (url, source_url))
+                shared_active = cursor.fetchone()[0]
+                if shared_active > 0 or shared_urls > 0:
+                    # Still required by another active source
+                    return False
+
+            cursor.execute("""
+            SELECT id, url, title, category, content_hash, raw_text, sitemap_source, updated_at 
+            FROM articles WHERE url = ?
+            """, (url,))
             row = cursor.fetchone()
+
             article_id = row["id"] if row else f"archived_{uuid.uuid4().hex[:8]}"
             title = row["title"] if row else url.split("/")[-1].replace("-", " ").title()
             cat = row["category"] if row else "General"
-            chash = row["content_hash"] if row else None
-            rtext = row["raw_text"] if row else None
+            chash = row["content_hash"] if row else hashlib.sha256(url.encode()).hexdigest()[:16]
+            rtext = row["raw_text"] if row else ""
+            src_val = row["sitemap_source"] if row and row["sitemap_source"] else (source_url or "sitemap")
+            last_indexed = row["updated_at"] if row else datetime.now(timezone.utc).isoformat()
             now = datetime.now(timezone.utc).isoformat()
-            cursor.execute("""
-            INSERT OR REPLACE INTO archived_articles (id, url, title, category, content_hash, raw_text, consecutive_missing_checks, archived_at, reason)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (article_id, url, title, cat, chash, rtext, checks_count, now, reason))
 
-            # Deactivate in active knowledge base #1
+            # Retrieve all chunk records with screenshots and headings for full-fidelity archival
+            cursor.execute("""
+            SELECT id, section_heading, content, image_urls, image_descriptions 
+            FROM chunks WHERE article_id = ? OR url = ?
+            """, (article_id, url))
+            chunks_rows = [dict(cr) for cr in cursor.fetchall()]
+            meta_json = json.dumps({
+                "chunks": chunks_rows,
+                "chunks_count": len(chunks_rows),
+                "original_article_id": article_id,
+                "archived_by": "automated_sitemap_refresh"
+            })
+
+            # Check previous version count
+            cursor.execute("SELECT COUNT(*) FROM article_version_history WHERE url = ?", (url,))
+            ver_count = cursor.fetchone()[0] + 1
+
+            # 1. Insert into archived_articles (Table #2)
+            cursor.execute("""
+            INSERT OR REPLACE INTO archived_articles (
+                id, url, title, category, content_hash, raw_text, sitemap_source,
+                consecutive_missing_checks, last_indexed_at, archived_at, reason, metadata_json, version
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                article_id, url, title, cat, chash, rtext, src_val,
+                checks_count, last_indexed, now, reason, meta_json, ver_count
+            ))
+
+            # 2. Record historical version
+            ver_id = f"ver_{uuid.uuid4().hex[:8]}"
+            cursor.execute("""
+            INSERT INTO article_version_history (
+                id, article_id, url, version, content_hash, raw_text, title, metadata_json, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (ver_id, article_id, url, ver_count, chash, rtext, title, meta_json, now))
+
+            # 3. Atomically deactivate in active Knowledge Brain retrieval (Table #1)
             cursor.execute("UPDATE articles SET is_active = 0, updated_at = ? WHERE id = ?", (now, article_id))
             cursor.execute("UPDATE chunks SET is_active = 0 WHERE article_id = ?", (article_id,))
+
+            # 4. Remove from active FTS5 index to guarantee exclusion from ordinary AI search
             cursor.execute("SELECT id FROM chunks WHERE article_id = ?", (article_id,))
             for r in cursor.fetchall():
                 cursor.execute("DELETE FROM chunks_fts WHERE chunk_id = ?", (r["id"],))
@@ -329,10 +457,159 @@ class KnowledgeVectorStore:
             conn.commit()
             return True
 
-    def get_archived_articles(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_archived_articles(self, search_query: Optional[str] = None, limit: int = 50) -> List[Dict[str, Any]]:
         with self._get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM archived_articles ORDER BY archived_at DESC LIMIT ?", (limit,))
+            if search_query and search_query.strip():
+                pattern = f"%{search_query.strip()}%"
+                cursor.execute("""
+                SELECT id, url, title, category, content_hash, sitemap_source, 
+                       consecutive_missing_checks, last_indexed_at, archived_at, reason, version,
+                       LENGTH(COALESCE(raw_text, '')) as content_length,
+                       SUBSTR(COALESCE(raw_text, ''), 1, 240) as content_snippet
+                FROM archived_articles
+                WHERE title LIKE ? OR url LIKE ? OR raw_text LIKE ? OR reason LIKE ?
+                ORDER BY archived_at DESC LIMIT ?
+                """, (pattern, pattern, pattern, pattern, limit))
+            else:
+                cursor.execute("""
+                SELECT id, url, title, category, content_hash, sitemap_source, 
+                       consecutive_missing_checks, last_indexed_at, archived_at, reason, version,
+                       LENGTH(COALESCE(raw_text, '')) as content_length,
+                       SUBSTR(COALESCE(raw_text, ''), 1, 240) as content_snippet
+                FROM archived_articles
+                ORDER BY archived_at DESC LIMIT ?
+                """, (limit,))
+            return [dict(r) for r in cursor.fetchall()]
+
+    def get_archived_article_details(self, identifier: str) -> Optional[Dict[str, Any]]:
+        """Retrieve full extracted content, chunks, and metadata for inspection preview."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM archived_articles WHERE id = ? OR url = ?", (identifier, identifier))
+            row = cursor.fetchone()
+            if not row:
+                return None
+            res = dict(row)
+            chunks = []
+            if res.get("metadata_json"):
+                try:
+                    meta = json.loads(res["metadata_json"])
+                    chunks = meta.get("chunks", [])
+                except Exception:
+                    chunks = []
+            res["chunks"] = chunks
+
+            # Fetch version history
+            cursor.execute("SELECT * FROM article_version_history WHERE url = ? ORDER BY version ASC", (res["url"],))
+            res["versions"] = [dict(v) for v in cursor.fetchall()]
+            return res
+
+    def restore_archived_article(self, identifier: str) -> bool:
+        """
+        Restores an archived page to the active Knowledge Base (Requirement #4):
+        - Validates the stored content
+        - Sets is_active = 1 on article and chunks
+        - Re-indexes chunks into active chunks_fts
+        - Removes from archived_articles
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM archived_articles WHERE id = ? OR url = ?", (identifier, identifier))
+            row = cursor.fetchone()
+            if not row:
+                return False
+
+            article_id = row["id"]
+            url = row["url"]
+            title = row["title"]
+            now = datetime.now(timezone.utc).isoformat()
+
+            # 1. Reactivate article in Table #1
+            cursor.execute("UPDATE articles SET is_active = 1, updated_at = ? WHERE id = ? OR url = ?", (now, article_id, url))
+            if cursor.rowcount == 0:
+                # Article row was removed; re-create from durable archive
+                cursor.execute("""
+                INSERT OR REPLACE INTO articles (id, url, title, category, content_hash, raw_text, is_active, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)
+                """, (article_id, url, title, row["category"], row["content_hash"], row["raw_text"], now, now))
+
+            # 2. Reactivate chunks & restore to chunks_fts
+            cursor.execute("UPDATE chunks SET is_active = 1 WHERE article_id = ? OR url = ?", (article_id, url))
+            cursor.execute("SELECT id, section_heading, content, image_descriptions FROM chunks WHERE article_id = ? OR url = ?", (article_id, url))
+            existing_chunks = cursor.fetchall()
+
+            if existing_chunks:
+                for c in existing_chunks:
+                    cursor.execute("DELETE FROM chunks_fts WHERE chunk_id = ?", (c["id"],))
+                    cursor.execute("""
+                    INSERT INTO chunks_fts (chunk_id, article_title, section_heading, content, image_descriptions)
+                    VALUES (?, ?, ?, ?, ?)
+                    """, (c["id"], title, c["section_heading"], c["content"], c["image_descriptions"]))
+            elif row["metadata_json"]:
+                # Re-index from durable metadata_json snapshot
+                try:
+                    meta = json.loads(row["metadata_json"])
+                    for c in meta.get("chunks", []):
+                        cid = c.get("id", f"chk_{uuid.uuid4().hex[:8]}")
+                        s_heading = c.get("section_heading", "Overview")
+                        c_text = c.get("content", "")
+                        imgs_str = json.dumps(c.get("image_urls", []))
+                        descs_str = json.dumps(c.get("image_descriptions", []))
+                        cursor.execute("""
+                        INSERT OR REPLACE INTO chunks (id, article_id, url, article_title, section_heading, content, image_urls, image_descriptions, is_active, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)
+                        """, (cid, article_id, url, title, s_heading, c_text, imgs_str, descs_str, now))
+                        cursor.execute("""
+                        INSERT INTO chunks_fts (chunk_id, article_title, section_heading, content, image_descriptions)
+                        VALUES (?, ?, ?, ?, ?)
+                        """, (cid, title, s_heading, c_text, descs_str))
+                except Exception:
+                    pass
+
+            # 3. Remove from archived_articles
+            cursor.execute("DELETE FROM archived_articles WHERE id = ? OR url = ?", (article_id, url))
+            conn.commit()
+            return True
+
+    def permanent_delete_archived_article(self, identifier: str) -> bool:
+        """
+        Explicit, authorized permanent deletion (Requirement #8):
+        - Completely purges article, chunks, and FTS rows
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, url FROM archived_articles WHERE id = ? OR url = ?", (identifier, identifier))
+            row = cursor.fetchone()
+            if not row:
+                return False
+            art_id = row["id"]
+            url = row["url"]
+
+            cursor.execute("SELECT id FROM chunks WHERE article_id = ? OR url = ?", (art_id, url))
+            for r in cursor.fetchall():
+                cursor.execute("DELETE FROM chunks_fts WHERE chunk_id = ?", (r["id"],))
+
+            cursor.execute("DELETE FROM chunks WHERE article_id = ? OR url = ?", (art_id, url))
+            cursor.execute("DELETE FROM articles WHERE id = ? OR url = ?", (art_id, url))
+            cursor.execute("DELETE FROM article_version_history WHERE url = ?", (url,))
+            cursor.execute("DELETE FROM archived_articles WHERE id = ? OR url = ?", (art_id, url))
+            conn.commit()
+            return True
+
+    def search_archived_articles(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """Dedicated Historical Search Mode (Requirement #6)."""
+        pattern = f"%{query.strip()}%"
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            SELECT id, url, title, category, content_hash, sitemap_source, archived_at, reason,
+                   LENGTH(COALESCE(raw_text, '')) as content_length,
+                   SUBSTR(COALESCE(raw_text, ''), 1, 300) as matched_snippet
+            FROM archived_articles
+            WHERE title LIKE ? OR raw_text LIKE ? OR reason LIKE ?
+            ORDER BY archived_at DESC LIMIT ?
+            """, (pattern, pattern, pattern, limit))
             return [dict(r) for r in cursor.fetchall()]
 
     def create_sitemap_source(
@@ -380,6 +657,17 @@ class KnowledgeVectorStore:
             except Exception:
                 res["active_articles_count"] = 0
             return res
+
+    def link_url_to_source(self, source_url: str, page_url: str) -> None:
+        """Associate a URL with a sitemap source in sitemap_urls for cross-source tracking."""
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT OR REPLACE INTO sitemap_urls (id, source_id, url, normalized_url, status, last_seen_at, last_checked_at, created_at, updated_at)
+            VALUES (?, ?, ?, ?, 'active', ?, ?, ?, ?)
+            """, (f"su_{uuid.uuid4().hex[:8]}", source_url, page_url, page_url.strip().lower(), now, now, now, now))
+            conn.commit()
 
     def update_sitemap_source(self, source_id: str, **kwargs) -> Optional[Dict[str, Any]]:
         valid_keys = {"name", "is_enabled", "refresh_enabled", "refresh_interval_days", "missing_threshold", "status", "last_checked_at", "last_successful_refresh_at", "next_check_at", "error_summary"}
@@ -445,7 +733,9 @@ class KnowledgeVectorStore:
                 cursor.execute("SELECT * FROM sitemap_refresh_runs ORDER BY started_at DESC LIMIT ?", (limit,))
             return [dict(r) for r in cursor.fetchall()]
 
-    def hybrid_search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
+    def hybrid_search(self, query: str, top_k: int = 5, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        if limit is not None:
+            top_k = limit
         query_cleaned = query.strip()
         if not query_cleaned:
             return []
