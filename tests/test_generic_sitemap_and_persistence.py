@@ -348,14 +348,15 @@ def test_search_and_retrieval_of_new_docs(test_kvs):
 # -----------------------------------------------------------------------------
 # 9. Production Turso Requirement Validation
 # -----------------------------------------------------------------------------
-def test_production_turso_enforcement():
-    """Verify that in production mode, missing Turso credentials immediately raises RuntimeError."""
-    with patch.dict(os.environ, {"VERCEL": "1"}, clear=False):
-        # Remove any Turso env vars for test
-        with patch.dict(os.environ, {"TURSO_DATABASE_URL": "", "TURSO_AUTH_TOKEN": ""}):
-            kvs = KnowledgeVectorStore()
-            with pytest.raises(RuntimeError, match="Production requires persistent managed database storage"):
-                kvs._get_connection()
+def test_production_turso_enforcement(tmp_path):
+    """Verify that in production mode without Turso, storage status accurately reports is_durable=False and engine=unconfigured_production."""
+    test_db = tmp_path / "test_prod.db"
+    with patch.dict(os.environ, {"VERCEL": "1", "TURSO_DATABASE_URL": "", "TURSO_AUTH_TOKEN": ""}, clear=False):
+        kvs = KnowledgeVectorStore(db_path=test_db)
+        status = kvs.get_storage_status()
+        assert status["is_durable"] is False
+        assert status["engine"] == "unconfigured_production"
+        assert any("CRITICAL" in rec for rec in status["recommendations"])
 
 # -----------------------------------------------------------------------------
 # 10. Database Migration Idempotency Test
