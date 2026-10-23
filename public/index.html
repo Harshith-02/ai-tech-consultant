@@ -81,7 +81,19 @@
           </div>
 
           <span class="badge-tag" id="brain-sync-status">Sitemap Synced</span>
-          <button class="btn btn-secondary btn-sm" id="btn-trigger-crawl" onclick="triggerIncrementalCrawl()">🔄 Sync Sitemap</button>
+          <button class="btn btn-secondary btn-sm" id="btn-trigger-crawl" onclick="triggerIncrementalCrawl()" title="Sync configured sitemaps">🔄 Sync</button>
+          <button class="btn btn-secondary btn-sm" id="btn-open-sitemaps" onclick="openSitemapsModal()" style="display:inline-flex;align-items:center;gap:6px;" title="Add & manage custom XML sitemaps">
+            <span>🌐</span> Sitemaps (<span id="sitemap-count-badge">1</span>)
+          </button>
+
+          <!-- Top Right User Profile Avatar (Standard Web UX - Facebook/LinkedIn/Gmail style) -->
+          <div class="user-profile-header" onclick="openAccountSettingsModal()" title="Account & AI Autonomy Settings">
+            <div class="avatar-circle">H</div>
+            <div class="user-meta-header">
+              <span class="user-name-text">Harshith</span>
+              <span class="user-role-badge">Lead Architect ▾</span>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -163,45 +175,94 @@
         </div>
       </section>
 
-      <!-- TAB 2: INBOX AGENT -->
+      <!-- TAB 2: INBOX AGENT - AUTHENTIC GMAIL ENGINE -->
       <section class="tab-pane" id="tab-inbox">
-        <div class="inbox-layout">
-          <!-- Email List -->
-          <div class="panel email-list-panel">
-            <div class="panel-header">
-              <h3>Customer Inbox (50 Emails)</h3>
-              <select id="inbox-category-filter" onchange="filterEmailsByCategory(this.value)">
-                <option value="all">All Categories</option>
-                <option value="how_to">How-To (12)</option>
-                <option value="troubleshooting">Troubleshooting (10)</option>
-                <option value="project_request">Project Requests (6)</option>
-                <option value="refund_cancellation">Refunds & Cancellation (6)</option>
-                <option value="complaint">Complaints (6)</option>
-                <option value="quote_request">Quotes (5)</option>
-                <option value="follow_up">Follow-ups (5)</option>
-              </select>
+        <div class="gmail-workspace">
+          <!-- GMAIL LEFT SIDEBAR -->
+          <div class="gmail-sidebar">
+            <button class="gmail-compose-btn" onclick="openGmailComposeModal()">
+              <span>✏️</span> Compose
+            </button>
+
+            <!-- Standard Webmail Folders -->
+            <div class="gmail-nav-group">
+              <div class="gmail-nav-item active" id="folder-nav-inbox" onclick="switchMailboxFolder('inbox')">
+                <div class="gmail-nav-left">
+                  <span>📥</span> <span>Inbox</span>
+                </div>
+                <span class="gmail-nav-badge" id="badge-count-inbox">50</span>
+              </div>
+              <div class="gmail-nav-item" id="folder-nav-starred" onclick="switchMailboxFolder('starred')">
+                <div class="gmail-nav-left">
+                  <span>⭐</span> <span>Starred</span>
+                </div>
+                <span class="gmail-nav-badge" id="badge-count-starred">0</span>
+              </div>
+              <div class="gmail-nav-item" id="folder-nav-drafts" onclick="switchMailboxFolder('drafts')">
+                <div class="gmail-nav-left">
+                  <span>📝</span> <span>Drafts</span>
+                </div>
+                <span class="gmail-nav-badge" id="badge-count-drafts">0</span>
+              </div>
+              <div class="gmail-nav-item" id="folder-nav-sent" onclick="switchMailboxFolder('sent')">
+                <div class="gmail-nav-left">
+                  <span>📤</span> <span>Sent</span>
+                </div>
+                <span class="gmail-nav-badge" id="badge-count-sent">0</span>
+              </div>
+              <div class="gmail-nav-item" id="folder-nav-trash" onclick="switchMailboxFolder('trash')">
+                <div class="gmail-nav-left">
+                  <span>🗑️</span> <span>Trash</span>
+                </div>
+                <span class="gmail-nav-badge" id="badge-count-trash">0</span>
+              </div>
             </div>
-            <div class="email-items-scroll" id="email-items-container">
-              <!-- Dynamically populated from 50 emails -->
+
+            <!-- Setting Types / Labels Classification -->
+            <div class="gmail-labels-section">
+              <div class="gmail-labels-header">
+                <span>LABELS & SETTINGS</span>
+                <span class="threshold-pill" title="Configure Autonomy Threshold" onclick="openAccountSettingsModal()">X=<span id="lbl-threshold-x">3</span> ⚙️</span>
+              </div>
+              <div class="gmail-label-items" id="gmail-labels-list">
+                <!-- Dynamically generated 8 setting classification labels -->
+              </div>
             </div>
           </div>
 
-          <!-- Email Detail & Review Panel -->
-          <div class="panel email-detail-panel">
+          <!-- GMAIL EMAIL LIST PANE -->
+          <div class="gmail-list-panel">
+            <div class="gmail-toolbar">
+              <div class="gmail-toolbar-actions">
+                <input type="checkbox" id="check-select-all-emails" title="Select all" />
+                <button class="btn btn-secondary btn-sm" onclick="fetchLiveGmail()" title="Fetch live real emails">🔄 Fetch Live Gmail</button>
+                <button class="btn btn-primary btn-sm" onclick="openSendTestEmailModal()" title="Simulate incoming test email from customer">✉️ Send Test Email</button>
+              </div>
+              <div class="gmail-search-box">
+                <input type="text" id="gmail-search-input" placeholder="Search mail..." oninput="handleGmailSearch(this.value)" />
+              </div>
+            </div>
+            <div class="gmail-emails-scroll" id="email-items-container">
+              <!-- Dynamically populated emails -->
+            </div>
+          </div>
+
+          <!-- GMAIL READING / DRAFT REVIEW PANE -->
+          <div class="gmail-detail-panel" id="email-detail-panel">
             <div class="panel-header" id="email-detail-header">
               <div>
-                <h3 id="detail-sender-name">Select an email to process</h3>
-                <span class="panel-subtitle" id="detail-sender-meta">Click any customer message from the list</span>
+                <h3 id="detail-sender-name">Select an email to view</h3>
+                <span class="panel-subtitle" id="detail-sender-meta">Click any email from the Gmail inbox list</span>
               </div>
               <div class="autonomy-meter-inline" id="autonomy-badge-container">
-                <span class="streak-badge" id="category-streak-label">Streak: 0/20</span>
+                <span class="streak-badge" id="category-streak-label">Streak: 0/3</span>
               </div>
             </div>
 
             <div class="email-viewer-body" id="detail-viewer-content">
               <div class="empty-state">
                 <span class="empty-icon">✉️</span>
-                <p>Select an email to view classified intent, query the Knowledge Brain API, and review generated reply.</p>
+                <p>Select an email from your Gmail inbox to view classified setting label, grounded citations, and AI draft.</p>
               </div>
             </div>
           </div>
@@ -368,6 +429,304 @@
       <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
       <img id="image-modal-img" src="" alt="Enlarged Screenshot">
       <p id="image-modal-caption"></p>
+    </div>
+  </div>
+
+  <!-- SITEMAPS MANAGEMENT MODAL (With Inspection, Confirmation & Speed/ETA Calculation) -->
+  <div class="app-modal-backdrop" id="modal-sitemaps">
+    <div class="app-modal-dialog">
+      <div class="app-modal-header">
+        <div>
+          <h3>🌐 Manage Knowledge Sitemaps</h3>
+          <span class="panel-subtitle">Configure single or nested sitemaps with inspection, speed estimation & Table #2 archiving</span>
+        </div>
+        <button class="app-modal-close" onclick="closeSitemapsModal()" title="Close">✕</button>
+      </div>
+      <div class="app-modal-body">
+        <!-- Active Sitemaps List -->
+        <div class="sitemap-list-section">
+          <h4>
+            <span>Configured Sitemaps</span>
+            <span class="badge-tag highlight" id="sitemaps-total-articles-badge">1,540 Articles Indexed</span>
+          </h4>
+          <div class="sitemap-cards" id="sitemaps-list-container">
+            <!-- Dynamic sitemap items -->
+          </div>
+        </div>
+
+        <!-- Add Custom Sitemap Form -->
+        <div class="sitemap-add-section">
+          <h4>Add New Sitemap (Nested / Single)</h4>
+          <div class="form-group">
+            <label class="form-label" for="input-sitemap-urls">Sitemap URL(s)</label>
+            <div style="display:flex;gap:8px;">
+              <input 
+                type="text"
+                class="form-input" 
+                id="input-sitemap-urls" 
+                placeholder="https://example.com/sitemap.xml (supports nested <sitemapindex>)"
+              />
+              <button class="btn btn-secondary btn-sm" onclick="inspectEnteredSitemap()" id="btn-inspect-sitemap" style="white-space:nowrap;">
+                🔍 Inspect & Calculate Speed
+              </button>
+            </div>
+            <span class="form-hint">Our engine parses sub-sitemaps automatically and verifies total URLs before ingestion.</span>
+          </div>
+
+          <!-- Inspection Confirmation & Speed Card (Step 2) -->
+          <div id="sitemap-inspection-results" class="inspection-card" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <h5 style="color:#fff;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+                <span>📊</span> Sitemap Inspection Summary
+              </h5>
+              <span class="badge-tag highlight" id="inspect-submaps-count">1 Sitemap</span>
+            </div>
+            
+            <div style="font-size:0.78rem;color:var(--text-secondary);display:flex;flex-direction:column;gap:4px;">
+              <div><strong>Total URLs Found:</strong> <span id="inspect-total-urls" style="color:var(--accent-cyan);font-weight:700;">1,540</span></div>
+              <div style="word-break:break-all;"><strong>First URL:</strong> <a href="#" id="inspect-first-url" target="_blank" style="color:#a5b4fc;text-decoration:none;">-</a></div>
+              <div style="word-break:break-all;"><strong>Last URL:</strong> <a href="#" id="inspect-last-url" target="_blank" style="color:#a5b4fc;text-decoration:none;">-</a></div>
+            </div>
+
+            <!-- Ingestion Speed & ETA Calculation -->
+            <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
+              <div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">⏱️ Crawl Speed & Estimated Completion Time</div>
+              <div class="speed-grid">
+                <div class="speed-badge-item">
+                  <div class="num" id="speed-5m">50</div>
+                  <div class="lbl">Pages / 5 mins</div>
+                </div>
+                <div class="speed-badge-item">
+                  <div class="num" id="speed-1h">600</div>
+                  <div class="lbl">Pages / 1 hour</div>
+                </div>
+                <div class="speed-badge-item">
+                  <div class="num" id="speed-24h">14.4k</div>
+                  <div class="lbl">Pages / 24 hours</div>
+                </div>
+              </div>
+              <div style="font-size:0.8rem;color:var(--accent-emerald);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:6px;">
+                <span>⏳ Estimated Time:</span> <span id="inspect-eta-text">2 hours 34 mins (±1 day)</span>
+              </div>
+            </div>
+
+            <!-- Update Frequency & Missing URL Policy -->
+            <div class="form-row" style="margin-top:4px;">
+              <div class="form-group">
+                <label class="form-label" for="select-update-frequency">Recheck Frequency</label>
+                <select class="form-select" id="select-update-frequency">
+                  <option value="every_day" selected>Every Day (24h)</option>
+                  <option value="every_week">Every Week (7 Days)</option>
+                  <option value="every_15_days">Every 15 Days</option>
+                  <option value="every_30_days">Every 30 Days</option>
+                </select>
+                <span class="form-hint">Checks for new URLs, changed lastmod, and missing URLs.</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="select-missing-policy">Missing URLs Policy</label>
+                <select class="form-select" id="select-missing-policy">
+                  <option value="0">Delete immediately</option>
+                  <option value="2">Wait for 2 parallel checks</option>
+                  <option value="15" selected>Wait for 15 parallel checks</option>
+                  <option value="30">Wait for 30 parallel checks</option>
+                </select>
+                <span class="form-hint">Saves to Table #2 (Archive DB) if missing for N checks.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:10px;">
+            <div class="form-group">
+              <label class="form-label" for="input-url-pattern">URL Pattern Filter (Optional)</label>
+              <input 
+                type="text" 
+                class="form-input" 
+                id="input-url-pattern" 
+                placeholder="e.g. /articles/ or /docs/"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="select-crawl-limit">Crawl Limit</label>
+              <select class="form-select" id="select-crawl-limit">
+                <option value="10" selected>10 Articles (Quick Run)</option>
+                <option value="25">25 Articles</option>
+                <option value="50">50 Articles</option>
+                <option value="100">100 Articles</option>
+                <option value="0">All Articles (Full Crawl)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row" style="align-items: center; margin-top: 4px;">
+            <label class="checkbox-label">
+              <input type="checkbox" id="check-force-reindex" />
+              <span>Force re-index existing pages</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="app-modal-footer">
+        <div class="crawl-progress-banner" id="modal-crawl-status">
+          <span>Ready to inspect or sync</span>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary btn-sm" onclick="closeSitemapsModal()">Cancel</button>
+          <button class="btn btn-primary btn-sm" id="btn-submit-sitemap-crawl" onclick="submitCustomSitemapsIngestion()">
+            🚀 Confirm & Start Ingestion
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT & AUTONOMY SETTINGS MODAL (Top Right Profile) -->
+  <div class="app-modal-backdrop" id="modal-account-settings">
+    <div class="app-modal-dialog">
+      <div class="app-modal-header">
+        <div>
+          <h3>⚙️ Account & AI Autonomy Settings</h3>
+          <span class="panel-subtitle">Configure autonomy threshold (X), auto-send toggles, and view AI learning rules</span>
+        </div>
+        <button class="app-modal-close" onclick="closeAccountSettingsModal()" title="Close">✕</button>
+      </div>
+      <div class="app-modal-body">
+        <!-- Gmail OAuth 2.0 Account Card -->
+        <div class="form-group" style="background:rgba(234,67,53,0.06);padding:14px;border-radius:var(--radius-md);border:1px solid rgba(234,67,53,0.25);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:1.6rem;">📬</span>
+              <div>
+                <label class="form-label" style="color:#fff;font-size:0.9rem;margin-bottom:2px;">Google Gmail Account (OAuth 2.0)</label>
+                <div class="form-hint" id="gmail-oauth-account-status">Status: Checking connection...</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;" id="gmail-oauth-action-buttons">
+              <button class="btn btn-secondary btn-sm" onclick="triggerGmailSync()" id="btn-oauth-sync">🔄 Sync</button>
+              <button class="btn btn-primary btn-sm" onclick="connectGmailOAuth()" id="btn-oauth-connect" style="background:#ea4335;border-color:#ea4335;">Connect Gmail</button>
+            </div>
+          </div>
+          <div id="gmail-oauth-setup-instructions" style="display:none;margin-top:10px;padding:10px;background:rgba(15,23,42,0.8);border-radius:6px;border:1px dashed rgba(255,255,255,0.15);font-size:0.75rem;color:var(--text-secondary);">
+          </div>
+        </div>
+
+        <!-- Autonomy Threshold X -->
+        <div class="form-group" style="background:rgba(99,102,241,0.08);padding:14px;border-radius:var(--radius-md);border:1px solid rgba(99,102,241,0.25);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <label class="form-label" style="color:#fff;font-size:0.9rem;">Autonomy Threshold (X Consecutive Unedited Sends)</label>
+              <div class="form-hint">If an AI draft is approved & sent without edits back-to-back X times in any setting label, that label automatically switches to Autonomous Auto-Sending!</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <input type="number" id="setting-threshold-x-input" min="1" max="20" value="3" style="width:65px;padding:6px;border-radius:6px;background:#0f172a;border:1px solid var(--accent-primary);color:#fff;text-align:center;font-weight:700;" />
+              <button class="btn btn-primary btn-sm" onclick="saveAutonomyThreshold()">Save X</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Master Auto-Send Toggle -->
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-color);">
+          <div>
+            <span style="font-size:0.85rem;font-weight:600;color:#fff;">Master Autonomous Auto-Send</span>
+            <div class="form-hint">When enabled, eligible categories dispatch replies to clients automatically.</div>
+          </div>
+          <input type="checkbox" id="check-auto-send-master" checked onchange="toggleAutoSendMaster(this.checked)" style="transform:scale(1.2);cursor:pointer;" />
+        </div>
+
+        <!-- Setting Labels Autonomy Status Grid -->
+        <div>
+          <h4 style="font-size:0.82rem;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">8 Setting Classification Labels & Current Streaks</h4>
+          <div class="sitemap-cards" id="settings-labels-autonomy-grid" style="max-height:160px;">
+            <!-- Dynamically populated label status cards -->
+          </div>
+        </div>
+
+        <!-- AI Learning Engine Rules -->
+        <div>
+          <h4 style="font-size:0.82rem;text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px;">
+            <span>💡 AI Learned Rules from Supervisor Edits</span>
+            <span class="badge-tag highlight" id="badge-learned-rules-count">0 Rules</span>
+          </h4>
+          <div class="sitemap-cards" id="settings-learned-rules-list" style="max-height:130px;">
+            <p style="padding:10px;font-size:0.75rem;color:var(--text-muted);">No human edits recorded yet. When you edit any AI draft and hit send, the AI learns the difference immediately!</p>
+          </div>
+        </div>
+      </div>
+      <div class="app-modal-footer">
+        <span style="font-size:0.76rem;color:var(--text-muted);">User: harshith@aiconsultant.ai (Lead Solutions Architect)</span>
+        <button class="btn btn-secondary btn-sm" onclick="closeAccountSettingsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEND TEST EMAIL MODAL (For Interviewer / User Live Test) -->
+  <div class="app-modal-backdrop" id="modal-test-email">
+    <div class="app-modal-dialog" style="max-width:540px;">
+      <div class="app-modal-header">
+        <div>
+          <h3>✉️ Simulate Incoming Test Email</h3>
+          <span class="panel-subtitle">Test live Gmail fetching, classification, draft generation & autonomy</span>
+        </div>
+        <button class="app-modal-close" onclick="closeSendTestEmailModal()" title="Close">✕</button>
+      </div>
+      <div class="app-modal-body">
+        <div class="form-group">
+          <label class="form-label">Quick Test Personas</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="fillTestEmailPersona('fiona')">Fiona (Filters & Facets)</button>
+            <button class="btn btn-secondary btn-sm" onclick="fillTestEmailPersona('alex')">Alex (Home Page Hero)</button>
+            <button class="btn btn-secondary btn-sm" onclick="fillTestEmailPersona('david')">David (Domain & DNS)</button>
+            <button class="btn btn-secondary btn-sm" onclick="fillTestEmailPersona('elena')">Elena (Header & Footer)</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="test-sender-name">Sender Name</label>
+            <input type="text" class="form-input" id="test-sender-name" value="Fiona Gallagher" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="test-sender-email">Sender Email</label>
+            <input type="email" class="form-input" id="test-sender-email" value="fiona@localgrowth.com" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="test-subject">Subject</label>
+          <input type="text" class="form-input" id="test-subject" value="How to configure custom search filter dropdowns and schema breadcrumbs?" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="test-body">Email Body</label>
+          <textarea class="form-textarea" id="test-body" style="min-height:90px;">Hi Tech Team,
+We want to set up custom multi-level category search filters on our home page and directory search results. Which settings do we need to activate in the admin menu, and do schema breadcrumbs generate automatically?
+Thanks,
+Fiona</textarea>
+        </div>
+      </div>
+      <div class="app-modal-footer">
+        <span style="font-size:0.75rem;color:var(--accent-cyan);">Will trigger real-time draft & auto-send if streak >= X</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm" onclick="closeSendTestEmailModal()">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="dispatchTestEmail()">🚀 Dispatch to Inbox</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GMAIL COMPOSE FLOATING WINDOW -->
+  <div class="gmail-compose-window" id="gmail-compose-modal" style="display:none;">
+    <div class="gmail-compose-header">
+      <span>New Message</span>
+      <span style="cursor:pointer;" onclick="closeGmailComposeModal()">✕</span>
+    </div>
+    <div class="gmail-compose-body">
+      <input type="text" class="form-input" id="compose-to" placeholder="Recipients" />
+      <input type="text" class="form-input" id="compose-subject" placeholder="Subject" />
+      <textarea class="form-textarea" id="compose-body" placeholder="Write your email here..." style="min-height:160px;"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <button class="btn btn-primary btn-sm" onclick="sendComposedEmail()">Send</button>
+        <span style="cursor:pointer;color:var(--text-muted);font-size:0.8rem;" onclick="closeGmailComposeModal()">🗑️ Discard</span>
+      </div>
     </div>
   </div>
 

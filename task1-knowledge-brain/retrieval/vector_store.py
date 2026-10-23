@@ -52,6 +52,15 @@ class KnowledgeVectorStore:
             );
             """)
 
+            # Safe migration: ensure sitemap_source column exists on articles
+            cursor.execute("PRAGMA table_info(articles)")
+            cols = [col[1] for col in cursor.fetchall()]
+            if "sitemap_source" not in cols:
+                try:
+                    cursor.execute("ALTER TABLE articles ADD COLUMN sitemap_source TEXT")
+                except Exception:
+                    pass
+
             cursor.execute("""
             CREATE TABLE IF NOT EXISTS chunks (
                 id TEXT PRIMARY KEY,
@@ -94,6 +103,126 @@ class KnowledgeVectorStore:
                 resolved_at TEXT
             );
             """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS archived_articles (
+                id TEXT PRIMARY KEY,
+                url TEXT NOT NULL,
+                title TEXT NOT NULL,
+                category TEXT,
+                content_hash TEXT,
+                raw_text TEXT,
+                sitemap_source TEXT,
+                consecutive_missing_checks INTEGER DEFAULT 0,
+                archived_at TEXT NOT NULL,
+                reason TEXT
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sitemap_sources (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                root_sitemap_url TEXT UNIQUE NOT NULL,
+                is_enabled INTEGER DEFAULT 1,
+                refresh_enabled INTEGER DEFAULT 1,
+                refresh_interval_days INTEGER DEFAULT 7,
+                missing_threshold INTEGER DEFAULT 15,
+                last_checked_at TEXT,
+                last_successful_refresh_at TEXT,
+                next_check_at TEXT,
+                status TEXT DEFAULT 'active',
+                error_summary TEXT,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sitemap_urls (
+                id TEXT PRIMARY KEY,
+                source_id TEXT NOT NULL,
+                url TEXT NOT NULL,
+                normalized_url TEXT NOT NULL,
+                lastmod TEXT,
+                etag TEXT,
+                content_hash TEXT,
+                consecutive_missing_checks INTEGER DEFAULT 0,
+                status TEXT DEFAULT 'active',
+                last_seen_at TEXT,
+                last_checked_at TEXT,
+                last_indexed_at TEXT,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL,
+                FOREIGN KEY (source_id) REFERENCES sitemap_sources(id),
+                UNIQUE(source_id, normalized_url)
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sitemap_refresh_runs (
+                id TEXT PRIMARY KEY,
+                source_id TEXT NOT NULL,
+                started_at TEXT NOT NULL,
+                completed_at TEXT,
+                status TEXT NOT NULL,
+                discovery_complete INTEGER DEFAULT 0,
+                sitemaps_discovered INTEGER DEFAULT 0,
+                sitemaps_succeeded INTEGER DEFAULT 0,
+                sitemaps_failed INTEGER DEFAULT 0,
+                urls_discovered INTEGER DEFAULT 0,
+                new_urls INTEGER DEFAULT 0,
+                changed_urls INTEGER DEFAULT 0,
+                missing_urls INTEGER DEFAULT 0,
+                urls_archived INTEGER DEFAULT 0,
+                pages_fetched INTEGER DEFAULT 0,
+                pages_failed INTEGER DEFAULT 0,
+                pages_indexed INTEGER DEFAULT 0,
+                error_summary TEXT,
+                details_json TEXT,
+                FOREIGN KEY (source_id) REFERENCES sitemap_sources(id)
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS gmail_accounts (
+                id TEXT PRIMARY KEY,
+                email_address TEXT UNIQUE NOT NULL,
+                connection_status TEXT DEFAULT 'connected',
+                scopes TEXT,
+                encrypted_access_token TEXT,
+                encrypted_refresh_token TEXT,
+                token_expiry TEXT,
+                history_id TEXT,
+                last_sync_at TEXT,
+                last_sync_error TEXT,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+            """)
+
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS email_audit_log (
+                id TEXT PRIMARY KEY,
+                account_id TEXT,
+                email_id TEXT,
+                event_type TEXT NOT NULL,
+                actor_type TEXT NOT NULL,
+                decision TEXT,
+                reason TEXT,
+                metadata_json TEXT,
+                created_at TEXT NOT NULL
+            );
+            """)
+
+            # Seed default documentation source if empty
+            cursor.execute("SELECT COUNT(*) FROM sitemap_sources")
+            if cursor.fetchone()[0] == 0:
+                now_str = datetime.now(timezone.utc).isoformat()
+                cursor.execute("""
+                INSERT INTO sitemap_sources (id, name, root_sitemap_url, is_enabled, refresh_enabled, refresh_interval_days, missing_threshold, status, created_at, updated_at)
+                VALUES ('src_default_bd', 'Brilliant Directories Documentation', 'https://support.brilliantdirectories.com/support/sitemap.xml', 1, 1, 7, 15, 'active', ?, ?)
+                """, (now_str, now_str))
 
             conn.commit()
 
@@ -173,6 +302,148 @@ class KnowledgeVectorStore:
 
             conn.commit()
             return True
+
+    def archive_article(self, url: str, reason: str = "Missing from sitemap across configured consecutive checks", checks_count: int = 15) -> bool:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, url, title, category, content_hash, raw_text FROM articles WHERE url = ?", (url,))
+            row = cursor.fetchone()
+            article_id = row["id"] if row else f"archived_{uuid.uuid4().hex[:8]}"
+            title = row["title"] if row else url.split("/")[-1].replace("-", " ").title()
+            cat = row["category"] if row else "General"
+            chash = row["content_hash"] if row else None
+            rtext = row["raw_text"] if row else None
+            now = datetime.now(timezone.utc).isoformat()
+            cursor.execute("""
+            INSERT OR REPLACE INTO archived_articles (id, url, title, category, content_hash, raw_text, consecutive_missing_checks, archived_at, reason)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (article_id, url, title, cat, chash, rtext, checks_count, now, reason))
+
+            # Deactivate in active knowledge base #1
+            cursor.execute("UPDATE articles SET is_active = 0, updated_at = ? WHERE id = ?", (now, article_id))
+            cursor.execute("UPDATE chunks SET is_active = 0 WHERE article_id = ?", (article_id,))
+            cursor.execute("SELECT id FROM chunks WHERE article_id = ?", (article_id,))
+            for r in cursor.fetchall():
+                cursor.execute("DELETE FROM chunks_fts WHERE chunk_id = ?", (r["id"],))
+
+            conn.commit()
+            return True
+
+    def get_archived_articles(self, limit: int = 50) -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM archived_articles ORDER BY archived_at DESC LIMIT ?", (limit,))
+            return [dict(r) for r in cursor.fetchall()]
+
+    def create_sitemap_source(
+        self,
+        name: str,
+        root_url: str,
+        refresh_interval_days: int = 7,
+        missing_threshold: int = 15
+    ) -> Dict[str, Any]:
+        src_id = f"src_{uuid.uuid4().hex[:8]}"
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO sitemap_sources (id, name, root_sitemap_url, is_enabled, refresh_enabled, refresh_interval_days, missing_threshold, status, created_at, updated_at)
+            VALUES (?, ?, ?, 1, 1, ?, ?, 'active', ?, ?)
+            """, (src_id, name, root_url, refresh_interval_days, missing_threshold, now, now))
+            conn.commit()
+        return self.get_sitemap_source(src_id)
+
+    def list_sitemap_sources(self) -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM sitemap_sources ORDER BY created_at ASC")
+            sources = [dict(r) for r in cursor.fetchall()]
+            for s in sources:
+                try:
+                    cursor.execute("SELECT COUNT(*) FROM articles WHERE sitemap_source = ? AND is_active = 1", (s["root_sitemap_url"],))
+                    s["active_articles_count"] = cursor.fetchone()[0]
+                except Exception:
+                    s["active_articles_count"] = 0
+            return sources
+
+    def get_sitemap_source(self, source_id: str) -> Optional[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM sitemap_sources WHERE id = ? OR root_sitemap_url = ?", (source_id, source_id))
+            row = cursor.fetchone()
+            if not row:
+                return None
+            res = dict(row)
+            try:
+                cursor.execute("SELECT COUNT(*) FROM articles WHERE sitemap_source = ? AND is_active = 1", (res["root_sitemap_url"],))
+                res["active_articles_count"] = cursor.fetchone()[0]
+            except Exception:
+                res["active_articles_count"] = 0
+            return res
+
+    def update_sitemap_source(self, source_id: str, **kwargs) -> Optional[Dict[str, Any]]:
+        valid_keys = {"name", "is_enabled", "refresh_enabled", "refresh_interval_days", "missing_threshold", "status", "last_checked_at", "last_successful_refresh_at", "next_check_at", "error_summary"}
+        updates = {k: v for k, v in kwargs.items() if k in valid_keys}
+        if not updates:
+            return self.get_sitemap_source(source_id)
+        updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+        set_clause = ", ".join(f"{k} = ?" for k in updates.keys())
+        values = list(updates.values()) + [source_id]
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(f"UPDATE sitemap_sources SET {set_clause} WHERE id = ?", values)
+            conn.commit()
+        return self.get_sitemap_source(source_id)
+
+    def delete_sitemap_source(self, source_id: str, purge_content: bool = False) -> bool:
+        src = self.get_sitemap_source(source_id)
+        if not src:
+            return False
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            if purge_content:
+                try:
+                    # Cross-source safety rule: only deactivate content if no other active source references it
+                    cursor.execute("SELECT url FROM articles WHERE sitemap_source = ?", (src["root_sitemap_url"],))
+                    urls = [r[0] for r in cursor.fetchall()]
+                    for u in urls:
+                        cursor.execute("SELECT COUNT(*) FROM articles WHERE url = ? AND sitemap_source != ? AND is_active = 1", (u, src["root_sitemap_url"]))
+                        shared_count = cursor.fetchone()[0]
+                        if shared_count == 0:
+                            self.archive_article(u, reason=f"Sitemap source '{src['name']}' deleted by user")
+                except Exception:
+                    pass
+            cursor.execute("DELETE FROM sitemap_sources WHERE id = ?", (source_id,))
+            conn.commit()
+            return True
+
+    def record_refresh_run(self, source_id: str, **kwargs) -> str:
+        run_id = f"run_{uuid.uuid4().hex[:8]}"
+        now = datetime.now(timezone.utc).isoformat()
+        cols = ["id", "source_id", "started_at", "status"]
+        vals = [run_id, source_id, kwargs.get("started_at", now), kwargs.get("status", "completed")]
+        for k, v in kwargs.items():
+            if k not in ["id", "source_id", "started_at", "status"] and k in [
+                "completed_at", "discovery_complete", "sitemaps_discovered", "sitemaps_succeeded", "sitemaps_failed",
+                "urls_discovered", "new_urls", "changed_urls", "missing_urls", "urls_archived", "pages_fetched", "pages_failed", "pages_indexed", "error_summary", "details_json"
+            ]:
+                cols.append(k)
+                vals.append(v)
+        placeholders = ", ".join("?" for _ in cols)
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(f"INSERT INTO sitemap_refresh_runs ({', '.join(cols)}) VALUES ({placeholders})", vals)
+            conn.commit()
+        return run_id
+
+    def list_refresh_runs(self, source_id: Optional[str] = None, limit: int = 20) -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            if source_id:
+                cursor.execute("SELECT * FROM sitemap_refresh_runs WHERE source_id = ? ORDER BY started_at DESC LIMIT ?", (source_id, limit))
+            else:
+                cursor.execute("SELECT * FROM sitemap_refresh_runs ORDER BY started_at DESC LIMIT ?", (limit,))
+            return [dict(r) for r in cursor.fetchall()]
 
     def hybrid_search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         query_cleaned = query.strip()
@@ -346,4 +617,112 @@ class KnowledgeVectorStore:
                 "resolved_escalations": resolved_escalations
             }
 
+    # =========================================================================
+    # GMAIL ACCOUNTS & AUDIT LOGGING (UPGRADE B)
+    # =========================================================================
+    def save_gmail_account(
+        self,
+        email_address: str,
+        encrypted_access_token: str,
+        encrypted_refresh_token: str,
+        token_expiry: Optional[str] = None,
+        scopes: Optional[str] = None
+    ) -> Dict[str, Any]:
+        acc_id = f"acc_{uuid.uuid4().hex[:8]}"
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM gmail_accounts WHERE email_address = ?", (email_address,))
+            row = cursor.fetchone()
+            if row:
+                acc_id = row["id"]
+                cursor.execute("""
+                UPDATE gmail_accounts
+                SET connection_status = 'connected',
+                    encrypted_access_token = ?,
+                    encrypted_refresh_token = COALESCE(?, encrypted_refresh_token),
+                    token_expiry = ?,
+                    scopes = ?,
+                    updated_at = ?
+                WHERE id = ?
+                """, (encrypted_access_token, encrypted_refresh_token, token_expiry, scopes, now, acc_id))
+            else:
+                cursor.execute("""
+                INSERT INTO gmail_accounts (
+                    id, email_address, connection_status, scopes,
+                    encrypted_access_token, encrypted_refresh_token,
+                    token_expiry, created_at, updated_at
+                ) VALUES (?, ?, 'connected', ?, ?, ?, ?, ?, ?)
+                """, (acc_id, email_address, scopes, encrypted_access_token, encrypted_refresh_token, token_expiry, now, now))
+            conn.commit()
+        return self.get_gmail_account(acc_id)
+
+    def get_gmail_account(self, account_id: str) -> Optional[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM gmail_accounts WHERE id = ? OR email_address = ?", (account_id, account_id))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_active_gmail_account(self) -> Optional[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM gmail_accounts WHERE connection_status = 'connected' ORDER BY updated_at DESC LIMIT 1")
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def disconnect_gmail_account(self, account_id_or_email: str) -> bool:
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            UPDATE gmail_accounts
+            SET connection_status = 'disconnected',
+                encrypted_access_token = NULL,
+                updated_at = ?
+            WHERE id = ? OR email_address = ?
+            """, (now, account_id_or_email, account_id_or_email))
+            conn.commit()
+            return cursor.rowcount > 0
+
+    def update_gmail_sync(self, account_id: str, history_id: Optional[str] = None, error: Optional[str] = None) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            UPDATE gmail_accounts
+            SET last_sync_at = ?, history_id = COALESCE(?, history_id), last_sync_error = ?, updated_at = ?
+            WHERE id = ?
+            """, (now, history_id, error, now, account_id))
+            conn.commit()
+
+    def record_email_audit(
+        self,
+        event_type: str,
+        actor_type: str = "system",
+        decision: Optional[str] = None,
+        reason: Optional[str] = None,
+        email_id: Optional[str] = None,
+        account_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> str:
+        audit_id = f"aud_{uuid.uuid4().hex[:8]}"
+        now = datetime.now(timezone.utc).isoformat()
+        meta_json = json.dumps(metadata) if metadata else None
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO email_audit_log (id, account_id, email_id, event_type, actor_type, decision, reason, metadata_json, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (audit_id, account_id, email_id, event_type, actor_type, decision, reason, meta_json, now))
+            conn.commit()
+        return audit_id
+
+    def get_email_audit_logs(self, limit: int = 50) -> List[Dict[str, Any]]:
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM email_audit_log ORDER BY created_at DESC LIMIT ?", (limit,))
+            return [dict(r) for r in cursor.fetchall()]
+
 vector_store = KnowledgeVectorStore()
+

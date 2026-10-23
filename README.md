@@ -1,99 +1,162 @@
-# AI Tech Consultant
+# AI Tech Consultant — Enterprise Knowledge & Intelligent Email Assistant
 
-An autonomous, multi-agent AI tech consultancy system that unifies company product knowledge, handles customer email support with human-in-the-loop learning, and transforms messy client meeting transcripts into verified Scopes of Work (SOW), task hour estimates, and proposals.
+An autonomous, multi-agent AI tech consultancy system that unifies company product knowledge, handles customer email support with human-in-the-loop learning, and transforms client meeting transcripts into verified Scopes of Work (SOW), task hour estimates, and proposals.
 
----
-
-## Architecture at a Glance
-
-The solution connects **three independently testable components** through a single shared knowledge service:
-
-1. **Task 1 — Knowledge Brain (Python / FastAPI):**
-   - Scrapes and indexes Brilliant Directories Solution Center documentation.
-   - Extracts screenshots and associates UI visual steps with procedural instructions.
-   - Grounded RAG with exact source citations, honest abstention, and an expert escalation queue.
-   - Exposes REST API on `http://127.0.0.1:8000`.
-
-2. **Task 2 — Inbox Agent (TypeScript / Node.js):**
-   - Ingests customer inquiries across 7 intent and risk categories.
-   - Consumes Task 1 API over HTTP for verified product facts.
-   - Generates structured response drafts with safety guardrails (refund & legal locks).
-   - Enforces a 20-consecutive-approval rule for autonomous sending with instant revocation on human edits.
-   - Exposes REST API on `http://127.0.0.1:3001`.
-
-3. **Task 3 — Meeting to Scope (Python / Multi-Agent):**
-   - Team of 5 specialized agents: *Transcript Analyst*, *Feasibility Agent* (calls Task 1 API), *Scope Agent*, *Estimation Agent*, and *Proposal Agent*.
-   - Evaluates existing configuration vs custom development to save client costs.
-   - Compares follow-up meetings against the approved baseline (Scope Diff Engine).
-   - Exposes REST API on `http://127.0.0.1:8002`.
-
-4. **Unified Operations Dashboard:**
-   - Single glassmorphic interface at `http://127.0.0.1:5000` supporting Knowledge Chat, Inbox Review, and Scope Builder.
+- **Live Application:** [https://ai-tech-consultant-mu.vercel.app/](https://ai-tech-consultant-mu.vercel.app/)
+- **GitHub Repository:** [https://github.com/Harshith-02/ai-tech-consultant](https://github.com/Harshith-02/ai-tech-consultant)
 
 ---
 
-## Prerequisites
+## 🌟 Major System Upgrades
 
-- **Python:** 3.12+ (managed with `uv` or `pip`)
-- **Node.js:** v20+ / v24+
-- **Operating System:** Windows, macOS, or Linux
+### Upgrade A: Advanced Sitemap Discovery, Ingestion & Automatic Refresh
+- **Multi-Source Sitemap Support:** Add, inspect, and track multiple independent sitemap origins (`sitemap_sources` table).
+- **Recursive Sitemap Traversal:** Automatically navigates nested `<sitemapindex>` hierarchies down to terminal page URLs.
+- **SSRF Safeguards:** Strict validation blocking private IP blocks (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), localhost/loopback, link-local metadata (`169.254.169.254`), and cloud internal domains (`metadata.google.internal`).
+- **Discovery Preview & Explicit Confirmation:** Displays total URLs discovered, first/last URL sample, speed estimates, and estimated completion time before any crawling begins.
+- **Dynamic Measured ETA:** Calculations based on observed throughput (`50 pages / 5 mins`, `600 pages / 1 hour`, `14.4k pages / 24 hours`) reporting realistic completion estimates (`X hours Y mins (±1 day)`).
+- **3-Case Incremental Change Detection:**
+  - *Case 1 (New URLs):* Automatically fetched, parsed, chunked, embedded, and added to the Knowledge Brain.
+  - *Case 2 (Changed URLs):* Verified via conditional re-validation and SHA-256 content hashes, updating index chunks atomically.
+  - *Case 3 (Missing URLs):* Absence is tracked across consecutive runs. URLs are preserved and **only archived after 15 consecutive successful checks** by default.
+  - *Cross-Source Protection:* Shared URLs referenced by another active source remain active.
+- **Table #2 Archival:** Missing URLs that cross the threshold are retired from active retrieval (Table #1) and safely preserved in Table #2 (`archived_articles`) for historical audit trails.
+- **Automatic Scheduled Refreshes:** Enabled by default (Weekly default; configurable to Daily, Weekly, Every 15 Days, or Every 30 Days).
 
----
-
-## Quickstart (One-Command Run)
-
-### Windows:
-Double-click `run_all.bat` or execute in PowerShell:
-```powershell
-.\run_all.ps1
-```
-
-### Linux / macOS:
-```bash
-python3 scripts/start_services.py
-```
-
-Once launched, open your browser to **`http://127.0.0.1:5000`**.
-
----
-
-## Running Individual Services
-
-### Task 1: Knowledge Brain
-```bash
-cd task1-knowledge-brain
-uv run uvicorn app.main:app --port 8000
-```
-
-### Task 2: Inbox Agent
-```bash
-cd task2-inbox-agent
-npm install
-npm run build
-npm start
-```
-
-### Task 3: Meeting to Scope
-```bash
-cd task3-meeting-to-scope
-uv run uvicorn app.main:app --port 8002
-```
+### Upgrade B: Real Gmail Integration & Intelligent Email Assistant
+- **Google OAuth 2.0 Integration:** Secure connection flow requesting minimum necessary scopes (`gmail.readonly`, `gmail.compose`, `gmail.modify`, `userinfo.email`) with CSRF state protection.
+- **Symmetric Token Encryption:** Standard-library HMAC-SHA256 authenticated keystream encryption with random 16-byte IVs for all stored access and refresh tokens.
+- **Real Inbox Synchronization:** Fetches live Gmail messages via Gmail API / History cursor, extracts thread context, and prevents duplicate records.
+- **8 Configurable Setting Classification Labels:**
+  1. `filters` — Search, facets, dropdowns, schema breadcrumbs, categories.
+  2. `home_page` — Homepage layout, hero banners, sliders, cover images.
+  3. `domain_management` — Domain records, DNS, nameservers, SSL, forwarding.
+  4. `header_footer` — Main menu, navigation links, social media icons, footer.
+  5. `billing` — Subscription plans, invoices, Stripe, membership pricing.
+  6. `staging` — Sandbox clone, developer environments, MySQL migrations.
+  7. `general_settings` — Timezone, company information, reCAPTCHA, CSV import.
+  8. `design_settings` — CSS stylesheets, typography, color themes, hover styles.
+- **Grounded Draft Generation in Real Gmail:** AI draft replies are generated using Knowledge Brain hybrid retrieval and immediately created in the user's authentic **Gmail Drafts folder** (`users.drafts.create`).
+- **Configurable Autonomy Threshold X:**
+  - Default: $X = 3$ consecutive unedited sent responses.
+  - Configurable per category or globally in Settings.
+  - When $X$ is reached, the category unlocks autonomous sending for eligible emails.
+- **AI Learning Engine (Draft vs. Sent Diffs):**
+  - If a supervisor edits an AI draft before sending, the system captures the difference, extracts the preference into `FEEDBACK_RULES`, and resets the category streak to 0.
+  - Subsequent drafts incorporate the learned supervisor rule directly.
+- **Permanent Policy Restrictions:** High-risk categories (`refund_cancellation`, `complaint`, `project_request`, `quote_request`) permanently require human review and cannot be bypassed.
+- **Comprehensive Audit Logs:** All connection changes, approvals, manual edits, sends, and streak resets are persisted in `email_audit_log`.
 
 ---
 
-## Running Evaluations
+## 🚀 Quickstart & Local Setup
 
-All tasks include comprehensive, reproducible test suites:
+### 1. Environment Setup
+Create a `.env` file in the project root:
+```env
+# Optional LLM API Keys (Falls back to deterministic rule & hybrid retrieval engines)
+GEMINI_API_KEY=your_gemini_api_key_here
 
-```bash
-# Task 1 Evals (22 cases):
-uv run python task1-knowledge-brain/evaluation/run_evals.py
-
-# Task 2 Evals (50 emails + autonomy rules):
-cd task2-inbox-agent && npm run eval
-
-# Task 3 Evals (22 cases):
-uv run python task3-meeting-to-scope/evaluation/run_evals.py
+# Google OAuth 2.0 Credentials (for Real Gmail Connection)
+GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=http://localhost:8000/api/inbox/oauth/callback
+GMAIL_ENCRYPTION_KEY=secure-random-encryption-salt-2026
 ```
 
-**Overall Test Results:** 94/94 Test Cases Passed (100% Pass Rate across all 3 tasks).
+### 2. Run the Unified Service (FastAPI + Static Frontend)
+```bash
+# Using the configured virtual environment:
+& ".venv\Scripts\python.exe" -m uvicorn api.index:app --host 0.0.0.0 --port 8000 --reload
+```
+Open **`http://localhost:8000`** in your browser.
+
+---
+
+## 🔧 Google Cloud Console OAuth Setup Instructions
+
+To connect your real Gmail account:
+1. Open the [Google Cloud Console](https://console.cloud.google.com/) and create or select a project.
+2. Navigate to **APIs & Services > Library**, search for **Gmail API**, and click **Enable**.
+3. Navigate to **APIs & Services > OAuth consent screen**:
+   - Choose **External** (or Internal for Google Workspace).
+   - Fill in App Name (e.g. *AI Tech Consultant*), Support Email, and Developer Email.
+   - Under Scopes, add:
+     - `.../auth/gmail.readonly`
+     - `.../auth/gmail.compose`
+     - `.../auth/gmail.modify`
+     - `.../auth/userinfo.email`
+   - Under Test Users, add your personal Gmail address.
+4. Navigate to **APIs & Services > Credentials**:
+   - Click **Create Credentials > OAuth Client ID**.
+   - Application type: **Web application**.
+   - Name: *AI Tech Consultant Web Client*.
+   - Authorized redirect URIs:
+     - Local development: `http://localhost:8000/api/inbox/oauth/callback`
+     - Production: `https://ai-tech-consultant-mu.vercel.app/api/inbox/oauth/callback`
+5. Copy your **Client ID** and **Client Secret** into your `.env` file.
+6. In the application dashboard, click the profile avatar in the top-right corner to open **Account & Autonomy Settings**, and click **Connect Gmail**!
+
+---
+
+## 🧪 Real Email Testing Instructions (3–4 Live Emails)
+
+To test end-to-end functionality with 3–4 incoming customer inquiries:
+
+1. **Connect Gmail:** In Account Settings, click **Connect Gmail** and authorize access.
+2. **Send Test Email #1 (Search Filters):**
+   - From another email address, send an email to your connected Gmail with:
+     - **Subject:** *How do I configure custom search filters and category dropdowns?*
+     - **Body:** *Hi team, we want to set up multi-tier search filter dropdowns on our homepage search. How do we configure this in the admin panel?*
+   - Click **Sync** in the dashboard. The email will appear in your Inbox classified as `Filters & Facets`.
+   - The AI generates a grounded draft referencing the official documentation and creates a genuine **Gmail Draft** in your Gmail account.
+   - Click **Send (Unedited)**: The email is sent through Gmail, and the `filters` streak increments to $1/X$.
+3. **Send Test Email #2 (Supervisor Diff Learning):**
+   - Send an inquiry regarding CSS styling:
+     - **Subject:** *Custom CSS button hover states*
+     - **Body:** *Where do I edit the CSS stylesheets to override button hover colors?*
+   - Open the draft in the dashboard.
+   - Click **Edit Draft**, add your custom personalized sign-off (e.g., *"P.S. Make sure to back up your custom stylesheet first"*), and click **Send Edited**.
+   - The AI Learning Engine records the difference in `FEEDBACK_RULES`, and resets the `design_settings` streak to $0/X$.
+4. **Send Test Emails #3 & #4 (Unlocking Autonomy):**
+   - Send two additional unedited queries in `filters`.
+   - Once the streak reaches the configured threshold $X$ (default: 3), the label unlocks **Autonomous Auto-Sending**!
+   - Send a 5th query under `filters`: The system automatically classifies the email, generates the grounded draft, and dispatches it directly to the customer without waiting for human review.
+
+---
+
+## 📊 Automated Evaluation Benchmark Results
+
+All evaluation suites are 100% passing:
+
+```bash
+# Task 1 Knowledge Brain Evaluation (22 cases):
+& ".venv\Scripts\python.exe" task1-knowledge-brain/evaluation/run_evals.py
+# Result: 22/22 PASSED (100.0%)
+
+# Task 2 Inbox Agent Evaluation (50 cases + autonomy engine):
+cd task2-inbox-agent && npm test
+# Result: 50/50 PASSED (100.0%, 0 safety violations)
+
+# Task 3 Meeting to Scope Evaluation (22 cases):
+& ".venv\Scripts\python.exe" task3-meeting-to-scope/evaluation/run_evals.py
+# Result: 22/22 PASSED (100.0%)
+
+# Pytest Comprehensive Test Suite (7 tests):
+& ".venv\Scripts\python.exe" -m pytest tests/
+# Result: 7/7 PASSED (100.0%)
+```
+
+---
+
+## 📁 Repository Structure & Key Changed Files
+
+- `api/index.py` — Unified FastAPI gateway with OAuth 2.0 endpoints, token encryption, real Gmail synchronization, real draft creation, multi-source sitemap management, and audit logging.
+- `task1-knowledge-brain/retrieval/vector_store.py` — Database models and queries for `sitemap_sources`, `sitemap_urls`, `sitemap_refresh_runs`, `archived_articles` (Table #2), `gmail_accounts`, and `email_audit_log`.
+- `task1-knowledge-brain/ingestion/crawler.py` — Recursive crawler with SSRF safeguards, speed estimation, dynamic ETA, 15-check missing URL threshold, and Table #2 archival.
+- `public/index.html` & `dashboard/public/index.html` — Authentic Gmail 3-pane workspace, top-right profile avatar with Account & Autonomy Settings modal, and multi-source sitemap controls.
+- `public/app.js` & `dashboard/public/app.js` — Client-side controllers for OAuth connection, Gmail sync, sitemap source CRUD, autonomy thresholds, and supervisor edit feedback.
+- `tests/test_crawler_change_detection.py` — Automated verification of 15-consecutive-check missing URL policy and Table #2 archival.
+- `tests/test_sitemap_and_gmail_engine.py` — End-to-end tests for sitemap inspection, speed calculation, AI reasoning, autonomy learning, multi-source CRUD, OAuth encryption, and audit logs.
+- `IMPLEMENTATION_PLAN.md` — Detailed technical architecture and implementation roadmap.
+

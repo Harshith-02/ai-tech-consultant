@@ -29,11 +29,35 @@ class QueryResponse(BaseModel):
     needs_human: bool = Field(False, description="Whether human expert escalation is recommended")
     escalation_id: Optional[str] = Field(None, description="Escalation ticket ID if created")
     analyzed_visual: Optional[Dict[str, Any]] = Field(None, description="Visual elements extracted from user screenshot")
+    thinking_process: Optional[Dict[str, Any]] = Field(None, description="Detailed prompt engineering and reasoning breakdown")
+
+class SitemapInspectRequest(BaseModel):
+    sitemap_url: str = Field(..., description="Sitemap XML URL to inspect")
+    url_pattern: Optional[str] = Field(None, description="Optional regex or substring filter")
+
+class SpeedEstimates(BaseModel):
+    pages_per_5_min: int = Field(50, description="Pages ingested per 5 minutes")
+    pages_per_hour: int = Field(600, description="Pages ingested per hour")
+    pages_per_24_hours: int = Field(14400, description="Pages ingested per 24 hours")
+    estimated_time_text: str = Field(..., description="Estimated completion time (plus or minus 1 day)")
+
+class SitemapInspectResponse(BaseModel):
+    sitemap_url: str
+    total_sitemaps_found: int
+    total_urls_found: int
+    first_url: Optional[str] = None
+    last_url: Optional[str] = None
+    speed_estimates: SpeedEstimates
+    sample_urls: List[str] = Field(default_factory=list)
 
 class IngestionRunRequest(BaseModel):
+    sitemap_urls: Optional[List[str]] = Field(None, description="One or more custom sitemap URLs to ingest")
+    url_pattern: Optional[str] = Field(None, description="Optional substring or regex filter to include only matching URLs")
     limit: Optional[int] = Field(None, description="Max number of articles to crawl (None for all)")
     force_reindex: bool = Field(False, description="Re-parse and re-index already crawled articles")
     delay_seconds: Optional[float] = Field(None, description="Delay between HTTP requests in seconds")
+    missing_retention_policy: Optional[int] = Field(15, description="Number of consecutive missing checks before archiving to Table #2 (0=immediate, 2, 15, 30)")
+    update_frequency: Optional[str] = Field("every_day", description="Recheck frequency: every_day, every_week, every_15_days, every_30_days")
 
 class IngestionStatusResponse(BaseModel):
     status: str = Field(..., description="Current status: idle, running, completed, error")
@@ -44,6 +68,8 @@ class IngestionStatusResponse(BaseModel):
     active_articles: int = Field(0, description="Number of active indexed articles")
     last_run: Optional[str] = Field(None, description="Timestamp of the last crawl/ingestion")
     is_running: bool = Field(False, description="Whether crawler is currently executing")
+    configured_sitemaps: List[str] = Field(default_factory=list, description="List of configured or crawled sitemap URLs")
+    archived_articles_count: int = Field(0, description="Total articles preserved in Table #2 (archived knowledge)")
 
 class EscalationCreateRequest(BaseModel):
     question: str = Field(..., description="Unanswered question")

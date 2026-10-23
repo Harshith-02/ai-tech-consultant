@@ -19,7 +19,13 @@ class ArticleParser:
             aid = match.group(1)
             slug = match.group(2) or "article"
             return f"{aid}-{slug[:30]}"
-        return hashlib.md5(url.encode()).hexdigest()[:12]
+        clean_url = url.split("?")[0].rstrip("/")
+        slug_part = clean_url.split("/")[-1]
+        slug_part = re.sub(r"[^a-zA-Z0-9_-]", "", slug_part)
+        hash_prefix = hashlib.md5(url.encode()).hexdigest()[:8]
+        if slug_part:
+            return f"{hash_prefix}-{slug_part[:25]}"
+        return hash_prefix
 
     def parse_html(self, html_content: str, url: str) -> Dict[str, Any]:
         soup = BeautifulSoup(html_content, "html.parser")

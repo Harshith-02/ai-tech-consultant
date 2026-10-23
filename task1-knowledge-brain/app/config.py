@@ -28,8 +28,8 @@ class Settings(BaseSettings):
     CLAUDE_MODEL_FAST: str = os.getenv("CLAUDE_MODEL_FAST", "claude-3-5-haiku-20241022")
     
     # Grounding & Abstention thresholds
-    MIN_RELEVANCE_SCORE: float = 0.50
-    MIN_CONFIDENCE_THRESHOLD: float = 0.50
+    MIN_RELEVANCE_SCORE: float = float(os.getenv("MIN_RELEVANCE_SCORE", "0.40"))
+    MIN_CONFIDENCE_THRESHOLD: float = float(os.getenv("MIN_CONFIDENCE_THRESHOLD", "0.40"))
     DEFAULT_TOP_K: int = 4
     
     class Config:

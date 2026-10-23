@@ -3,8 +3,8 @@
   "passed": 22,
   "pass_rate_pct": 100.0,
   "abstention_correctness_pct": 71.43,
-  "median_latency_ms": 66.91,
-  "p95_latency_ms": 77.61,
+  "median_latency_ms": 50.15,
+  "p95_latency_ms": 54.27,
   "avg_cost_per_query_usd": 0.00015,
   "results": [
     {
@@ -15,7 +15,7 @@
       "actual_status": "answered",
       "confidence": 0.88,
       "citations_count": 4,
-      "latency_ms": 72.43,
+      "latency_ms": 53.29,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -27,8 +27,8 @@
       "expected_status": "answered",
       "actual_status": "answered",
       "confidence": 0.94,
-      "citations_count": 2,
-      "latency_ms": 66.91,
+      "citations_count": 4,
+      "latency_ms": 49.63,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -41,7 +41,7 @@
       "actual_status": "answered",
       "confidence": 0.68,
       "citations_count": 4,
-      "latency_ms": 72.6,
+      "latency_ms": 49.88,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -54,7 +54,7 @@
       "actual_status": "answered",
       "confidence": 0.88,
       "citations_count": 4,
-      "latency_ms": 71.49,
+      "latency_ms": 49.1,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -67,7 +67,7 @@
       "actual_status": "answered",
       "confidence": 0.7,
       "citations_count": 4,
-      "latency_ms": 58.27,
+      "latency_ms": 51.89,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -80,7 +80,7 @@
       "actual_status": "answered",
       "confidence": 0.81,
       "citations_count": 4,
-      "latency_ms": 75.54,
+      "latency_ms": 52.43,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -92,8 +92,8 @@
       "expected_status": "answered",
       "actual_status": "answered",
       "confidence": 0.59,
-      "citations_count": 1,
-      "latency_ms": 59.02,
+      "citations_count": 2,
+      "latency_ms": 53.63,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -106,7 +106,7 @@
       "actual_status": "answered",
       "confidence": 0.84,
       "citations_count": 4,
-      "latency_ms": 53.86,
+      "latency_ms": 54.27,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -119,7 +119,7 @@
       "actual_status": "answered",
       "confidence": 0.74,
       "citations_count": 4,
-      "latency_ms": 67.56,
+      "latency_ms": 45.57,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -131,8 +131,8 @@
       "expected_status": "answered",
       "actual_status": "answered",
       "confidence": 0.55,
-      "citations_count": 2,
-      "latency_ms": 63.96,
+      "citations_count": 4,
+      "latency_ms": 50.15,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -144,8 +144,8 @@
       "expected_status": "answered",
       "actual_status": "answered",
       "confidence": 0.57,
-      "citations_count": 2,
-      "latency_ms": 77.61,
+      "citations_count": 4,
+      "latency_ms": 45.41,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -158,7 +158,7 @@
       "actual_status": "answered",
       "confidence": 0.63,
       "citations_count": 4,
-      "latency_ms": 73.59,
+      "latency_ms": 46.46,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -171,7 +171,7 @@
       "actual_status": "insufficient_evidence",
       "confidence": 0.1,
       "citations_count": 0,
-      "latency_ms": 69.19,
+      "latency_ms": 58.89,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -184,7 +184,7 @@
       "actual_status": "insufficient_evidence",
       "confidence": 0.1,
       "citations_count": 0,
-      "latency_ms": 62.12,
+      "latency_ms": 48.57,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -197,7 +197,7 @@
       "actual_status": "insufficient_evidence",
       "confidence": 0.1,
       "citations_count": 0,
-      "latency_ms": 76.13,
+      "latency_ms": 51.68,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -210,7 +210,7 @@
       "actual_status": "insufficient_evidence",
       "confidence": 0.1,
       "citations_count": 0,
-      "latency_ms": 87.06,
+      "latency_ms": 54.22,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -236,7 +236,7 @@
       "actual_status": "insufficient_evidence",
       "confidence": 0.1,
       "citations_count": 0,
-      "latency_ms": 59.7,
+      "latency_ms": 53.43,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -249,7 +249,7 @@
       "actual_status": "answered",
       "confidence": 0.73,
       "citations_count": 4,
-      "latency_ms": 52.94,
+      "latency_ms": 50.51,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -262,7 +262,7 @@
       "actual_status": "answered",
       "confidence": 0.95,
       "citations_count": 1,
-      "latency_ms": 64.66,
+      "latency_ms": 48.81,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
@@ -288,7 +288,7 @@
       "actual_status": "answered",
       "confidence": 0.82,
       "citations_count": 4,
-      "latency_ms": 54.85,
+      "latency_ms": 47.91,
       "cost_usd": 0.00015,
       "passed": true,
       "failure_reason": ""
