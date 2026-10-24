@@ -1,0 +1,69 @@
+{
+  "article_id": "2171033-how-to-activate-the-divi-build",
+  "url": "https://help.elegantthemes.com/en/articles/2171033-how-to-activate-the-divi-builder",
+  "title": "How to Activate the Divi Builder",
+  "category": "En >> Articles",
+  "content_hash": "af948e219d24daa7e449efec42f80fef982a2940b078438203863e86ba7ddc3b",
+  "raw_text": "How to Activate the Divi Builder\n## Overview\nActivating the Divi Builder is the first step to unlocking its powerful design capabilities and easily transforming your WordPress website.\nIn this article, we will guide you through the process of activating the Divi Builder on your WordPress site.\n\n## Activate the Divi Builder while using the WordPress Gutenberg editor\n\u2022 Go toWordPress Dashboard \u2192 Pages\n\u2022 Createa new page oreditan existing page\n\u2022 Click on theUse Divi Builderbutton.\nGo to WordPress Dashboard \u2192 Pages\nCreate a new page or edit an existing page\nClick on the Use Divi Builder button.\n\n## Activate the Divi Builder while using the WordPress Classic editor\n\u2022 Go toWordPress Dashboard \u2192 Pages\n\u2022 Createa new page oreditan existing page\n\u2022 Click on theUse The Divi Builderbutton.\nGo to WordPress Dashboard \u2192 Pages\nCreate a new page or edit an existing page\nClick on the Use The Divi Builder button.\nNote :\n\u2022 If you do not see theUse Divi Builder Pluginbutton, please check theHow to Troubleshoot the Divi Builder Disappearingarticle.\n\u2022 TheWordPress Classic Editorcan be enabled or disabled by following these steps:\nIf you do not see the Use Divi Builder Plugin button, please check the How to Troubleshoot the Divi Builder Disappearing article.\nThe WordPress Classic Editor can be enabled or disabled by following these steps:\n\u2022 Go toDivi \u2192 Theme Options \u2192 Builder \u2192 Advanced Tab\n\u2022 Enable or Disable theEnable Classic Editoroption\nGo to Divi \u2192 Theme Options \u2192 Builder \u2192 Advanced Tab\nEnable or Disable the Enable Classic Editor option\n\n## Related Articles\n\u2022 How to Troubleshoot the Divi Builder Disappearing\n\u2022 What's the Difference Between the Divi Theme and the Divi Builder Plugin?\n\u2022 The Divi Layout Block\n\u2022 How to Troubleshoot the Divi Builder Timeout Error\n\u2022 How to Fix the Missing Enable Divi Builder Option in Divi 5",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Activating the Divi Builder is the first step to unlocking its powerful design capabilities and easily transforming your WordPress website.",
+        "In this article, we will guide you through the process of activating the Divi Builder on your WordPress site."
+      ],
+      "images": [
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/798246034/f2a4a2965320bc0c6a511cad/image.png?expires=1792826100&signature=ec137a17ef1470a0b585558838b9744f4b5055998c08b335fb5c51e64106c831&req=cykvFM14nYJbFb4f3HP0gBX8Feb1VHHWS%2FS3hAM2CH1iWNkoPv%2BbvdiVyE5U%0AvT8%3D%0A",
+          "alt": "WordPress Gutenberg Editor - Enabled the Visual Builder",
+          "description": "Interface view for 'Overview'. Visual prompt to click/select 'Classic editor'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/798247059/48e1cf3fce3ed5c99b944c95/image.png?expires=1792826100&signature=104ab69b3ba3e6f2998413396f6392420ed181541a191eed2fd1785a06671d02&req=cykvFM15nYRWFb4f3HP0gAvqezV5Ct6LUp6r9%2FBaTaWzl1sXfmp41BHtUoWa%0AgXA%3D%0A",
+          "alt": "WordPress Classic Editor - Enabled the Visual Builder",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1080837212/5e25ab066c878c8c2248fc49/4.png?expires=1792826100&signature=d0d00c32fe9ef37b7375bd5836cd384da9c120c25a18abe979497ac596d6c6c0&req=dSAvFsF9moNeW%2FMW1HO4zeWfm3Mk7dwfM%2BBHGForPM4vucEeXUfZ198zpNnB%0A8uFcSyvAJ3G%2BIi5QBt0%3D%0A",
+          "alt": "Divi - Enable/Disable the Classic Editor",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Activate the Divi Builder while using the WordPress Gutenberg editor",
+      "paragraphs": [
+        "\u2022 Go toWordPress Dashboard \u2192 Pages\n\u2022 Createa new page oreditan existing page\n\u2022 Click on theUse Divi Builderbutton.",
+        "Go to WordPress Dashboard \u2192 Pages",
+        "Create a new page or edit an existing page",
+        "Click on the Use Divi Builder button."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Activate the Divi Builder while using the WordPress Classic editor",
+      "paragraphs": [
+        "\u2022 Go toWordPress Dashboard \u2192 Pages\n\u2022 Createa new page oreditan existing page\n\u2022 Click on theUse The Divi Builderbutton.",
+        "Go to WordPress Dashboard \u2192 Pages",
+        "Create a new page or edit an existing page",
+        "Click on the Use The Divi Builder button.",
+        "Note :",
+        "\u2022 If you do not see theUse Divi Builder Pluginbutton, please check theHow to Troubleshoot the Divi Builder Disappearingarticle.\n\u2022 TheWordPress Classic Editorcan be enabled or disabled by following these steps:",
+        "If you do not see the Use Divi Builder Plugin button, please check the How to Troubleshoot the Divi Builder Disappearing article.",
+        "The WordPress Classic Editor can be enabled or disabled by following these steps:",
+        "\u2022 Go toDivi \u2192 Theme Options \u2192 Builder \u2192 Advanced Tab\n\u2022 Enable or Disable theEnable Classic Editoroption",
+        "Go to Divi \u2192 Theme Options \u2192 Builder \u2192 Advanced Tab",
+        "Enable or Disable the Enable Classic Editor option"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Articles",
+      "paragraphs": [
+        "\u2022 How to Troubleshoot the Divi Builder Disappearing\n\u2022 What's the Difference Between the Divi Theme and the Divi Builder Plugin?\n\u2022 The Divi Layout Block\n\u2022 How to Troubleshoot the Divi Builder Timeout Error\n\u2022 How to Fix the Missing Enable Divi Builder Option in Divi 5"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 3
+}

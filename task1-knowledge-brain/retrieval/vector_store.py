@@ -139,8 +139,8 @@ class KnowledgeVectorStore:
                         client.execute("SELECT 1")
                     return LibsqlConnectionAdapter(client)
                 except Exception as e:
-                    # In production, if Turso fails to connect, fallback to local sqlite and record failure
-                    pass
+                    if is_prod:
+                        raise RuntimeError(f"Failed to connect to persistent Turso database: {str(e)}")
         
         try:
             conn = sqlite3.connect(self.db_path, timeout=10.0)

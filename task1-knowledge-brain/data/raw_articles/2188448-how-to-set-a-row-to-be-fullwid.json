@@ -1,0 +1,61 @@
+{
+  "article_id": "2188448-how-to-set-a-row-to-be-fullwid",
+  "url": "https://help.elegantthemes.com/en/articles/2188448-how-to-set-a-row-to-be-fullwidth",
+  "title": "How to Set a Row to be Fullwidth",
+  "category": "En >> Articles",
+  "content_hash": "5c926f1d1774e5f811b923a96dbbc0f11f98deec531dcea7b599155273f7d65a",
+  "raw_text": "How to Set a Row to be Fullwidth\n## Overview\nCreating a fullwidth row in Divi can dramatically enhance your website's visual impact and layout flexibility.\nBy utilizing the full width of the screen, you can create immersive sections that captivate your audience and provide a modern, clean design.\nWhile you can use Fullwidth sections to create fullwidth layouts, the number of modules you can use inside a Fullwidth section is limited.\nNote : A Row in Divi has a width of 80% and a max-width of 1080px.\n\n## Change the Row's default width and max-width values\n\u2022 Open the Row settings by clicking on theGear icon\n\u2022 Go toDesign Tab \u2192  Sizing\n\u2022 Set theWidthto100%\n\u2022 Set theMax Widthto100%\nOpen the Row settings by clicking on the Gear icon\nGo to Design Tab \u2192  Sizing\nSet the Width to 100%\nSet the Max Width to 100%\nThe result can be seen in the screenshot below:\n\n## Related Articles\n\u2022 How to Make a Masonry Blog Layout Using the Isotope JS Library\n\u2022 Divi Rows & Row Options\n\u2022 Using Divi Sizing Options\n\u2022 Nested Rows in Divi 5\n\u2022 How to Set a Row to Be Fullwidth in Divi 5",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Creating a fullwidth row in Divi can dramatically enhance your website's visual impact and layout flexibility.",
+        "By utilizing the full width of the screen, you can create immersive sections that captivate your audience and provide a modern, clean design.",
+        "While you can use Fullwidth sections to create fullwidth layouts, the number of modules you can use inside a Fullwidth section is limited.",
+        "Note : A Row in Divi has a width of 80% and a max-width of 1080px."
+      ],
+      "images": [
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/70082284/14079d58b33f5d9e9d5641c1/image.png?expires=1792826100&signature=c3e98bbf49757d91a566a9943271c11442ea047b388a0655d79a450c0c686c35&req=cyAnHst8lYUTWLcX3D%2B5hlOGJh8k6A0s3%2FtEvUjAY0UqJbofv7Aykn4YjbCy%0A3iiKnmHIfrT4Cagj%0A",
+          "alt": "Divi - Default Row Width",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1079186570/54d02cd6c0b6534297756a63/row-settings.png?expires=1792908000&signature=2ee005bc26fc2ff6a096874d4300e454932b6a0750d26576eb491286a3759fb7&req=dSAgH8h2m4RYWfMW3Hu4gfRVNcrDLLszXAsa1TiKoWzwj7fvCuCLEU5OzqlN%0AMg%3D%3D%0A",
+          "alt": "",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/115721845/f217d58a07ab406b84bfbd2b/image.png?expires=1792826100&signature=2d235528b9d17b9aa3dc518978574da898c68a28f8b50c9244c1978fd52b59d3&req=dSEiEct%2FlYVaFb4f3HP0gAQ3kJQLgqKzVyyWRCK5GXuM%2F8hHtiP50XeYkKX5%0A75g%3D%0A",
+          "alt": "Divi Row Sizing Settings",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1079190137/5ffe7644708240493d5a0697/Service++WPML+Divi+Demo.png?expires=1792826100&signature=cd685cba2f5493ab27056a39aa8774a0c4607379c965a3484878b1a2a538cfa1&req=dSAgH8h3nYBcXvMW1HO4zQvXpD3LPW1h8ohWus59uTxsbzsNWtEeCF4LqV4m%0ApijU0vZnjkbkqHncm28%3D%0A",
+          "alt": "Divi - Fullwidth Row",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Change the Row's default width and max-width values",
+      "paragraphs": [
+        "\u2022 Open the Row settings by clicking on theGear icon\n\u2022 Go toDesign Tab \u2192  Sizing\n\u2022 Set theWidthto100%\n\u2022 Set theMax Widthto100%",
+        "Open the Row settings by clicking on the Gear icon",
+        "Go to Design Tab \u2192  Sizing",
+        "Set the Width to 100%",
+        "Set the Max Width to 100%",
+        "The result can be seen in the screenshot below:"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Articles",
+      "paragraphs": [
+        "\u2022 How to Make a Masonry Blog Layout Using the Isotope JS Library\n\u2022 Divi Rows & Row Options\n\u2022 Using Divi Sizing Options\n\u2022 Nested Rows in Divi 5\n\u2022 How to Set a Row to Be Fullwidth in Divi 5"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 4
+}

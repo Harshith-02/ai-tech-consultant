@@ -1,0 +1,68 @@
+{
+  "article_id": "2188425-how-to-equalize-column-heights",
+  "url": "https://help.elegantthemes.com/en/articles/2188425-how-to-equalize-column-heights",
+  "title": "How to Equalize Column Heights",
+  "category": "En >> Articles",
+  "content_hash": "e39659cb408651121bcda7a1641e96643e47158ac180fd2d84c272824188528c",
+  "raw_text": "How to Equalize Column Heights\n## Overview\nSometimes, we need each Column to be the same height, regardless of the content of each Column.\nLet's have a look at this example:\nIn this layout, we have three text modules. Each text module has a different background color, and the content in each text module is different.\nThis creates an uneven height for each text module. The purpose of this guide is to have each Column have the same height.\n\n## Adjust the Layout and enable the Equalize Columns Height option\n\u2022 Edit each module and remove the background color\n\u2022 Edit the Row's settings\n\u2022 Edit each Column, and set the previous background colors that were set on each module\n\u2022 Go back to theRow's settings\n\u2022 Click on theDesign Tab\n\u2022 Expand theSizingoption group\n\u2022 Enable theEqualize Column Heightsoption\nEdit each module and remove the background color\nEdit the Row's settings\nEdit each Column, and set the previous background colors that were set on each module\nGo back to the Row's settings\nClick on the Design Tab\nExpand the Sizing option group\nEnable the Equalize Column Heights option\nThe result will be:\nPro Tips:\n\u2022 The height of the Column refers to the Column itself and not to the content inside a column.\n\u2022 Suppose the Modules inside each Column contain other properties, like Box Shadow, Border Radius, etc. In that case, those properties need to be reset on the Module's level and applied to the Column itself.\nThe height of the Column refers to the Column itself and not to the content inside a column.\nSuppose the Modules inside each Column contain other properties, like Box Shadow, Border Radius, etc. In that case, those properties need to be reset on the Module's level and applied to the Column itself.\n\n## Related Articles\n\u2022 How to Equalize Pricing Tables' Height\n\u2022 How to Add a Hover Effect to Any Divi Element (Section, Row, Module)\n\u2022 Divi Rows & Row Options\n\u2022 Using Divi Sizing Options\n\u2022 The Chart Module in Divi 5",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Sometimes, we need each Column to be the same height, regardless of the content of each Column.",
+        "Let's have a look at this example:",
+        "In this layout, we have three text modules. Each text module has a different background color, and the content in each text module is different.",
+        "This creates an uneven height for each text module. The purpose of this guide is to have each Column have the same height."
+      ],
+      "images": [
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/801583318/6a4bc266b33b5bbc3e10af9e/chrome_2023-08-06_21-26-07.png?expires=1792826100&signature=df7c2eea5b91c937620d62f61cc9baaca40b5263e7ed67c9b53c74e60669020d&req=fCAmE8F9noBXFb4f3HP0gGY9i%2B52Ocn%2FF06hvjQtlUboDyElph0QCD8IuDJE%0AO3QvCvQmo%2BBumCFCbA%3D%3D%0A",
+          "alt": "Divi Columns are not equalized",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1071060409/7fdbfcb1f9c3d237f35d687e/01.png?expires=1792826100&signature=fb6786e270d0242a241d2869a29107f6a0c4b53d1d065a339249923339bd8906&req=dSAgF8l4nYVfUPMW1HO4zTSA7lpt0IsQwL55dCL%2Bn5rDg%2FdJTnvnd9Gg9IsA%0AdGdI%0A",
+          "alt": "Divi - Edit Column settings",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1071061443/b50ca11a468010bc02c3e88b/02.png?expires=1792826100&signature=6616aa15bfe23dc1efc027eaae573fc4246ac27d7f6f1aa2748eb105a26f8b73&req=dSAgF8l4nIVbWvMW1HO4zeYYVXLtmP7pyFZ9ihr1UxM8TduIp9DVfNAUSO0f%0AHyAx%0A",
+          "alt": "Divi Row - Enable Equalize Columns Heights",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1071062506/84c494eafaedb4bc18c025a0/03.png?expires=1792826100&signature=b171c50a24e247d254f1e9dd437ef637876c56f88d2da894763718db1e3e7264&req=dSAgF8l4n4RfX%2FMW1HO4zaQmJ23y2laT0DnZWugdt9vf3Ld1fh5pBDotOmZu%0AOj8WFXv9pB66sDrzFdw%3D%0A",
+          "alt": "Divi Equalized Columns Heights",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Adjust the Layout and enable the Equalize Columns Height option",
+      "paragraphs": [
+        "\u2022 Edit each module and remove the background color\n\u2022 Edit the Row's settings\n\u2022 Edit each Column, and set the previous background colors that were set on each module\n\u2022 Go back to theRow's settings\n\u2022 Click on theDesign Tab\n\u2022 Expand theSizingoption group\n\u2022 Enable theEqualize Column Heightsoption",
+        "Edit each module and remove the background color",
+        "Edit the Row's settings",
+        "Edit each Column, and set the previous background colors that were set on each module",
+        "Go back to the Row's settings",
+        "Click on the Design Tab",
+        "Expand the Sizing option group",
+        "Enable the Equalize Column Heights option",
+        "The result will be:",
+        "Pro Tips:",
+        "\u2022 The height of the Column refers to the Column itself and not to the content inside a column.\n\u2022 Suppose the Modules inside each Column contain other properties, like Box Shadow, Border Radius, etc. In that case, those properties need to be reset on the Module's level and applied to the Column itself.",
+        "The height of the Column refers to the Column itself and not to the content inside a column.",
+        "Suppose the Modules inside each Column contain other properties, like Box Shadow, Border Radius, etc. In that case, those properties need to be reset on the Module's level and applied to the Column itself."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Articles",
+      "paragraphs": [
+        "\u2022 How to Equalize Pricing Tables' Height\n\u2022 How to Add a Hover Effect to Any Divi Element (Section, Row, Module)\n\u2022 Divi Rows & Row Options\n\u2022 Using Divi Sizing Options\n\u2022 The Chart Module in Divi 5"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 4
+}

@@ -1,5 +1,5 @@
 {
-  "last_sitemap_sync": "2026-10-23T14:20:24.551147+00:00",
+  "last_sitemap_sync": "2026-10-24T06:48:04.783286+00:00",
   "configured_sitemaps": [
     "https://support.brilliantdirectories.com/support/sitemap.xml",
     "https://www.elegantthemes.com/robots.txt",
@@ -17,8 +17,8 @@
       "status": "error: syntax error: line 1, column 0"
     },
     "https://help.elegantthemes.com/sitemap.xml": {
-      "last_synced": "2026-10-23T14:20:24.510513+00:00",
-      "urls_count": 977,
+      "last_synced": "2026-10-24T06:48:04.779246+00:00",
+      "urls_count": 978,
       "status": "synced"
     }
   },
@@ -26,29 +26,29 @@
     "https://support.brilliantdirectories.com/support/solutions/articles/test-active": {
       "url": "https://support.brilliantdirectories.com/support/solutions/articles/test-active",
       "lastmod": "2026-01-01T00:00:00Z",
-      "consecutive_missing_checks": 7
+      "consecutive_missing_checks": 8
     },
     "https://support.brilliantdirectories.com/support/solutions/articles/test-modified": {
       "url": "https://support.brilliantdirectories.com/support/solutions/articles/test-modified",
       "lastmod": "2026-10-23T12:00:00Z",
-      "consecutive_missing_checks": 7,
+      "consecutive_missing_checks": 8,
       "status": "failed",
-      "attempts": 7,
+      "attempts": 8,
       "error": "HTTP fetch error or 404"
     },
     "https://support.brilliantdirectories.com/support/solutions/articles/test-missing": {
       "url": "https://support.brilliantdirectories.com/support/solutions/articles/test-missing",
       "lastmod": "2026-01-01T00:00:00Z",
-      "consecutive_missing_checks": 9,
+      "consecutive_missing_checks": 10,
       "status": "archived"
     },
     "https://support.brilliantdirectories.com/support/solutions/articles/test-brand-new": {
       "status": "failed",
       "lastmod": "2026-10-23T12:00:00Z",
       "sitemap_source": null,
-      "consecutive_missing_checks": 7,
+      "consecutive_missing_checks": 8,
       "content_hash": null,
-      "attempts": 3,
+      "attempts": 4,
       "error": "HTTP fetch error or 404",
       "crawled_at": null
     },
@@ -15693,84 +15693,84 @@
       "crawled_at": "2026-10-23T14:20:47.305989+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2170999-can-i-use-multiple-websites-on-divi": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2018-10-18T22:18:58Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "c8435426189773ad961b981701bc899ec732840884320f2b9faea3591a1cf600",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:10.331414+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2171033-how-to-activate-the-divi-builder": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-08-09T14:45:42Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "af948e219d24daa7e449efec42f80fef982a2940b078438203863e86ba7ddc3b",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:12.685266+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2174686-our-support-system-explained": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-08-21T22:25:35Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "ac89f522432216fc1603866079ba29c9700b3db71a40c6e608b20a6cbf3b9234",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:14.886002+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2179422-how-to-reinstall-the-divi-theme": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-06-18T14:58:57Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "61b4f7b9b37144a355acae6d2742c5415f91d8937c5112179aa0837eb7e0be15",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:17.264870+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2179494-how-to-add-google-analytics-and-other-tracking-codes-to-your-divi-website": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-08-08T11:35:04Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "8d78bb4cd629fcb77ce473f2a693bfb8e08ca2d2de6f8c6645e3afc7693e8fe8",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:19.486531+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2188070-how-to-create-a-child-theme-for-divi": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-06-10T11:55:06Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "2a043edc05cf3043d29bbcba404c16dd8eb68833285696e133d67c8cc8ba5d5c",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:21.828249+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2188425-how-to-equalize-column-heights": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-06-10T11:23:29Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "e39659cb408651121bcda7a1641e96643e47158ac180fd2d84c272824188528c",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:25.061066+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2188448-how-to-set-a-row-to-be-fullwidth": {
-      "status": "pending",
+      "status": "completed",
       "lastmod": "2024-08-08T12:39:31Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
-      "content_hash": null,
-      "attempts": 0,
+      "content_hash": "5c926f1d1774e5f811b923a96dbbc0f11f98deec531dcea7b599155273f7d65a",
+      "attempts": 1,
       "error": null,
-      "crawled_at": null
+      "crawled_at": "2026-10-24T06:48:27.102747+00:00"
     },
     "https://help.elegantthemes.com/en/articles/2188833-how-to-fix-blog-page-not-updating-when-using-divi-builder": {
       "status": "pending",
@@ -21374,7 +21374,7 @@
     },
     "https://help.elegantthemes.com/en/articles/9973580-divi-5-update-status": {
       "status": "pending",
-      "lastmod": "2026-10-19T06:09:19Z",
+      "lastmod": "2026-10-23T12:36:48Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -21444,7 +21444,7 @@
     },
     "https://help.elegantthemes.com/en/articles/10101671-understanding-the-toggle-icon-option-group-in-divi-5": {
       "status": "pending",
-      "lastmod": "2026-03-09T11:05:20Z",
+      "lastmod": "2026-10-23T06:12:24Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -21864,7 +21864,7 @@
     },
     "https://help.elegantthemes.com/en/articles/10259854-understanding-the-button-option-group-in-divi-5": {
       "status": "pending",
-      "lastmod": "2026-06-29T05:43:10Z",
+      "lastmod": "2026-10-23T06:10:51Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -22054,7 +22054,7 @@
     },
     "https://help.elegantthemes.com/en/articles/10315683-the-icon-module-in-divi-5": {
       "status": "pending",
-      "lastmod": "2026-06-08T14:40:49Z",
+      "lastmod": "2026-10-23T06:27:14Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -22094,7 +22094,7 @@
     },
     "https://help.elegantthemes.com/en/articles/10340853-divi-hosting-requirements-optimizing-your-server-for-peak-performance": {
       "status": "pending",
-      "lastmod": "2025-02-22T00:16:41Z",
+      "lastmod": "2026-10-23T09:50:45Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -22994,7 +22994,7 @@
     },
     "https://help.elegantthemes.com/en/articles/11982062-the-icon-list-module-in-divi-5": {
       "status": "pending",
-      "lastmod": "2026-06-08T14:40:01Z",
+      "lastmod": "2026-10-23T06:24:58Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -23004,7 +23004,7 @@
     },
     "https://help.elegantthemes.com/en/articles/11982083-how-to-upload-svg-and-json-files": {
       "status": "pending",
-      "lastmod": "2025-11-25T06:53:19Z",
+      "lastmod": "2026-10-23T06:14:50Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -23284,7 +23284,7 @@
     },
     "https://help.elegantthemes.com/en/articles/12331954-exploring-divi-5-s-new-features": {
       "status": "pending",
-      "lastmod": "2026-10-19T06:55:42Z",
+      "lastmod": "2026-10-23T05:44:13Z",
       "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
       "consecutive_missing_checks": 0,
       "content_hash": null,
@@ -25221,16 +25221,26 @@
       "attempts": 0,
       "error": null,
       "crawled_at": null
+    },
+    "https://help.elegantthemes.com/en/articles/17693045-the-icon-manager-in-divi-5": {
+      "status": "pending",
+      "lastmod": "2026-10-23T05:37:54Z",
+      "sitemap_source": "https://help.elegantthemes.com/sitemap.xml",
+      "consecutive_missing_checks": 0,
+      "content_hash": null,
+      "attempts": 0,
+      "error": null,
+      "crawled_at": null
     }
   },
   "stats": {
     "total_removed": 1,
-    "total_crawled": 24,
-    "total_failed": 10
+    "total_crawled": 32,
+    "total_failed": 12
   },
   "measured_perf": {
-    "total_pages_measured": 24,
-    "total_seconds": 36.062,
-    "avg_seconds_per_page": 1.503
+    "total_pages_measured": 32,
+    "total_seconds": 51.894,
+    "avg_seconds_per_page": 1.622
   }
 }

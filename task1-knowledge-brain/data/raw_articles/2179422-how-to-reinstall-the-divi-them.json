@@ -1,0 +1,84 @@
+{
+  "article_id": "2179422-how-to-reinstall-the-divi-them",
+  "url": "https://help.elegantthemes.com/en/articles/2179422-how-to-reinstall-the-divi-theme",
+  "title": "How to Reinstall the Divi Theme",
+  "category": "En >> Articles",
+  "content_hash": "61b4f7b9b37144a355acae6d2742c5415f91d8937c5112179aa0837eb7e0be15",
+  "raw_text": "How to Reinstall the Divi Theme\n## Overview\nReinstalling the Divi Theme can help resolve issues such as corrupted files, bugs, or incomplete updates. Whether you're troubleshooting problems or simply performing maintenance, knowing how to reinstall Divi correctly is essential.\nIn this article, we will guide you through the process of safely reinstalling the Divi Theme on your WordPress site.\n\n## Reinstall the Divi theme using the Appearance Page\n\u2022 Login to yourElegant Themes Account\n\u2022 Go to theMy Downloadssection\n\u2022 Click on theDownload the Divi Themebutton\n\u2022 Log in toWordPress Dashboard\n\u2022 Go toAppearance\u2192Themes\n\u2022 Click on theAdd New Themebutton (at the top)\n\u2022 Click on theUpload Themebutton (at the top)\n\u2022 Choose theDivi.zipfile, which was downloaded in Step 3\n\u2022 WordPress will detect the previous Divi installation and will give the option to override with the new one (downloaded at step 2)\n\u2022 Click onReplace current with uploadedbutton.\nLogin to your Elegant Themes Account\nGo to the My Downloads section\nClick on the Download the Divi Theme button\nLog in to WordPress Dashboard\nGo to Appearance \u2192 Themes\nClick on the Add New Theme button (at the top)\nClick on the Upload Theme button (at the top)\nChoose the Divi.zip file, which was downloaded in Step 3\nWordPress will detect the previous Divi installation and will give the option to override with the new one (downloaded at step 2)\nClick on Replace current with uploaded button.\n\n## Reinstall the Divi theme using the Updates Tab\nNote : This method will only work if it is not a fresh Divi installation.\n\u2022 Go toWordPress Dashboard \u2192 Divi \u2192 Theme Options \u2192 Updates tab\n\u2022 Click on theRollback to the previous versionbutton\n\u2022 Go toAppearance\u2192Themesand perform the update to the latest version\nGo to WordPress Dashboard \u2192 Divi \u2192 Theme Options \u2192 Updates tab\nClick on the Rollback to the previous version button\nGo to Appearance \u2192 Themes and perform the update to the latest version\n\n## Reinstall the Divi theme by changing the version number\n\u2022 Go to yourWordPress Dashboard\u2192Appearance\u2192Theme File Editor\n\u2022 Edit thestyle.cssfile\n\u2022 Change the version number in this file to a previous version by editing:Version: 4.0.6(e.g., change4.0.6to4.0.5)\n\u2022 Go back toAppearance\u2192Themesand update to the latest version.\nGo to your WordPress Dashboard \u2192 Appearance \u2192 Theme File Editor\nEdit the style.css file\nChange the version number in this file to a previous version by editing:\n```\nVersion: 4.0.6\n```\n(e.g., change 4.0.6 to 4.0.5 )\nGo back to Appearance \u2192 Themes and update to the latest version.\nNote: If the update is unavailable under Appearance \u2192 Themes, go to Dashboard \u2192 Updates instead.\n\n## Related Articles\n\u2022 How to Create a Child Theme for Divi\n\u2022 How to Troubleshoot Divi Theme Builder: An Unknown Error Has Occurred\n\u2022 How to Install the Divi Theme\n\u2022 How to Rollback to Divi 4\n\u2022 How to Roll Back to a Previous Divi 5 Version",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Reinstalling the Divi Theme can help resolve issues such as corrupted files, bugs, or incomplete updates. Whether you're troubleshooting problems or simply performing maintenance, knowing how to reinstall Divi correctly is essential.",
+        "In this article, we will guide you through the process of safely reinstalling the Divi Theme on your WordPress site."
+      ],
+      "images": [
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/435833734/6366c3a6f72194495c1653a5/image.png?expires=1792826100&signature=5846bf89d925312a53f96e24faf5216e00a27bef39b6108c98279b001affcbb7&req=cCMiHsp9moJbFb4f3HP0gAs9ZYLf4Er%2BgYKy7DeHSAk1pSJJLoxsWM3NhsLW%0AwFY%3D%0A",
+          "alt": "Elegant Themes - Members Area",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/435837296/22503bed5381ec58f9a62f26/image.png?expires=1792826100&signature=6f66044732b6f5c8a09c7dc217f57002671cdc18a8be3e1eb65473191ee37c6e&req=cCMiHsp5n4hZFb4f3HP0gN8IuoXSTdkmnQ%2BZi%2B0JPhg7Hmt6DzX5x1bJ9wFv%0ARBk%3D%0A",
+          "alt": "WordPress - Reinstall the active theme",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/435838129/0c4ad25bf3ced03c86ae048d/image.png?expires=1792826100&signature=d5683334ae2c78577bed7ae7ab11e1521804abb750775a0c0521fa8b156967bd&req=cCMiHsp2nINWFb4f3HP0gCLi1VWtCElkVgSBDM9u6rBH15Y8aZO4EG1aCcP0%0AOtE%3D%0A",
+          "alt": "Divi Theme - Updates Tab",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Reinstall the Divi theme using the Appearance Page",
+      "paragraphs": [
+        "\u2022 Login to yourElegant Themes Account\n\u2022 Go to theMy Downloadssection\n\u2022 Click on theDownload the Divi Themebutton\n\u2022 Log in toWordPress Dashboard\n\u2022 Go toAppearance\u2192Themes\n\u2022 Click on theAdd New Themebutton (at the top)\n\u2022 Click on theUpload Themebutton (at the top)\n\u2022 Choose theDivi.zipfile, which was downloaded in Step 3\n\u2022 WordPress will detect the previous Divi installation and will give the option to override with the new one (downloaded at step 2)\n\u2022 Click onReplace current with uploadedbutton.",
+        "Login to your Elegant Themes Account",
+        "Go to the My Downloads section",
+        "Click on the Download the Divi Theme button",
+        "Log in to WordPress Dashboard",
+        "Go to Appearance \u2192 Themes",
+        "Click on the Add New Theme button (at the top)",
+        "Click on the Upload Theme button (at the top)",
+        "Choose the Divi.zip file, which was downloaded in Step 3",
+        "WordPress will detect the previous Divi installation and will give the option to override with the new one (downloaded at step 2)",
+        "Click on Replace current with uploaded button."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Reinstall the Divi theme using the Updates Tab",
+      "paragraphs": [
+        "Note : This method will only work if it is not a fresh Divi installation.",
+        "\u2022 Go toWordPress Dashboard \u2192 Divi \u2192 Theme Options \u2192 Updates tab\n\u2022 Click on theRollback to the previous versionbutton\n\u2022 Go toAppearance\u2192Themesand perform the update to the latest version",
+        "Go to WordPress Dashboard \u2192 Divi \u2192 Theme Options \u2192 Updates tab",
+        "Click on the Rollback to the previous version button",
+        "Go to Appearance \u2192 Themes and perform the update to the latest version"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Reinstall the Divi theme by changing the version number",
+      "paragraphs": [
+        "\u2022 Go to yourWordPress Dashboard\u2192Appearance\u2192Theme File Editor\n\u2022 Edit thestyle.cssfile\n\u2022 Change the version number in this file to a previous version by editing:Version: 4.0.6(e.g., change4.0.6to4.0.5)\n\u2022 Go back toAppearance\u2192Themesand update to the latest version.",
+        "Go to your WordPress Dashboard \u2192 Appearance \u2192 Theme File Editor",
+        "Edit the style.css file",
+        "Change the version number in this file to a previous version by editing:",
+        "```\nVersion: 4.0.6\n```",
+        "(e.g., change 4.0.6 to 4.0.5 )",
+        "Go back to Appearance \u2192 Themes and update to the latest version.",
+        "Note: If the update is unavailable under Appearance \u2192 Themes, go to Dashboard \u2192 Updates instead."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Articles",
+      "paragraphs": [
+        "\u2022 How to Create a Child Theme for Divi\n\u2022 How to Troubleshoot Divi Theme Builder: An Unknown Error Has Occurred\n\u2022 How to Install the Divi Theme\n\u2022 How to Rollback to Divi 4\n\u2022 How to Roll Back to a Previous Divi 5 Version"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 3
+}

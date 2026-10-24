@@ -1,0 +1,94 @@
+{
+  "article_id": "2188070-how-to-create-a-child-theme-fo",
+  "url": "https://help.elegantthemes.com/en/articles/2188070-how-to-create-a-child-theme-for-divi",
+  "title": "How to Create a Child Theme for Divi",
+  "category": "En >> Articles",
+  "content_hash": "2a043edc05cf3043d29bbcba404c16dd8eb68833285696e133d67c8cc8ba5d5c",
+  "raw_text": "How to Create a Child Theme for Divi\n## Overview\nA child theme is a sub-theme that inherits all the functionality and style of the main theme, also called the parent theme. Child themes are a safe way to modify an active WordPress theme without directly altering it.\nUsing a Child theme will ensure that any customization is preserved when the parent theme is updated.\nNotes :\n\u2022 Having a Child theme is not required if you only use CSS customizations. You can place your custom CSS code inDivi\u2192Theme Options\u2192General Tab\u2192Custom CSS.\n\u2022 If you plan to modify Divi's theme files, such asheader.phporfooter.php, you will need to create a Child theme to retain those changes when updating.\n\u2022 For more information, you can also check theUltimate Guide to Creating a Divi Child Themeguide.\nHaving a Child theme is not required if you only use CSS customizations. You can place your custom CSS code in Divi \u2192 Theme Options \u2192 General Tab \u2192 Custom CSS.\nIf you plan to modify Divi's theme files, such as header.php or footer.php , you will need to create a Child theme to retain those changes when updating.\nFor more information, you can also check the Ultimate Guide to Creating a Divi Child Theme guide.\nThere are two ways you can use to create a child theme for Divi:\n\u2022 Using a 3rd party plugin (easy)\n\u2022 Creating it from scratch (advanced)\nUsing a 3rd party plugin (easy)\nCreating it from scratch (advanced)\n\n## Using the Child Theme Configurator third-party plugin\n\u2022 Log in to the WordPress Dashboard\n\u2022 Go toPlugins \u2192 Add new\n\u2022 Search forChild Theme Configurator\n\u2022 Install it and Activate it\n\u2022 Go toTools \u2192  Child Themes\n\u2022 Ensure theCreate a new Child Themeoption is selected\n\u2022 Ensure thatDiviis selected as the Parent Theme\n\u2022 Click on theAnalyzebutton\n\u2022 Choose thePrimary Stylesheet (style.css)option\n\u2022 ChooseUse the WordPress style queueoption\n\u2022 Click on theCreate New Child Themebutton\n\u2022 Go toAppearance \u2192  Themesand activate the new Child Theme\nLog in to the WordPress Dashboard\nGo to Plugins \u2192 Add new\nSearch for Child Theme Configurator\nInstall it and Activate it\nGo to Tools \u2192  Child Themes\nEnsure the Create a new Child Theme option is selected\nEnsure that Divi is selected as the Parent Theme\nClick on the Analyze button\nChoose the Primary Stylesheet (style.css) option\nChoose Use the WordPress style queue option\nClick on the Create New Child Theme button\nGo to Appearance \u2192  Themes and activate the new Child Theme\n\n## Creating the Child Theme from scratch (advanced)\nCreating a child theme from scratch is easier than it sounds. We only need a code editor, such as VS Code , Sublime Text , or any other code editor.\n\u2022 Create a new folder on your local computer and name itdivi-child\n\u2022 Inside thedivi-childfolder, create a new file calledstyle.cssand place the following CSS code:/*Theme Name: Divi Child ThemeTheme URI: http://yourwebsite.comDescription: Child Theme For DiviAuthor: Your NameAuthor URI: http://yourwebsite.comVersion: 1.0.0Template: Divi*/Theme Name:It's the child's theme name. It can be anything you want. Usually, I useDivi's Child ThemeTheme URI:Represents the child theme author's website URL.Description:a short description of your child's theme. You can include things like color scheme used, features added, etcAuthor:The person's name who has created the Child themeAuthor URI: This could be your business website, or it can be the actual URL of the website where the child theme is usedTemplate: It is the parent theme name folder. In this case, that would always beDivi- case sensitive.\n\u2022 Theme Name:It's the child's theme name. It can be anything you want. Usually, I useDivi's Child Theme\n\u2022 Theme URI:Represents the child theme author's website URL.\n\u2022 Description:a short description of your child's theme. You can include things like color scheme used, features added, etc\n\u2022 Author:The person's name who has created the Child theme\n\u2022 Author URI: This could be your business website, or it can be the actual URL of the website where the child theme is used\n\u2022 Template: It is the parent theme name folder. In this case, that would always beDivi- case sensitive.\n\u2022 In thedivi-childfolder, create a second file and name itfunctions.php\n\u2022 Place the following PHP code inside thefunctions.phpfile:<?php/*================================================#Load the Parent theme style.css file================================================*/function dt_enqueue_styles() {$parenthandle = 'divi-style';$theme = wp_get_theme();wp_enqueue_style( $parenthandle, get_template_directory_uri() . '/style.css',array(),  // if the parent theme code has a dependency, copy it to here$theme->parent()->get('Version'));wp_enqueue_style( 'child-style', get_stylesheet_uri(),array( $parenthandle ),$theme->get('Version'));}add_action( 'wp_enqueue_scripts', 'dt_enqueue_styles' );\n\u2022 Zip the entire folder, which should contain the two files:style.cssandfunctions.php\n\u2022 Go back to yourWordPress Dashboard \u2192 Appearance \u2192 Themes\n\u2022 Click on theAdd New Themebutton\n\u2022 Click on theUpload Themebutton\n\u2022 Choose the zip file from Step 5\n\u2022 Click on theInstall Nowbutton\n\u2022 Activate the new Child theme\nCreate a new folder on your local computer and name it divi-child\nInside the divi-child folder, create a new file called style.css and place the following CSS code:\n```\n/* Theme Name: Divi Child Theme Theme URI: http://yourwebsite.com Description: Child Theme For Divi Author: Your Name Author URI: http://yourwebsite.com Version: 1.0.0 Template: Divi */\n```\n\u2022 Theme Name:It's the child's theme name. It can be anything you want. Usually, I useDivi's Child Theme\n\u2022 Theme URI:Represents the child theme author's website URL.\n\u2022 Description:a short description of your child's theme. You can include things like color scheme used, features added, etc\n\u2022 Author:The person's name who has created the Child theme\n\u2022 Author URI: This could be your business website, or it can be the actual URL of the website where the child theme is used\n\u2022 Template: It is the parent theme name folder. In this case, that would always beDivi- case sensitive.\nTheme Name: It's the child's theme name. It can be anything you want. Usually, I use Divi's Child Theme\nTheme URI: Represents the child theme author's website URL.\nDescription: a short description of your child's theme. You can include things like color scheme used, features added, etc\nAuthor: The person's name who has created the Child theme\nAuthor URI : This could be your business website, or it can be the actual URL of the website where the child theme is used\nTemplate : It is the parent theme name folder. In this case, that would always be Divi - case sensitive.\nIn the divi-child folder, create a second file and name it functions.php\nPlace the following PHP code inside the functions.php file:\n```\n<?php /*================================================ #Load the Parent theme style.css file ================================================*/ function dt_enqueue_styles() { $parenthandle = 'divi-style'; $theme = wp_get_theme(); wp_enqueue_style( $parenthandle, get_template_directory_uri() . '/style.css', array(),  // if the parent theme code has a dependency, copy it to here $theme->parent()->get('Version') ); wp_enqueue_style( 'child-style', get_stylesheet_uri(), array( $parenthandle ), $theme->get('Version') ); } add_action( 'wp_enqueue_scripts', 'dt_enqueue_styles' );\n```\nZip the entire folder, which should contain the two files: style.css and functions.php\nGo back to your WordPress Dashboard \u2192 Appearance \u2192 Themes\nClick on the Add New Theme button\nClick on the Upload Theme button\nChoose the zip file from Step 5\nClick on the Install Now button\nActivate the new Child theme\nPro Tip : you can download a ready-to-use Divi Child theme from this GitHub page .\n\n## Related Articles\n\u2022 How to Translate the Divi Theme\n\u2022 How to Move the Portfolio Module From the Parent Theme to a Child Theme\n\u2022 How to Move the Filterable Portfolio Module From the Parent Theme to a Child Theme\n\u2022 How to Move the Blog Module to a Child Theme\n\u2022 How to Add Custom PHP Code in Divi",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "A child theme is a sub-theme that inherits all the functionality and style of the main theme, also called the parent theme. Child themes are a safe way to modify an active WordPress theme without directly altering it.",
+        "Using a Child theme will ensure that any customization is preserved when the parent theme is updated.",
+        "Notes :",
+        "\u2022 Having a Child theme is not required if you only use CSS customizations. You can place your custom CSS code inDivi\u2192Theme Options\u2192General Tab\u2192Custom CSS.\n\u2022 If you plan to modify Divi's theme files, such asheader.phporfooter.php, you will need to create a Child theme to retain those changes when updating.\n\u2022 For more information, you can also check theUltimate Guide to Creating a Divi Child Themeguide.",
+        "Having a Child theme is not required if you only use CSS customizations. You can place your custom CSS code in Divi \u2192 Theme Options \u2192 General Tab \u2192 Custom CSS.",
+        "If you plan to modify Divi's theme files, such as header.php or footer.php , you will need to create a Child theme to retain those changes when updating.",
+        "For more information, you can also check the Ultimate Guide to Creating a Divi Child Theme guide.",
+        "There are two ways you can use to create a child theme for Divi:",
+        "\u2022 Using a 3rd party plugin (easy)\n\u2022 Creating it from scratch (advanced)",
+        "Using a 3rd party plugin (easy)",
+        "Creating it from scratch (advanced)"
+      ],
+      "images": [
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1071017454/68b85bc8584a233ed67bee63/01.png?expires=1792826100&signature=483703e7e0ad08f96348acf863df4dfcc8a943d27a03d43febba5de8ef6ecb05&req=dSAgF8l%2FmoVaXfMW1HO4zURch2LOw93k25uGyOtweENi3DyjyA5BPdLLJti0%0ApYzJ%0A",
+          "alt": "Child theme configuration - initial setup",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/1071020992/f61a0dcd8ed015a66e7b28ce/02.png?expires=1792826100&signature=7ddc97755f7f7450be030f7afc3472630afb1fca2c13bbc39b621dc60d1ed2be&req=dSAgF8l8nYhWW%2FMW1HO4zYGW2EHD3z1dEVtzNfjHy0j29BL%2Fo0lr8VC4cWdu%0AHfoz%0A",
+          "alt": "Child theme configuration - initial setup",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Using the Child Theme Configurator third-party plugin",
+      "paragraphs": [
+        "\u2022 Log in to the WordPress Dashboard\n\u2022 Go toPlugins \u2192 Add new\n\u2022 Search forChild Theme Configurator\n\u2022 Install it and Activate it\n\u2022 Go toTools \u2192  Child Themes\n\u2022 Ensure theCreate a new Child Themeoption is selected\n\u2022 Ensure thatDiviis selected as the Parent Theme\n\u2022 Click on theAnalyzebutton\n\u2022 Choose thePrimary Stylesheet (style.css)option\n\u2022 ChooseUse the WordPress style queueoption\n\u2022 Click on theCreate New Child Themebutton\n\u2022 Go toAppearance \u2192  Themesand activate the new Child Theme",
+        "Log in to the WordPress Dashboard",
+        "Go to Plugins \u2192 Add new",
+        "Search for Child Theme Configurator",
+        "Install it and Activate it",
+        "Go to Tools \u2192  Child Themes",
+        "Ensure the Create a new Child Theme option is selected",
+        "Ensure that Divi is selected as the Parent Theme",
+        "Click on the Analyze button",
+        "Choose the Primary Stylesheet (style.css) option",
+        "Choose Use the WordPress style queue option",
+        "Click on the Create New Child Theme button",
+        "Go to Appearance \u2192  Themes and activate the new Child Theme"
+      ],
+      "images": []
+    },
+    {
+      "heading": "Creating the Child Theme from scratch (advanced)",
+      "paragraphs": [
+        "Creating a child theme from scratch is easier than it sounds. We only need a code editor, such as VS Code , Sublime Text , or any other code editor.",
+        "\u2022 Create a new folder on your local computer and name itdivi-child\n\u2022 Inside thedivi-childfolder, create a new file calledstyle.cssand place the following CSS code:/*Theme Name: Divi Child ThemeTheme URI: http://yourwebsite.comDescription: Child Theme For DiviAuthor: Your NameAuthor URI: http://yourwebsite.comVersion: 1.0.0Template: Divi*/Theme Name:It's the child's theme name. It can be anything you want. Usually, I useDivi's Child ThemeTheme URI:Represents the child theme author's website URL.Description:a short description of your child's theme. You can include things like color scheme used, features added, etcAuthor:The person's name who has created the Child themeAuthor URI: This could be your business website, or it can be the actual URL of the website where the child theme is usedTemplate: It is the parent theme name folder. In this case, that would always beDivi- case sensitive.\n\u2022 Theme Name:It's the child's theme name. It can be anything you want. Usually, I useDivi's Child Theme\n\u2022 Theme URI:Represents the child theme author's website URL.\n\u2022 Description:a short description of your child's theme. You can include things like color scheme used, features added, etc\n\u2022 Author:The person's name who has created the Child theme\n\u2022 Author URI: This could be your business website, or it can be the actual URL of the website where the child theme is used\n\u2022 Template: It is the parent theme name folder. In this case, that would always beDivi- case sensitive.\n\u2022 In thedivi-childfolder, create a second file and name itfunctions.php\n\u2022 Place the following PHP code inside thefunctions.phpfile:<?php/*================================================#Load the Parent theme style.css file================================================*/function dt_enqueue_styles() {$parenthandle = 'divi-style';$theme = wp_get_theme();wp_enqueue_style( $parenthandle, get_template_directory_uri() . '/style.css',array(),  // if the parent theme code has a dependency, copy it to here$theme->parent()->get('Version'));wp_enqueue_style( 'child-style', get_stylesheet_uri(),array( $parenthandle ),$theme->get('Version'));}add_action( 'wp_enqueue_scripts', 'dt_enqueue_styles' );\n\u2022 Zip the entire folder, which should contain the two files:style.cssandfunctions.php\n\u2022 Go back to yourWordPress Dashboard \u2192 Appearance \u2192 Themes\n\u2022 Click on theAdd New Themebutton\n\u2022 Click on theUpload Themebutton\n\u2022 Choose the zip file from Step 5\n\u2022 Click on theInstall Nowbutton\n\u2022 Activate the new Child theme",
+        "Create a new folder on your local computer and name it divi-child",
+        "Inside the divi-child folder, create a new file called style.css and place the following CSS code:",
+        "```\n/* Theme Name: Divi Child Theme Theme URI: http://yourwebsite.com Description: Child Theme For Divi Author: Your Name Author URI: http://yourwebsite.com Version: 1.0.0 Template: Divi */\n```",
+        "\u2022 Theme Name:It's the child's theme name. It can be anything you want. Usually, I useDivi's Child Theme\n\u2022 Theme URI:Represents the child theme author's website URL.\n\u2022 Description:a short description of your child's theme. You can include things like color scheme used, features added, etc\n\u2022 Author:The person's name who has created the Child theme\n\u2022 Author URI: This could be your business website, or it can be the actual URL of the website where the child theme is used\n\u2022 Template: It is the parent theme name folder. In this case, that would always beDivi- case sensitive.",
+        "Theme Name: It's the child's theme name. It can be anything you want. Usually, I use Divi's Child Theme",
+        "Theme URI: Represents the child theme author's website URL.",
+        "Description: a short description of your child's theme. You can include things like color scheme used, features added, etc",
+        "Author: The person's name who has created the Child theme",
+        "Author URI : This could be your business website, or it can be the actual URL of the website where the child theme is used",
+        "Template : It is the parent theme name folder. In this case, that would always be Divi - case sensitive.",
+        "In the divi-child folder, create a second file and name it functions.php",
+        "Place the following PHP code inside the functions.php file:",
+        "```\n<?php /*================================================ #Load the Parent theme style.css file ================================================*/ function dt_enqueue_styles() { $parenthandle = 'divi-style'; $theme = wp_get_theme(); wp_enqueue_style( $parenthandle, get_template_directory_uri() . '/style.css', array(),  // if the parent theme code has a dependency, copy it to here $theme->parent()->get('Version') ); wp_enqueue_style( 'child-style', get_stylesheet_uri(), array( $parenthandle ), $theme->get('Version') ); } add_action( 'wp_enqueue_scripts', 'dt_enqueue_styles' );\n```",
+        "Zip the entire folder, which should contain the two files: style.css and functions.php",
+        "Go back to your WordPress Dashboard \u2192 Appearance \u2192 Themes",
+        "Click on the Add New Theme button",
+        "Click on the Upload Theme button",
+        "Choose the zip file from Step 5",
+        "Click on the Install Now button",
+        "Activate the new Child theme",
+        "Pro Tip : you can download a ready-to-use Divi Child theme from this GitHub page ."
+      ],
+      "images": []
+    },
+    {
+      "heading": "Related Articles",
+      "paragraphs": [
+        "\u2022 How to Translate the Divi Theme\n\u2022 How to Move the Portfolio Module From the Parent Theme to a Child Theme\n\u2022 How to Move the Filterable Portfolio Module From the Parent Theme to a Child Theme\n\u2022 How to Move the Blog Module to a Child Theme\n\u2022 How to Add Custom PHP Code in Divi"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 2
+}

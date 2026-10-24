@@ -1,0 +1,42 @@
+{
+  "article_id": "2179494-how-to-add-google-analytics-an",
+  "url": "https://help.elegantthemes.com/en/articles/2179494-how-to-add-google-analytics-and-other-tracking-codes-to-your-divi-website",
+  "title": "How to Add Google Analytics and Other Tracking Codes to Your Divi Website",
+  "category": "En >> Articles",
+  "content_hash": "8d78bb4cd629fcb77ce473f2a693bfb8e08ca2d2de6f8c6645e3afc7693e8fe8",
+  "raw_text": "How to Add Google Analytics and Other Tracking Codes to Your Divi Website\n## Overview\nTracking your website\u2019s performance is crucial for understanding visitor behavior, measuring the effectiveness of your content, and making informed decisions to improve your site.\nThis guide is perfect for website owners, marketers, and developers who want to enhance their site\u2019s analytics capabilities and gain deeper insights into their audience and performance.\nWhether you want to track traffic, conversions, or user interactions, our step-by-step instructions will show you how to integrate these tracking codes seamlessly.\n\u2022 Go toWordPress Dashboard\u2192Divi \u2192 Theme Option \u2192 Integration tab\n\u2022 For tracking scripts such as Google Analytics or Facebook Pixel, place the related scripts in theAdd code to the < body > (good for tracking codes such as Google Analytics)section\nGo to WordPress Dashboard \u2192 Divi \u2192 Theme Option \u2192 Integration tab\nFor tracking scripts such as Google Analytics or Facebook Pixel, place the related scripts in the Add code to the < body > (good for tracking codes such as Google Analytics ) section\nNote : Make sure that the Enable body code option is enabled:\n\n## Related Articles\n\u2022 How to Use the Divi Integration Tab\n\u2022 How to Add Google Analytics to Divi\n\u2022 How to Add Custom JavaScript Code in Divi\n\u2022 Using The Divi Theme Options\n\u2022 Divi 5 Theme Options",
+  "sections": [
+    {
+      "heading": "Overview",
+      "paragraphs": [
+        "Tracking your website\u2019s performance is crucial for understanding visitor behavior, measuring the effectiveness of your content, and making informed decisions to improve your site.",
+        "This guide is perfect for website owners, marketers, and developers who want to enhance their site\u2019s analytics capabilities and gain deeper insights into their audience and performance.",
+        "Whether you want to track traffic, conversions, or user interactions, our step-by-step instructions will show you how to integrate these tracking codes seamlessly.",
+        "\u2022 Go toWordPress Dashboard\u2192Divi \u2192 Theme Option \u2192 Integration tab\n\u2022 For tracking scripts such as Google Analytics or Facebook Pixel, place the related scripts in theAdd code to the < body > (good for tracking codes such as Google Analytics)section",
+        "Go to WordPress Dashboard \u2192 Divi \u2192 Theme Option \u2192 Integration tab",
+        "For tracking scripts such as Google Analytics or Facebook Pixel, place the related scripts in the Add code to the < body > (good for tracking codes such as Google Analytics ) section",
+        "Note : Make sure that the Enable body code option is enabled:"
+      ],
+      "images": [
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/69729329/9ac2d662abe3d80a69b340fd/image.png?expires=1792826100&signature=5ebc30eb0804e50d4ee7fad66eed2b26e2d9a53b66953ae4597cff34956be000&req=cikgFMB9n4gTWLcX3D%2B5hjR%2BtCDKwXCaQ1n6U269ThQxib8HBjytodk4E7HO%0AZQ%3D%3D%0A",
+          "alt": "Divi - Integration Tab",
+          "description": "Interface view for 'Overview'."
+        },
+        {
+          "url": "https://downloads.intercomcdn.com/i/o/798739751/1148288c2d3ecc5dc37c6d94/image.png?expires=1792826100&signature=02efb27a528deba5bb1efb06258e5afb3c6465ec56d44197a3149b59efc264c1&req=cykvEcp3moReFb4f3HP0gDZaZOcHGEZr71IY1QzV5yehGa1h24UaYmcbyefL%0A6cQYA7shP1QesOjG2Q%3D%3D%0A",
+          "alt": "Divi - Enable Body Code",
+          "description": "Interface view for 'Overview'."
+        }
+      ]
+    },
+    {
+      "heading": "Related Articles",
+      "paragraphs": [
+        "\u2022 How to Use the Divi Integration Tab\n\u2022 How to Add Google Analytics to Divi\n\u2022 How to Add Custom JavaScript Code in Divi\n\u2022 Using The Divi Theme Options\n\u2022 Divi 5 Theme Options"
+      ],
+      "images": []
+    }
+  ],
+  "screenshot_count": 2
+}
