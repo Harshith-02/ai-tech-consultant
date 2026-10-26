@@ -145,7 +145,7 @@ def test_multi_account_isolation_and_idor_protection():
     )
     headers_b = {"Authorization": f"Bearer {tenant_b_session['token']}"}
 
-    test_url = f"https://corp-{uuid.uuid4().hex[:8]}.example.com/sitemap.xml"
+    test_url = f"https://support.brilliantdirectories.com/sitemap-{uuid.uuid4().hex[:8]}.xml"
 
     # 1. Tenant A creates a sitemap source
     src_res_a = client.post("/api/kb/sitemap/sources", headers=headers_a, json={
@@ -228,7 +228,12 @@ def test_cron_secret_scheduler_authorization(monkeypatch):
 
 def test_rate_limiting_enforcement():
     """Phase 3: Rate Limiting on Sensitive Endpoints."""
+    import sqlite3
+    from app.config import settings
     RATE_LIMIT_BUCKETS.clear()
+    with sqlite3.connect(settings.DB_PATH) as conn:
+        conn.execute("DELETE FROM rate_limits WHERE key LIKE 'login_%'")
+        conn.commit()
 
     # Simulate 15 rapid login attempts
     for i in range(15):
@@ -246,10 +251,20 @@ def test_rate_limiting_enforcement():
     assert res_limited.status_code == 429, "16th login attempt must trigger HTTP 429 Rate Limit Exceeded"
     assert "rate limit" in res_limited.json()["detail"].lower()
     RATE_LIMIT_BUCKETS.clear()
+    with sqlite3.connect(settings.DB_PATH) as conn:
+        conn.execute("DELETE FROM rate_limits WHERE key LIKE 'login_%'")
+        conn.commit()
 
-def test_legacy_token_backward_compatibility():
-    """Phase 3: Legacy Bearer token compatibility for existing deployments."""
-    legacy_key = "lead-consultant-sec-token-2026"
-    res = client.get("/api/kb/sitemap/sources", headers={"Authorization": f"Bearer {legacy_key}"})
-    assert res.status_code == 200
-    assert "sources" in res.json()
+def test_legacy_token_backward_compatibility(monkeypatch):
+    """Hardcoded backdoor token must be rejected; configured API_SECRET_KEY must succeed."""
+    # 1. Hardcoded insecure token must be rejected
+    insecure_legacy_key = "lead-consultant-sec-token-2026"
+    res = client.get("/api/kb/sitemap/sources", headers={"Authorization": f"Bearer {insecure_legacy_key}"})
+    assert res.status_code == 403, "Hardcoded backdoor token must be rejected with HTTP 403"
+
+    # 2. Configured API_SECRET_KEY must be accepted
+    custom_key = "valid-custom-api-secret-key-32chars"
+    monkeypatch.setenv("API_SECRET_KEY", custom_key)
+    res_valid = client.get("/api/kb/sitemap/sources", headers={"Authorization": f"Bearer {custom_key}"})
+    assert res_valid.status_code == 200
+    assert "sources" in res_valid.json()
