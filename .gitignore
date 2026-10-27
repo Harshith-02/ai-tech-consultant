@@ -25,3 +25,8 @@ Thumbs.db
 
 *.db-shm
 *.db-wal
+
+# Submission artifacts and caches
+ai_tech_consultant_submission/
+*.phase4_backup
+*.backup

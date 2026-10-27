@@ -4,17 +4,40 @@ import json
 import uuid
 import re
 import hashlib
+import time
 from datetime import datetime, timezone, timedelta
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
+import bcrypt
 from app.config import settings
 from retrieval.embeddings import embedding_engine
+
+def hash_password(password: str) -> str:
+    """Hash plaintext password using bcrypt with standard work factor."""
+    if not password:
+        raise ValueError("Password cannot be empty")
+    salt = bcrypt.gensalt(rounds=12)
+    return bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
+
+def verify_password(password: str, hashed: str) -> bool:
+    """Verify password against securely stored bcrypt hash. Rejects legacy/invalid hashes."""
+    if not password or not hashed:
+        return False
+    if not (hashed.startswith("$2a$") or hashed.startswith("$2b$") or hashed.startswith("$2y$")):
+        return False
+    try:
+        return bcrypt.checkpw(password.encode("utf-8"), hashed.encode("utf-8"))
+    except Exception:
+        return False
+
 
 DOMAIN_STOP_WORDS = {
     "brilliant", "directories", "directory", "support", "solutions", "articles", "article",
     "how", "what", "where", "when", "does", "with", "from", "into", "your", "their",
     "this", "that", "tell", "show", "can", "please", "using", "work", "make", "take",
-    "help", "system", "override", "ignore", "previous", "instructions", "many", "much"
+    "help", "system", "override", "ignore", "previous", "instructions", "many", "much",
+    "the", "for", "and", "are", "about", "there", "which", "some", "any", "all", "out",
+    "our", "you", "they", "then", "them", "have", "has", "had", "been", "being"
 }
 
 class DatabaseRow:
@@ -116,32 +139,43 @@ class LibsqlConnectionAdapter:
 
 class KnowledgeVectorStore:
     def __init__(self, db_path: Optional[Path] = None):
+        self.is_custom_db_path = bool(db_path is not None)
         self.turso_url = os.environ.get("TURSO_DATABASE_URL") or os.environ.get("DATABASE_URL")
         self.turso_token = os.environ.get("TURSO_AUTH_TOKEN")
         env_db = os.environ.get("DB_PATH")
         self.db_path = str(db_path or env_db or settings.DB_PATH)
-        try:
-            self._init_db()
-        except Exception:
-            pass
 
-    def _get_connection(self):
         is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
-        if self.turso_url:
-            if not self.turso_token:
-                if is_prod:
-                    raise RuntimeError("TURSO_DATABASE_URL is set for production, but TURSO_AUTH_TOKEN is missing. Production requires valid authentication token.")
-            else:
-                try:
-                    import libsql_client
-                    client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
-                    if is_prod:
-                        client.execute("SELECT 1")
-                    return LibsqlConnectionAdapter(client)
-                except Exception as e:
-                    if is_prod:
-                        raise RuntimeError(f"Failed to connect to persistent Turso database: {str(e)}")
-        
+        if is_prod and not self.is_custom_db_path:
+            self._validate_production_config()
+            self._init_db()
+        else:
+            try:
+                self._init_db()
+            except Exception:
+                pass
+
+    def _validate_production_config(self):
+        if not self.turso_url:
+            raise RuntimeError(
+                "CRITICAL PRODUCTION CONFIGURATION ERROR: TURSO_DATABASE_URL is not set. "
+                "Production and Vercel environments require managed persistent database storage (Turso). "
+                "Silent fallback to ephemeral SQLite (/tmp) is strictly prohibited in production."
+            )
+        clean_url = str(self.turso_url).strip()
+        if not (clean_url.startswith("libsql://") or clean_url.startswith("https://") or clean_url.startswith("http://")):
+            masked = clean_url[:15] + "..." if len(clean_url) > 15 else clean_url
+            raise ValueError(
+                f"CRITICAL PRODUCTION CONFIGURATION ERROR: Invalid TURSO_DATABASE_URL scheme '{masked}'. "
+                "Production Turso URL must begin with libsql://, https://, or http://."
+            )
+        if not self.turso_token:
+            raise RuntimeError(
+                "CRITICAL PRODUCTION CONFIGURATION ERROR: TURSO_DATABASE_URL is configured for production, "
+                "but TURSO_AUTH_TOKEN is missing. Production requires a valid authentication token."
+            )
+
+    def _get_sqlite_connection(self):
         try:
             conn = sqlite3.connect(self.db_path, timeout=10.0)
         except Exception:
@@ -154,6 +188,34 @@ class KnowledgeVectorStore:
         except Exception:
             pass
         return conn
+
+    def _get_connection(self):
+        is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
+
+        # Tests using an explicit temporary SQLite database or custom path are preserved
+        if self.is_custom_db_path:
+            return self._get_sqlite_connection()
+
+        if is_prod:
+            self._validate_production_config()
+            try:
+                import libsql_client
+                client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
+                client.execute("SELECT 1")
+                return LibsqlConnectionAdapter(client)
+            except Exception as e:
+                raise RuntimeError(f"Failed to connect to persistent Turso database: {str(e)}")
+
+        # Development / local SQLite mode:
+        if self.turso_url and self.turso_token:
+            try:
+                import libsql_client
+                client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
+                return LibsqlConnectionAdapter(client)
+            except Exception:
+                pass
+
+        return self._get_sqlite_connection()
 
     def get_storage_status(self) -> Dict[str, Any]:
         has_turso = bool(self.turso_url and self.turso_token)
@@ -660,6 +722,39 @@ class KnowledgeVectorStore:
                 cursor.execute("INSERT OR REPLACE INTO schema_migrations (version, name, applied_at) VALUES ('003_auth_and_sessions', 'User accounts, credential records, and JWT token revocation table', ?)", (now_str,))
                 conn.commit()
 
+            # -----------------------------------------------------------------
+            # Migration 004: Secure Bcrypt Password Hashing & Legacy Migration
+            # -----------------------------------------------------------------
+            cursor.execute("SELECT COUNT(*) FROM schema_migrations WHERE version = '004_secure_password_hashing'")
+            if cursor.fetchone()[0] == 0:
+                cursor.execute("SELECT password_hash FROM users WHERE email = 'consultant@apex.io'")
+                user_row = cursor.fetchone()
+                if user_row and not (str(user_row[0]).startswith("$2a$") or str(user_row[0]).startswith("$2b$") or str(user_row[0]).startswith("$2y$")):
+                    default_pw = os.environ.get("INITIAL_ADMIN_PASSWORD", "consultant2026")
+                    secure_hash = hash_password(default_pw)
+                    cursor.execute("UPDATE users SET password_hash = ? WHERE email = 'consultant@apex.io'", (secure_hash,))
+
+                now_str = datetime.now(timezone.utc).isoformat()
+                cursor.execute("INSERT OR REPLACE INTO schema_migrations (version, name, applied_at) VALUES ('004_secure_password_hashing', 'Migrated legacy plaintext/mock password hashes to standard Bcrypt hashes', ?)", (now_str,))
+                conn.commit()
+
+            # -----------------------------------------------------------------
+            # Migration 005: Durable Serverless Rate Limiting Table
+            # -----------------------------------------------------------------
+            cursor.execute("SELECT COUNT(*) FROM schema_migrations WHERE version = '005_durable_rate_limits'")
+            if cursor.fetchone()[0] == 0:
+                cursor.execute("""
+                CREATE TABLE IF NOT EXISTS rate_limits (
+                    key TEXT NOT NULL,
+                    timestamp REAL NOT NULL
+                )
+                """)
+                cursor.execute("CREATE INDEX IF NOT EXISTS idx_rate_limits_key_time ON rate_limits (key, timestamp)")
+                now_str = datetime.now(timezone.utc).isoformat()
+                cursor.execute("INSERT OR REPLACE INTO schema_migrations (version, name, applied_at) VALUES ('005_durable_rate_limits', 'Durable rate limit timestamps table for multi-instance serverless resilience', ?)", (now_str,))
+                conn.commit()
+
+
             # Seed default documentation source for acc_default if empty
             cursor.execute("SELECT COUNT(*) FROM sitemap_sources WHERE account_id = 'acc_default'")
             if cursor.fetchone()[0] == 0:
@@ -732,6 +827,97 @@ class KnowledgeVectorStore:
             cursor.execute("INSERT OR REPLACE INTO user_accounts (id, name, created_at) VALUES (?, ?, ?)", (account_id, account_name, now_str))
             conn.commit()
             return {"id": account_id, "name": account_name, "created_at": now_str}
+
+    def verify_user_credentials(self, email: str, password: str) -> Tuple[bool, Optional[Dict[str, Any]], str]:
+        """
+        Verify submitted password against stored hash.
+        Returns: (is_valid, user_rec, status_code_or_reason)
+        """
+        if not password or not password.strip():
+            return False, None, "Password cannot be empty"
+        user = self.get_user_by_email(email)
+        if not user:
+            return False, None, "User not found"
+
+        stored_hash = user.get("password_hash", "")
+        if not (stored_hash.startswith("$2a$") or stored_hash.startswith("$2b$") or stored_hash.startswith("$2y$")):
+            return False, user, "legacy_hash"
+
+        if verify_password(password, stored_hash):
+            return True, user, "authenticated"
+        return False, user, "invalid_credentials"
+
+    def update_user_password(self, email: str, new_password: str) -> bool:
+        """Update a user's password with a secure bcrypt hash."""
+        if not new_password or not new_password.strip():
+            raise ValueError("New password cannot be empty")
+        secure_hash = hash_password(new_password)
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE users SET password_hash = ? WHERE email = ?", (secure_hash, email.strip().lower()))
+            conn.commit()
+            return cursor.rowcount > 0
+
+    def create_user(
+        self,
+        user_id: str,
+        account_id: str,
+        email: str,
+        password: str,
+        role: str = "consultant"
+    ) -> Dict[str, Any]:
+        """Create a new user record with securely hashed password."""
+        if not password or not password.strip():
+            raise ValueError("Password cannot be empty")
+        secure_hash = hash_password(password)
+        now_str = datetime.now(timezone.utc).isoformat()
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            INSERT INTO users (id, account_id, email, password_hash, role, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """, (user_id, account_id, email.strip().lower(), secure_hash, role, now_str))
+            conn.commit()
+            return {
+                "id": user_id,
+                "account_id": account_id,
+                "email": email.strip().lower(),
+                "role": role,
+                "created_at": now_str
+            }
+
+    def check_rate_limit(self, key: str, max_requests: int, window_seconds: int = 60) -> Optional[bool]:
+        """
+        Durable rate-limiting backed by SQLite/Turso.
+        Cleans up expired timestamps, counts events in the current window,
+        and records the new request timestamp if within quota.
+        Returns:
+            True if request is allowed, False if limit exceeded,
+            or None if the database operation fails (allowing safe fallback).
+        """
+        now = time.time()
+        cutoff = now - window_seconds
+        try:
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                CREATE TABLE IF NOT EXISTS rate_limits (
+                    key TEXT NOT NULL,
+                    timestamp REAL NOT NULL
+                )
+                """)
+                cursor.execute("CREATE INDEX IF NOT EXISTS idx_rate_limits_key_time ON rate_limits (key, timestamp)")
+                cursor.execute("DELETE FROM rate_limits WHERE key = ? AND timestamp < ?", (key, cutoff))
+                cursor.execute("SELECT COUNT(*) FROM rate_limits WHERE key = ? AND timestamp >= ?", (key, cutoff))
+                count = cursor.fetchone()[0]
+                if count >= max_requests:
+                    conn.commit()
+                    return False
+                cursor.execute("INSERT INTO rate_limits (key, timestamp) VALUES (?, ?)", (key, now))
+                conn.commit()
+                return True
+        except Exception:
+            return None
 
     # =========================================================================
     # ARTICLE INGESTION & VERSIONING
@@ -839,6 +1025,65 @@ class KnowledgeVectorStore:
 
             conn.commit()
             return True
+
+    def reembed_all_chunks(self, batch_size: int = 32, force: bool = False) -> Dict[str, Any]:
+        """
+        Resumable re-embedding process for all active documentation chunks
+        using the configured genuine pretrained semantic embedding model.
+        Preserves all article IDs, titles, sections, contents, URLs, screenshot metadata,
+        and version history completely intact.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+            SELECT id, article_title, section_heading, content, image_descriptions, embedding_json
+            FROM chunks
+            WHERE is_active = 1
+            ORDER BY id
+            """)
+            rows = cursor.fetchall()
+
+        total = len(rows)
+        reembedded = 0
+
+        for i in range(0, total, batch_size):
+            batch = rows[i:i + batch_size]
+            texts_to_embed = []
+            chunk_ids = []
+
+            for r in batch:
+                cid = r["id"]
+                title = r["article_title"] or ""
+                section = r["section_heading"] or ""
+                content = r["content"] or ""
+                img_desc_list = json.loads(r["image_descriptions"]) if r["image_descriptions"] else []
+                img_desc_text = " ".join(img_desc_list)
+                text_to_embed = f"{title}\n{section}\n{content}\n{img_desc_text}"
+
+                texts_to_embed.append(text_to_embed)
+                chunk_ids.append(cid)
+
+            new_embeddings = embedding_engine.get_embeddings(texts_to_embed, batch_size=batch_size)
+
+            with self._get_connection() as conn:
+                cursor = conn.cursor()
+                for cid, emb in zip(chunk_ids, new_embeddings):
+                    cursor.execute("""
+                    UPDATE chunks
+                    SET embedding_json = ?
+                    WHERE id = ?
+                    """, (json.dumps(emb), cid))
+                conn.commit()
+
+            reembedded += len(batch)
+
+        return {
+            "total_chunks": total,
+            "reembedded": reembedded,
+            "model_name": embedding_engine.model_name,
+            "is_pretrained": embedding_engine.is_pretrained,
+            "dimension": embedding_engine.dimension
+        }
 
     def archive_article(
         self,
@@ -1324,13 +1569,31 @@ class KnowledgeVectorStore:
 
             full_text = f"{c['article_title']} {c['section_heading']} {c['content']}".lower()
             keyword_hits = sum(1 for t in substantive_tokens if t in full_text)
+            hit_ratio = keyword_hits / len(substantive_tokens) if substantive_tokens else 0.0
 
-            min_required_hits = 1 if len(substantive_tokens) <= 2 else 2
-            if keyword_hits < min_required_hits:
-                continue
+            if embedding_engine.is_pretrained:
+                # Genuine semantic hybrid search:
+                # 1. High semantic similarity (handles paraphrases and synonyms without exact keyword match)
+                if sim >= 0.50:
+                    calibrated_relevance = (sim * 0.65) + (hit_ratio * 0.35)
+                # 2. Moderate semantic similarity with keyword confirmation
+                elif keyword_hits >= 1 and sim >= 0.25:
+                    calibrated_relevance = (sim * 0.50) + (hit_ratio * 0.50)
+                # 3. High keyword overlap with plausible semantic coherence
+                elif hit_ratio >= 0.60 and sim >= 0.20:
+                    calibrated_relevance = (sim * 0.40) + (hit_ratio * 0.60)
+                else:
+                    continue
 
-            hit_ratio = keyword_hits / len(substantive_tokens)
-            calibrated_relevance = (sim * 0.3) + (hit_ratio * 0.7)
+                # Grounding guard: If query has multiple specific concepts and <35% are found in evidence, penalize
+                if len(substantive_tokens) >= 4 and hit_ratio < 0.35:
+                    calibrated_relevance *= (hit_ratio / 0.5)
+            else:
+                # Fallback heuristic for deterministic hash projections
+                min_required_hits = 1 if len(substantive_tokens) <= 2 else 2
+                if keyword_hits < min_required_hits:
+                    continue
+                calibrated_relevance = (sim * 0.3) + (hit_ratio * 0.7)
 
             if calibrated_relevance >= settings.MIN_RELEVANCE_SCORE:
                 candidate_scores.append((cid, calibrated_relevance, c))

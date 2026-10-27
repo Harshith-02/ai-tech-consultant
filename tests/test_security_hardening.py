@@ -10,8 +10,9 @@ sys.path.insert(0, str(BASE_DIR))
 sys.path.insert(0, str(BASE_DIR / "task1-knowledge-brain"))
 
 from fastapi.testclient import TestClient
-from api.index import app, encrypt_secret, decrypt_secret, get_aes_gcm_cipher
+from api.index import app, encrypt_secret, decrypt_secret, get_aes_gcm_cipher, create_session_jwt
 from ingestion.crawler import is_safe_external_url, safe_http_get
+
 
 client = TestClient(app)
 
@@ -147,11 +148,13 @@ def test_authorization_rejection_on_invalid_credentials():
 def test_authorized_access_succeeds():
     """Verify that valid tokens return HTTP 200 OK and allow access."""
     isolated_client = TestClient(app)
-    valid_headers = {"Authorization": "Bearer lead-consultant-sec-token-2026"}
+    session = create_session_jwt(user_id="consultant_lead_01", account_id="acc_default")
+    valid_headers = {"Authorization": f"Bearer {session['token']}"}
 
     res = isolated_client.get("/api/kb/sitemap/sources", headers=valid_headers)
     assert res.status_code == 200, f"Expected 200 OK, got {res.status_code}: {res.text}"
     assert "sources" in res.json()
+
 
 def test_public_health_endpoints_remain_accessible():
     """Verify that public health endpoints do not require authentication."""

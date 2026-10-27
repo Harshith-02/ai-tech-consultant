@@ -1,5 +1,6 @@
 import re
 import os
+import sys
 from typing import Dict, Any, List, Optional
 from app.config import settings
 from app.models import QueryResponse, SourceCitation
@@ -117,9 +118,6 @@ class QAEngine:
 
         if self.api_key and self.api_key.startswith("sk-ant-") and len(self.api_key) > 20:
             try:
-                import anthropic
-                client = anthropic.Anthropic(api_key=self.api_key)
-                
                 context_blocks = []
                 for idx, c in enumerate(retrieved_chunks):
                     imgs_txt = "None"
@@ -149,13 +147,38 @@ class QAEngine:
                     "Synthesize a clear, helpful, grounded response. Cite the relevant article title and screenshot visual details where appropriate."
                 )
 
-                response = client.messages.create(
-                    model=settings.CLAUDE_MODEL_FAST,
-                    max_tokens=600,
-                    system=SYSTEM_PROMPT,
-                    messages=[{"role": "user", "content": user_message}]
-                )
-                answer_text = response.content[0].text.strip()
+                if "anthropic" in sys.modules:
+                    import anthropic
+                    client = anthropic.Anthropic(api_key=self.api_key)
+                    response = client.messages.create(
+                        model=settings.CLAUDE_MODEL_FAST,
+                        max_tokens=600,
+                        system=SYSTEM_PROMPT,
+                        messages=[{"role": "user", "content": user_message}]
+                    )
+                    answer_text = response.content[0].text.strip()
+                else:
+                    import httpx
+                    with httpx.Client(timeout=12.0) as client:
+                        resp = client.post(
+                            "https://api.anthropic.com/v1/messages",
+                            headers={
+                                "x-api-key": self.api_key,
+                                "anthropic-version": "2023-06-01",
+                                "content-type": "application/json"
+                            },
+                            json={
+                                "model": settings.CLAUDE_MODEL_FAST,
+                                "max_tokens": 600,
+                                "system": SYSTEM_PROMPT,
+                                "messages": [{"role": "user", "content": user_message}]
+                            }
+                        )
+                        if resp.status_code == 200:
+                            data = resp.json()
+                            answer_text = data.get("content", [{}])[0].get("text", "").strip()
+                        else:
+                            answer_text = self._extractive_grounding(trimmed, retrieved_chunks)
             except Exception:
                 answer_text = self._extractive_grounding(trimmed, retrieved_chunks)
         else:

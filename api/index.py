@@ -57,6 +57,10 @@ if str(T1_DIR) not in sys.path:
 
 # Import vector_store early for auth revocation & multi-tenancy
 from retrieval.vector_store import vector_store
+from ingestion.crawler import is_safe_external_url
+from retrieval.llm_provider import llm_client, sanitize_customer_reply, HIGH_RISK_CATEGORIES
+from app.config import settings
+
 
 # FastAPI Main Application
 app = FastAPI(
@@ -65,11 +69,44 @@ app = FastAPI(
     description="Unified API gateway hosting Task 1 (Knowledge Brain), Task 2 (Inbox Agent), and Task 3 (Meeting to Scope) for Cloud / Vercel Serverless deployment."
 )
 
+def is_production() -> bool:
+    return (
+        os.environ.get("VERCEL") == "1"
+        or os.environ.get("ENVIRONMENT", "").lower() in ("production", "prod")
+        or os.environ.get("NODE_ENV", "").lower() in ("production", "prod")
+        or os.environ.get("VERCEL_ENV", "").lower() in ("production", "prod")
+    )
+
+def get_allowed_origins() -> List[str]:
+    raw = os.environ.get("ALLOWED_ORIGINS") or os.environ.get("CORS_ORIGINS")
+    if raw:
+        return [o.strip() for o in raw.split(",") if o.strip()]
+    if is_production():
+        prod_origins = []
+        vercel_url = os.environ.get("VERCEL_URL")
+        if vercel_url:
+            prod_origins.append(f"https://{vercel_url}")
+        app_url = os.environ.get("APP_URL") or os.environ.get("FRONTEND_URL")
+        if app_url:
+            prod_origins.append(app_url)
+        return prod_origins if prod_origins else ["https://ai-tech-consultant.vercel.app"]
+    return [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+    ]
+
+_cors_origins = get_allowed_origins()
+_cors_allow_credentials = "*" not in _cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=_cors_origins,
+    allow_credentials=_cors_allow_credentials,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"],
     allow_headers=["*"],
 )
 
@@ -84,12 +121,58 @@ async def vercel_path_rewrite_middleware(request: Request, call_next):
 # ==============================================================================
 # AUTHENTICATION & ACCESS CONTROL (PHASE 2 & 3: JWT & MULTI-TENANCY)
 # ==============================================================================
-API_SECRET_KEY = os.environ.get("API_SECRET_KEY", "lead-consultant-sec-token-2026")
-JWT_SECRET = os.environ.get("JWT_SECRET") or os.environ.get("API_SECRET_KEY") or "lead-consultant-sec-token-2026-production-jwt-key"
+
+INSECURE_SECRET_DEFAULTS = {
+    "lead-consultant-sec-token-2026",
+    "lead-consultant-sec-token-2026-production-jwt-key",
+    "ai-tech-consultant-oauth-secret-key-2026",
+    "secret",
+    "change-me",
+    "default",
+    "admin"
+}
+
+def get_jwt_secret() -> str:
+    raw = os.environ.get("JWT_SECRET") or os.environ.get("API_SECRET_KEY")
+    if is_production():
+        if not raw or raw.strip() in INSECURE_SECRET_DEFAULTS:
+            raise RuntimeError(
+                "CRITICAL SECURITY CONFIGURATION ERROR: JWT_SECRET must be explicitly configured "
+                "with a cryptographically secure key in production environments. Refusing to start."
+            )
+        return raw.strip()
+
+    if raw and raw.strip() not in INSECURE_SECRET_DEFAULTS:
+        return raw.strip()
+
+    # Safe ephemeral key per runtime process - never hardcoded in source
+    if not hasattr(sys, "_ephemeral_jwt_secret"):
+        sys._ephemeral_jwt_secret = secrets.token_urlsafe(32)
+    return sys._ephemeral_jwt_secret
+
+def get_api_secret_key() -> str:
+    raw = os.environ.get("API_SECRET_KEY", "")
+    if is_production() and raw.strip() in INSECURE_SECRET_DEFAULTS:
+        raise RuntimeError("CRITICAL SECURITY ERROR: Insecure API_SECRET_KEY default detected in production.")
+    return raw.strip()
+
+
 SESSION_EXPIRY_HOURS = int(os.environ.get("SESSION_EXPIRY_HOURS", "24"))
 
 RATE_LIMIT_BUCKETS: Dict[str, List[float]] = {}
 def check_rate_limit(key: str, max_requests: int, window_seconds: int = 60) -> bool:
+    """
+    Multi-instance serverless rate limiting:
+    1. Attempts durable SQLite/Turso distributed bucket recording.
+    2. Falls back safely to process-local in-memory tracking if database write is locked/offline.
+    """
+    try:
+        durable_allowed = vector_store.check_rate_limit(key, max_requests, window_seconds)
+        if durable_allowed is not None:
+            return durable_allowed
+    except Exception:
+        pass
+
     now = time.time()
     timestamps = RATE_LIMIT_BUCKETS.setdefault(key, [])
     RATE_LIMIT_BUCKETS[key] = [t for t in timestamps if t > now - window_seconds]
@@ -116,7 +199,7 @@ def create_session_jwt(
     expires_in_seconds: Optional[int] = None
 ) -> Dict[str, Any]:
     now = int(time.time())
-    exp_seconds = expires_in_seconds or (SESSION_EXPIRY_HOURS * 3600)
+    exp_seconds = expires_in_seconds if expires_in_seconds is not None else (SESSION_EXPIRY_HOURS * 3600)
     exp = now + exp_seconds
     jti = str(uuid.uuid4())
     
@@ -132,10 +215,11 @@ def create_session_jwt(
         "jti": jti
     }
     
+    jwt_secret = get_jwt_secret()
     h_b64 = base64url_encode(json.dumps(header, separators=(',', ':')).encode('utf-8'))
     p_b64 = base64url_encode(json.dumps(payload, separators=(',', ':')).encode('utf-8'))
     signing_input = f"{h_b64}.{p_b64}".encode('ascii')
-    signature = hmac.new(JWT_SECRET.encode('utf-8'), signing_input, hashlib.sha256).digest()
+    signature = hmac.new(jwt_secret.encode('utf-8'), signing_input, hashlib.sha256).digest()
     sig_b64 = base64url_encode(signature)
     token = f"{h_b64}.{p_b64}.{sig_b64}"
     
@@ -160,7 +244,8 @@ def decode_and_verify_jwt(token: str) -> Dict[str, Any]:
         raise ValueError("Invalid JWT token format")
     h_b64, p_b64, sig_b64 = parts
     signing_input = f"{h_b64}.{p_b64}".encode('ascii')
-    expected_sig = hmac.new(JWT_SECRET.encode('utf-8'), signing_input, hashlib.sha256).digest()
+    jwt_secret = get_jwt_secret()
+    expected_sig = hmac.new(jwt_secret.encode('utf-8'), signing_input, hashlib.sha256).digest()
     try:
         actual_sig = base64url_decode(sig_b64)
     except Exception:
@@ -231,15 +316,16 @@ def require_auth(request: Request) -> UserIdentity:
                 raise HTTPException(status_code=401, detail=f"Authentication failed: {err_msg}")
             raise HTTPException(status_code=403, detail=f"Forbidden: {err_msg}")
 
-    # 2. Check legacy static token
-    expected_key = os.environ.get("API_SECRET_KEY", API_SECRET_KEY)
-    if token == expected_key or token.startswith("lead_consultant_"):
+    # 2. Check explicitly configured API key via constant-time comparison
+    expected_key = get_api_secret_key()
+    if expected_key and hmac.compare_digest(token, expected_key):
         return UserIdentity(account_id="acc_default")
 
     raise HTTPException(
         status_code=403,
         detail="Forbidden: Invalid authentication credentials or insufficient permissions."
     )
+
 
 # ==============================================================================
 # TASK 1: KNOWLEDGE BRAIN
@@ -400,14 +486,15 @@ async def kb_escalations(user: UserIdentity = Depends(require_auth)):
         return {"total": 0, "escalations": []}
 
 @kb_router.post("/escalations/resolve")
-async def kb_resolve_escalation(payload: EscalationResolveRequest):
+async def kb_resolve_escalation(payload: EscalationResolveRequest, user: UserIdentity = Depends(require_auth)):
     return {
         "status": "resolved",
         "escalation_id": payload.escalation_id,
-        "resolved_by": payload.resolved_by,
+        "resolved_by": payload.resolved_by or user.email,
         "resolution_notes": payload.resolution_notes,
         "resolved_at": datetime.now(timezone.utc).isoformat()
     }
+
 
 # Ingestion & Sitemap Endpoints
 crawler = None
@@ -440,7 +527,9 @@ class SitemapInspectPayload(BaseModel):
     url_pattern: Optional[str] = None
 
 @kb_router.post("/ingestion/inspect")
-async def kb_ingestion_inspect(payload: SitemapInspectPayload):
+async def kb_ingestion_inspect(payload: SitemapInspectPayload, user: UserIdentity = Depends(require_auth)):
+    if not is_safe_external_url(payload.sitemap_url):
+        raise HTTPException(status_code=400, detail="Blocked unsafe SSRF destination: sitemap_url must be a valid public HTTP/HTTPS target.")
     c = get_crawler()
     try:
         return c.inspect_sitemap(payload.sitemap_url, url_pattern=payload.url_pattern)
@@ -448,7 +537,11 @@ async def kb_ingestion_inspect(payload: SitemapInspectPayload):
         raise HTTPException(status_code=400, detail=f"Sitemap inspection failed: {str(e)}")
 
 @kb_router.post("/ingestion/run")
-async def kb_ingestion_run(payload: IngestionRunPayload):
+async def kb_ingestion_run(payload: IngestionRunPayload, user: UserIdentity = Depends(require_auth)):
+    if payload.sitemap_urls:
+        for u in payload.sitemap_urls:
+            if not is_safe_external_url(u):
+                raise HTTPException(status_code=400, detail=f"Blocked unsafe SSRF destination: {u}")
     c = get_crawler()
     if c.is_running:
         return {"status": "already_running", "message": "An ingestion crawl is already in progress."}
@@ -470,6 +563,7 @@ async def kb_ingestion_run(payload: IngestionRunPayload):
         "status": "started", 
         "message": f"Ingestion initiated for {count_sm} sitemap(s) (missing_retention={missing_p} checks, schedule={payload.update_frequency})."
     }
+
 
 @kb_router.get("/ingestion/status")
 async def kb_ingestion_status():
@@ -575,6 +669,8 @@ async def kb_list_sources(user: UserIdentity = Depends(require_auth)):
 async def kb_create_source(payload: CreateSitemapSourceReq, user: UserIdentity = Depends(require_auth)):
     if not check_rate_limit(f"sm_{user.account_id}", 20, 60):
         raise HTTPException(status_code=429, detail="Rate limit exceeded for creating sitemaps. Please wait a moment.")
+    if not is_safe_external_url(payload.root_sitemap_url):
+        raise HTTPException(status_code=400, detail="Blocked unsafe SSRF destination: root_sitemap_url must be a valid public HTTP/HTTPS target.")
     source = vector_store.create_sitemap_source(
         name=payload.name,
         root_url=payload.root_sitemap_url,
@@ -583,6 +679,7 @@ async def kb_create_source(payload: CreateSitemapSourceReq, user: UserIdentity =
         account_id=user.account_id
     )
     return {"status": "created", "source": source}
+
 
 @kb_router.delete("/sitemap/sources/{source_id}")
 async def kb_delete_source(source_id: str, purge_content: bool = False, user: UserIdentity = Depends(require_auth)):
@@ -987,33 +1084,59 @@ def classify_setting_label(email: Dict[str, Any]) -> str:
         return "billing"
     return "general_settings"
 
-def classify_email(email: Dict[str, Any]) -> Dict[str, Any]:
-    text = f"{email.get('subject', '')} {email.get('body', '')}".lower()
-    setting_label = classify_setting_label(email)
+async def classify_email(email: Dict[str, Any]) -> Dict[str, Any]:
+    subject = email.get("subject", "")
+    body = email.get("body", "")
 
-    urgency = "low"
-    if re.search(r"(urgent|emergency|outage|unacceptable|down|furious|immediately|lawsuit)", text):
-        urgency = "critical" if re.search(r"(outage|site down|down during|unacceptable)", text) else "high"
-    elif re.search(r"(error|fails|failing|broken|discrepancy|tomorrow|deadline|incorrect billing|ruining|timing out)", text):
-        urgency = "medium"
+    # Genuine LLM classification with calibrated confidence & uncertainty routing
+    llm_res = await llm_client.classify_inquiry(subject, body)
+    cat = llm_res.get("category", "how_to")
+
+    # Map to settingLabel for Brilliant Directories UI/Autonomy
+    setting_label = cat
+    if setting_label not in SETTING_CATEGORIES:
+        if cat in ("refund_cancellation", "billing"):
+            setting_label = "billing"
+        elif cat in ("troubleshooting", "how_to", "follow_up"):
+            setting_label = classify_setting_label(email)
+        else:
+            setting_label = "general_settings"
+
+    urgency = llm_res.get("urgency", "low")
+    risk = llm_res.get("risk", "low")
+    confidence = float(llm_res.get("confidence", 0.85))
+    reasoning = llm_res.get("reasoning", "")
+    requires_human = llm_res.get("requires_human_approval", True)
 
     cat_status = AUTONOMY_DATA.get(setting_label, {})
+    is_eligible = bool(cat_status.get("isEligibleForAutonomy", False))
+
+    # Conservative Autonomy Decision:
+    # Requires streak threshold, global auto-send enabled, low/moderate risk, high confidence,
+    # and strictly not in permanently guarded categories (billing, refund, complaint, project, quote)
     is_autonomous = bool(
-        cat_status.get("isEligibleForAutonomy", False) and 
-        AUTONOMY_CONFIG.get("auto_send_enabled", True)
+        is_eligible and
+        AUTONOMY_CONFIG.get("auto_send_enabled", True) and
+        not requires_human and
+        confidence >= 0.70 and
+        cat not in HIGH_RISK_CATEGORIES and
+        setting_label not in ("billing",)
     )
 
     return {
-        "category": setting_label,
+        "category": cat,
         "settingLabel": setting_label,
-        "settingName": SETTING_CATEGORIES.get(setting_label, {}).get("name", "General Settings"),
+        "settingName": SETTING_CATEGORIES.get(setting_label, {}).get("name", cat.replace("_", " ").title()),
         "icon": SETTING_CATEGORIES.get(setting_label, {}).get("icon", "⚙️"),
         "urgency": urgency,
-        "risk": "low",
+        "risk": risk,
         "requiresHumanApproval": not is_autonomous,
         "isAutonomous": is_autonomous,
-        "confidence": 0.94,
-        "reasoning": f"Classified to {SETTING_CATEGORIES.get(setting_label, {}).get('name')} based on prompt context and keyword matches."
+        "confidence": round(confidence, 2),
+        "uncertainty": llm_res.get("uncertainty", "low"),
+        "reasoning": reasoning,
+        "isFallback": llm_res.get("is_fallback", False),
+        "provider": llm_res.get("provider", "offline_fallback")
     }
 
 class ProcessEmailRequest(BaseModel):
@@ -1050,7 +1173,8 @@ async def inbox_health():
     }
 
 @inbox_router.get("/folders")
-async def inbox_folders_count():
+async def inbox_folders_count(user: UserIdentity = Depends(require_auth)):
+
     inbox_count = len([e for e in EMAILS_CACHE if e.get("id") not in TRASH_EMAIL_IDS and e.get("id") not in SPAM_EMAIL_IDS])
     starred_count = len(STARRED_EMAIL_IDS)
     drafts_count = len(DRAFT_EMAILS)
@@ -1125,7 +1249,8 @@ async def inbox_email_detail(email_id: str, user: UserIdentity = Depends(require
     return item
 
 @inbox_router.post("/process-email")
-async def inbox_process(payload: ProcessEmailRequest):
+async def inbox_process(payload: ProcessEmailRequest, user: UserIdentity = Depends(require_auth)):
+
     email = None
     if payload.emailId:
         email = next((e for e in EMAILS_CACHE if e.get("id") == payload.emailId), None)
@@ -1135,42 +1260,70 @@ async def inbox_process(payload: ProcessEmailRequest):
     if not email:
         raise HTTPException(status_code=400, detail="Valid emailId or rawEmail required")
 
-    classification = classify_email(email)
+    classification = await classify_email(email)
     q_text = f"{email.get('subject', '')}. {email.get('body', '')[:300]}"
     kb_res = await kb_query(QueryRequest(question=q_text, top_k=4))
 
     cat = classification["category"]
-    autonomy_status = AUTONOMY_DATA.get(cat, {
-        "category": cat,
+    setting_label = classification["settingLabel"]
+    autonomy_status = AUTONOMY_DATA.get(setting_label, {
+        "category": setting_label,
         "consecutiveUneditedCount": 0,
         "isEligibleForAutonomy": False,
         "threshold": AUTONOMY_CONFIG["threshold_x"]
     })
 
     # AI Learning Engine: Check if recent human feedback rules exist for this category
-    learned_feedback = FEEDBACK_RULES.get(cat, [])
-    learning_note = ""
+    learned_feedback = FEEDBACK_RULES.get(cat, []) or FEEDBACK_RULES.get(setting_label, [])
+    latest_rule = None
     if learned_feedback:
         latest_rule = learned_feedback[-1].get("rule") or learned_feedback[-1].get("rule_text") or ""
-        learning_note = f"\n\n*(💡 AI Learning Engine Applied: Adapted using your previous supervisor edit: \"{latest_rule[:100]}...\")*"
 
-    sender_first = (email.get("senderName") or "Valued Client").split()[0]
-    draft_body = f"Hi {sender_first},\n\nThank you for reaching out to support regarding {classification['settingName'].lower()}.\n\n"
-    if kb_res.get("status") == "answered":
-        draft_body += f"{kb_res.get('answer')}\n\n"
-    else:
-        draft_body += "I have received your request and routed it to our specialized engineering team for immediate review.\n\n"
+    passages = []
+    for s in kb_res.get("sources", []):
+        passages.append({
+            "title": s.get("title", ""),
+            "url": s.get("url", ""),
+            "content": s.get("snippet", ""),
+            "section": s.get("section", "")
+        })
+
+    sender_name = email.get("senderName") or "Valued Client"
     
-    draft_body += "Please let us know if you run into any questions as you set this up!\n\nBest regards,\nSupport Operations Team" + learning_note
+    # Generate genuine grounded reply via configured LLM provider
+    draft_result = await llm_client.generate_grounded_reply(
+        subject=email.get("subject", ""),
+        body=email.get("body", ""),
+        sender_name=sender_name,
+        retrieved_passages=passages,
+        category=cat,
+        feedback_rule=latest_rule
+    )
+
+    # CRITICAL LEAK FIX: Customer-visible reply contains ONLY the clean sanitized customer body.
+    # Learning notes, supervisor critiques, and internal instructions are NEVER appended to customer body!
+    draft_body = sanitize_customer_reply(draft_result["suggested_reply"])
 
     draft_id = f"DFT-{uuid.uuid4().hex[:8].upper()}"
     draft = {
         "id": draft_id,
         "suggestedReply": draft_body,
-        "summary": f"Draft response addressed to {email.get('senderName')}",
+        "summary": draft_result.get("summary") or f"Draft response addressed to {sender_name}",
         "requiresHumanReview": classification["requiresHumanApproval"],
         "isAutonomous": classification["isAutonomous"],
-        "citations": [s.get("url") for s in kb_res.get("sources", [])]
+        "citations": draft_result.get("citations") or [s.get("url") for s in kb_res.get("sources", [])],
+        "internalMetadata": {
+            "generationMethod": draft_result.get("internal_metadata", {}).get("generation_method", "llm_grounded"),
+            "modelUsed": draft_result.get("internal_metadata", {}).get("model", settings.TASK2_LLM_MODEL),
+            "provider": draft_result.get("internal_metadata", {}).get("provider", "offline_fallback"),
+            "isFallback": draft_result.get("internal_metadata", {}).get("is_fallback", False),
+            "learnedRuleApplied": latest_rule if latest_rule else None,
+            "classificationReasoning": classification["reasoning"],
+            "calibratedConfidence": classification["confidence"],
+            "uncertainty": classification.get("uncertainty", "low"),
+            "riskLevel": classification["risk"],
+            "insufficientEvidence": draft_result.get("insufficient_evidence", False)
+        }
     }
 
     # Upgrade B: Create genuine Gmail Draft if active account is connected
@@ -1210,7 +1363,7 @@ async def inbox_process(payload: ProcessEmailRequest):
         except Exception:
             pass
 
-    # If category is autonomous, automatically dispatch and record as sent!
+    # If category is autonomous, record simulated dispatch in local records
     if classification["isAutonomous"]:
         sent_record = {
             "id": email.get("id", f"EM-{uuid.uuid4().hex[:6]}"),
@@ -1220,25 +1373,16 @@ async def inbox_process(payload: ProcessEmailRequest):
             "body": draft_body,
             "receivedAt": datetime.now(timezone.utc).isoformat(),
             "sentAt": datetime.now(timezone.utc).isoformat(),
-            "settingLabel": cat,
+            "settingLabel": setting_label,
             "autoSent": True
         }
         if not any(s.get("id") == sent_record["id"] for s in SENT_EMAILS):
             SENT_EMAILS.insert(0, sent_record)
         draft["autoSent"] = True
 
-        if active_acc and draft.get("gmailDraftId"):
-            try:
-                token = await get_valid_access_token(active_acc)
-                if token:
-                    async with httpx.AsyncClient(timeout=10.0) as client:
-                        await client.post(
-                            "https://gmail.googleapis.com/gmail/v1/users/me/drafts/send",
-                            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-                            json={"id": draft["gmailDraftId"]}
-                        )
-            except Exception:
-                pass
+        # MANDATORY REMEDIATION SAFEGUARD:
+        # Autonomous real email sending is strictly disabled.
+        # Under no circumstances should background autonomous processing trigger live Gmail sending.
 
     DRAFT_EMAILS[email.get("id")] = draft
 
@@ -1277,42 +1421,61 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
     active_acc = vector_store.get_active_gmail_account(account_id=user.account_id)
     sent_gmail_msg_id = None
     found = next((e for e in EMAILS_CACHE if e.get("id") == payload.emailId), None)
+    is_real_gmail = bool(found.get("isRealGmail", False)) if found else False
 
     if active_acc:
-        try:
-            token = await get_valid_access_token(active_acc)
-            if token:
-                dft_obj = DRAFT_EMAILS.get(payload.emailId)
-                async with httpx.AsyncClient(timeout=10.0) as client:
-                    if dft_obj and dft_obj.get("gmailDraftId"):
-                        send_res = await client.post(
-                            "https://gmail.googleapis.com/gmail/v1/users/me/drafts/send",
-                            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-                            json={"id": dft_obj["gmailDraftId"]}
-                        )
-                        if send_res.status_code in [200, 201]:
-                            sent_gmail_msg_id = send_res.json().get("id")
-                        else:
-                            raise HTTPException(status_code=502, detail=f"Failed to dispatch draft in Gmail: HTTP {send_res.status_code}")
-                    elif found:
-                        msg = EmailMessage()
-                        msg["To"] = found.get("senderEmail", "client@example.com")
-                        msg["Subject"] = f"Re: {found.get('subject', 'Inquiry')}"
-                        msg.set_content(payload.finalSentReply or payload.generatedDraft)
-                        raw_bytes = base64.urlsafe_b64encode(msg.as_bytes()).decode('ascii')
-                        send_res = await client.post(
-                            "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
-                            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
-                            json={"raw": raw_bytes}
-                        )
-                        if send_res.status_code in [200, 201]:
-                            sent_gmail_msg_id = send_res.json().get("id")
-                        else:
-                            raise HTTPException(status_code=502, detail=f"Failed to send email via Gmail: HTTP {send_res.status_code}")
-        except HTTPException:
-            raise
-        except Exception as e:
-            raise HTTPException(status_code=502, detail=f"Error sending email through Gmail API: {str(e)}")
+        # Mandatory Send Guard #1: Mock/test emails must NEVER call real Gmail endpoints!
+        if not is_real_gmail:
+            vector_store.record_email_audit(
+                event_type="mock_send_simulated",
+                actor_type="user",
+                decision="simulated_send",
+                reason="Mock/test email send simulated safely without hitting Gmail API",
+                email_id=payload.emailId,
+                account_id=user.account_id
+            )
+        else:
+            # Mandatory Send Guard #2: Real Gmail sending requires explicit administrative enablement
+            if not settings.ENABLE_REAL_GMAIL_SEND:
+                raise HTTPException(
+                    status_code=403,
+                    detail="Real Gmail sending is disabled by safety policy (ENABLE_REAL_GMAIL_SEND=false). Real customer replies cannot be dispatched without explicit authorization."
+                )
+
+            try:
+                token = await get_valid_access_token(active_acc)
+                if token:
+                    dft_obj = DRAFT_EMAILS.get(payload.emailId)
+                    async with httpx.AsyncClient(timeout=10.0) as client:
+                        if dft_obj and dft_obj.get("gmailDraftId"):
+                            send_res = await client.post(
+                                "https://gmail.googleapis.com/gmail/v1/users/me/drafts/send",
+                                headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+                                json={"id": dft_obj["gmailDraftId"]}
+                            )
+                            if send_res.status_code in [200, 201]:
+                                sent_gmail_msg_id = send_res.json().get("id")
+                            else:
+                                raise HTTPException(status_code=502, detail=f"Failed to dispatch draft in Gmail: HTTP {send_res.status_code}")
+                        elif found:
+                            msg = EmailMessage()
+                            msg["To"] = found.get("senderEmail", "client@example.com")
+                            msg["Subject"] = f"Re: {found.get('subject', 'Inquiry')}"
+                            msg.set_content(payload.finalSentReply or payload.generatedDraft)
+                            raw_bytes = base64.urlsafe_b64encode(msg.as_bytes()).decode('ascii')
+                            send_res = await client.post(
+                                "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
+                                headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+                                json={"raw": raw_bytes}
+                            )
+                            if send_res.status_code in [200, 201]:
+                                sent_gmail_msg_id = send_res.json().get("id")
+                            else:
+                                raise HTTPException(status_code=502, detail=f"Failed to send email via Gmail: HTTP {send_res.status_code}")
+            except HTTPException:
+                raise
+            except Exception as e:
+                raise HTTPException(status_code=502, detail=f"Error sending email through Gmail API: {str(e)}")
 
     now_str = datetime.now(timezone.utc).isoformat()
 
@@ -1433,7 +1596,8 @@ async def inbox_review(payload: ReviewDraftRequest, user: UserIdentity = Depends
     }
 
 @inbox_router.post("/test-email")
-async def inbox_send_test_email(payload: TestEmailRequest):
+async def inbox_send_test_email(payload: TestEmailRequest, user: UserIdentity = Depends(require_auth)):
+
     """
     Simulates receiving an incoming email to test the live Gmail engine,
     automatic classification, draft creation, and auto-sending.
@@ -1462,7 +1626,8 @@ async def inbox_send_test_email(payload: TestEmailRequest):
     }
 
 @inbox_router.post("/toggle-star")
-async def inbox_toggle_star(payload: Dict[str, str]):
+async def inbox_toggle_star(payload: Dict[str, str], user: UserIdentity = Depends(require_auth)):
+
     email_id = payload.get("emailId")
     if not email_id:
         raise HTTPException(status_code=400, detail="emailId required")
@@ -1475,7 +1640,8 @@ async def inbox_toggle_star(payload: Dict[str, str]):
     return {"emailId": email_id, "isStarred": starred}
 
 @inbox_router.post("/trash")
-async def inbox_move_to_trash(payload: Dict[str, str]):
+async def inbox_move_to_trash(payload: Dict[str, str], user: UserIdentity = Depends(require_auth)):
+
     email_id = payload.get("emailId")
     if not email_id:
         raise HTTPException(status_code=400, detail="emailId required")
@@ -1546,7 +1712,8 @@ async def inbox_autonomy(user: UserIdentity = Depends(require_auth)):
 # GMAIL OAUTH, SYNCHRONIZATION & AUDIT ROUTES (UPGRADE B)
 # ==============================================================================
 @inbox_router.get("/oauth/authorize")
-async def inbox_oauth_authorize(request: Request):
+async def inbox_oauth_authorize(request: Request, user: UserIdentity = Depends(require_auth)):
+
     if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
         return {
             "configured": False,
@@ -1796,27 +1963,49 @@ async def auth_login(payload: LoginRequest, request: Request):
     if not check_rate_limit(f"login_{client_ip}", 15, 60):
         raise HTTPException(status_code=429, detail="Rate limit exceeded: Too many login attempts. Please wait 60 seconds.")
         
-    expected_key = os.environ.get("API_SECRET_KEY", API_SECRET_KEY)
-    email_val = (payload.email or payload.username or "consultant@apex.io").strip().lower()
+    email_val = (payload.email or payload.username or "").strip().lower()
+    password_val = payload.password or ""
     
-    # Authenticate via API key or password
-    is_valid = False
-    if payload.api_key == expected_key:
-        is_valid = True
-    elif payload.password in ("consultant2026", expected_key, "lead-consultant-sec-token-2026") or not payload.password:
-        is_valid = True
-    else:
-        user_rec = vector_store.get_user_by_email(email_val)
-        if user_rec:
-            is_valid = True
+    # 1. Check API key authentication if provided
+    expected_api_key = get_api_secret_key()
+    if payload.api_key:
+        if expected_api_key and hmac.compare_digest(payload.api_key.strip(), expected_api_key):
+            session = create_session_jwt(
+                user_id="consultant_lead_01",
+                account_id="acc_default",
+                email="consultant@apex.io",
+                role="Lead AI Consultant"
+            )
+            return {
+                "status": "authenticated",
+                "token": session["token"],
+                "token_type": "Bearer",
+                "expires_at": session["expires_at"],
+                "expires_in": session["expires_in"],
+                "jti": session["jti"],
+                "user": session["user"]
+            }
+        raise HTTPException(status_code=401, detail="Invalid API key credentials.")
 
-    if not is_valid:
-        raise HTTPException(status_code=401, detail="Invalid username or password")
+    # 2. Require non-empty email and password
+    if not email_val:
+        raise HTTPException(status_code=401, detail="Email or username is required.")
+    if not password_val or not password_val.strip():
+        raise HTTPException(status_code=401, detail="Password is required and cannot be empty.")
 
-    user_rec = vector_store.get_user_by_email(email_val)
-    user_id = user_rec["id"] if user_rec else "consultant_lead_01"
-    account_id = user_rec["account_id"] if user_rec else "acc_default"
-    role = user_rec["role"] if user_rec else "Lead AI Consultant"
+    # 3. Verify submitted password against securely stored bcrypt hash
+    is_valid, user_rec, reason = vector_store.verify_user_credentials(email_val, password_val)
+    if reason == "legacy_hash":
+        raise HTTPException(
+            status_code=401,
+            detail="Account credentials require security migration. Please reset password or contact administrator."
+        )
+    if not is_valid or not user_rec:
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
+
+    user_id = user_rec["id"]
+    account_id = user_rec.get("account_id", "acc_default")
+    role = user_rec.get("role", "Lead AI Consultant")
 
     session = create_session_jwt(
         user_id=user_id,
@@ -1824,6 +2013,7 @@ async def auth_login(payload: LoginRequest, request: Request):
         email=email_val,
         role=role
     )
+
     return {
         "status": "authenticated",
         "token": session["token"],
@@ -1893,7 +2083,7 @@ async def scope_health():
     }
 
 @scope_router.get("/transcripts")
-async def scope_transcripts():
+async def scope_transcripts(user: UserIdentity = Depends(require_auth)):
     files = list(TRANSCRIPTS_DIR.glob("*.txt")) if TRANSCRIPTS_DIR.exists() else []
     return {
         "total": len(files),
@@ -1901,7 +2091,7 @@ async def scope_transcripts():
     }
 
 @scope_router.post("/analyze-meeting")
-async def scope_analyze_meeting(payload: AnalyzeMeetingReq):
+async def scope_analyze_meeting(payload: AnalyzeMeetingReq, user: UserIdentity = Depends(require_auth)):
     text = payload.transcript_text
     if not text and payload.transcript_filename:
         target = TRANSCRIPTS_DIR / payload.transcript_filename
@@ -1941,7 +2131,7 @@ async def scope_analyze_meeting(payload: AnalyzeMeetingReq):
     return res
 
 @scope_router.post("/analyze-followup")
-async def scope_analyze_followup(payload: AnalyzeFollowupReq):
+async def scope_analyze_followup(payload: AnalyzeFollowupReq, user: UserIdentity = Depends(require_auth)):
     text = payload.followup_transcript_text
     if not text and payload.followup_filename:
         target = TRANSCRIPTS_DIR / payload.followup_filename
@@ -1989,7 +2179,7 @@ async def scope_analyze_followup(payload: AnalyzeFollowupReq):
     return res
 
 @scope_router.post("/approve-proposal")
-async def scope_approve(payload: ApproveProposalReq):
+async def scope_approve(payload: ApproveProposalReq, user: UserIdentity = Depends(require_auth)):
     prop = PROPOSAL_CACHE.get(payload.proposal_id)
     if not prop:
         return {

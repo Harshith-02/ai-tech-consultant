@@ -1,12 +1,99 @@
 import { CustomerEmail, DraftResponse, KnowledgeApiResponse } from "./types";
 import { ClassificationResult } from "./classifier";
 
+const LEAK_PATTERNS = [
+  /\*\(💡\s*AI Learning Engine Applied.*?\)\*/gi,
+  /AI Learning Engine Applied/gi,
+  /supervisor edit:/gi,
+  /FEEDBACK_RULES?/gi,
+  /internal reasoning:/gi,
+  /system prompt:/gi,
+  /requiresHumanApproval/gi
+];
+
+export function sanitizeCustomerReply(replyText: string): string {
+  if (!replyText) return "";
+  let sanitized = replyText;
+  for (const pat of LEAK_PATTERNS) {
+    sanitized = sanitized.replace(pat, "");
+  }
+  return sanitized.replace(/\n{3,}/g, "\n\n").trim();
+}
+
 export class ResponseDrafter {
+  /**
+   * Primary LLM reply generator if provider is configured, falling back to grounded extractive generation.
+   */
+  public async generateDraftWithLLM(
+    email: CustomerEmail,
+    classification: ClassificationResult,
+    knowledge: KnowledgeApiResponse,
+    isAutonomousEligible: boolean = false,
+    feedbackRule?: string
+  ): Promise<DraftResponse> {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey || process.env.NODE_ENV === "test") {
+      return this.generateDraft(email, classification, knowledge, isAutonomousEligible, feedbackRule);
+    }
+
+    try {
+      const topDocs = (knowledge.sources || []).map(s => `Title: ${s.title}\nURL: ${s.url}\nContent: ${s.snippet}`).join("\n\n");
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+          model: process.env.TASK2_LLM_MODEL || "claude-3-5-haiku-20241022",
+          max_tokens: 500,
+          system: "You are a customer support agent. Answer strictly using facts in the provided documentation. Never fabricate policies. Do not include internal feedback rules, supervisor notes, or internal reasoning in the reply body.",
+          messages: [{
+            role: "user",
+            content: `Customer: ${email.senderName}\nSubject: ${email.subject}\nInquiry: ${email.body}\n\nEvidence Documents:\n${topDocs}`
+          }]
+        })
+      });
+
+      if (res.ok) {
+        const data: any = await res.json();
+        const rawText = data?.content?.[0]?.text || "";
+        const cleanReply = sanitizeCustomerReply(rawText);
+        if (cleanReply) {
+          const canSendAutonomously = isAutonomousEligible && !classification.requiresHumanApproval;
+          return {
+            emailId: email.id,
+            category: classification.category,
+            urgency: classification.urgency,
+            risk: classification.risk,
+            summary: `LLM grounded draft response for ${email.senderName}`,
+            suggestedReply: cleanReply,
+            citations: knowledge.sources,
+            requiresHumanApproval: !canSendAutonomously,
+            recommendedNextAction: canSendAutonomously ? "Autonomous send eligible" : "Review and approve draft reply",
+            autonomousEligible: canSendAutonomously,
+            confidence: knowledge.confidence > 0 ? knowledge.confidence : 0.88
+          };
+        }
+      }
+    } catch {
+      // Clean fallback on provider failure
+    }
+
+    return this.generateDraft(email, classification, knowledge, isAutonomousEligible, feedbackRule);
+  }
+
+  /**
+   * Deterministic grounded response drafter.
+   * NEVER appends internal learning notes or supervisor feedback to suggestedReply.
+   */
   public generateDraft(
     email: CustomerEmail,
     classification: ClassificationResult,
     knowledge: KnowledgeApiResponse,
-    isAutonomousEligible: boolean = false
+    isAutonomousEligible: boolean = false,
+    _feedbackRule?: string
   ): DraftResponse {
     const sender = email.senderName || "Valued Customer";
     const firstName = sender.split(" ")[0];
@@ -124,6 +211,7 @@ export class ResponseDrafter {
     // Determine autonomy eligibility
     // Must be unedited-category eligible, AND must NOT have financial, commercial, or reputation risk!
     const canSendAutonomously = isAutonomousEligible && !classification.requiresHumanApproval;
+    const cleanReply = sanitizeCustomerReply(suggestedReply);
 
     return {
       emailId: email.id,
@@ -131,7 +219,7 @@ export class ResponseDrafter {
       urgency: classification.urgency,
       risk: classification.risk,
       summary,
-      suggestedReply,
+      suggestedReply: cleanReply,
       citations: knowledge.sources,
       requiresHumanApproval: !canSendAutonomously,
       recommendedNextAction,

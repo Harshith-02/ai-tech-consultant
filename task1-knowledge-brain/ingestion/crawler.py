@@ -17,7 +17,8 @@ from retrieval.vector_store import vector_store
 def is_safe_external_url(url: str) -> bool:
     """
     SSRF Defense: Validates that a target URL is an HTTP/HTTPS URL
-    and does not point to localhost, private IP blocks, or cloud metadata.
+    and does not point to localhost, private IP blocks, link-local,
+    IPv6 loopback/link-local, or cloud metadata endpoints.
     """
     try:
         parsed = urlparse(url)
@@ -26,18 +27,76 @@ def is_safe_external_url(url: str) -> bool:
         hostname = parsed.hostname
         if not hostname:
             return False
-        lower_host = hostname.lower()
-        if lower_host in ("localhost", "127.0.0.1", "0.0.0.0", "::1", "metadata.google.internal", "169.254.169.254", "instance-data"):
+        lower_host = hostname.strip().lower().strip("[]")
+
+        # Block known metadata & loopback hostnames
+        blocked_hosts = {
+            "localhost", "127.0.0.1", "0.0.0.0", "::1", "::",
+            "metadata.google.internal", "169.254.169.254", "instance-data",
+            "metadata", "fd00:ec2::254", "100.100.100.200"
+        }
+        if lower_host in blocked_hosts or lower_host.endswith(".internal") or lower_host.endswith(".local"):
             return False
+
         if parsed.port and parsed.port not in (80, 443, 8080):
             return False
-        ip_str = socket.gethostbyname(hostname)
-        ip = ipaddress.ip_address(ip_str)
-        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
+
+        # Check if hostname itself is directly an IP literal
+        try:
+            direct_ip = ipaddress.ip_address(lower_host)
+            if (
+                direct_ip.is_private or direct_ip.is_loopback or direct_ip.is_link_local
+                or direct_ip.is_reserved or direct_ip.is_multicast or direct_ip.is_unspecified
+            ):
+                return False
+            if hasattr(direct_ip, "ipv4_mapped") and direct_ip.ipv4_mapped:
+                if (
+                    direct_ip.ipv4_mapped.is_private or direct_ip.ipv4_mapped.is_loopback
+                    or direct_ip.ipv4_mapped.is_link_local or direct_ip.ipv4_mapped.is_reserved
+                ):
+                    return False
+        except ValueError:
+            pass
+
+        # Resolve all IPv4 and IPv6 addresses for hostname
+        addr_infos = socket.getaddrinfo(lower_host, None)
+        if not addr_infos:
             return False
+
+        for family, _, _, _, sockaddr in addr_infos:
+            ip_str = sockaddr[0]
+            ip = ipaddress.ip_address(ip_str)
+
+            # Handle NAT64 translated public addresses (RFC 6052)
+            if ip.version == 6 and ip in ipaddress.ip_network("64:ff9b::/96"):
+                embedded = ipaddress.ip_address(ip.packed[-4:])
+                if (
+                    embedded.is_private or embedded.is_loopback or embedded.is_link_local
+                    or embedded.is_reserved or embedded.is_multicast or embedded.is_unspecified
+                ):
+                    return False
+                continue
+
+            if (
+                ip.is_private or ip.is_loopback or ip.is_link_local
+                or ip.is_reserved or ip.is_multicast or ip.is_unspecified
+            ):
+                return False
+            if hasattr(ip, "ipv4_mapped") and ip.ipv4_mapped:
+                if (
+                    ip.ipv4_mapped.is_private or ip.ipv4_mapped.is_loopback
+                    or ip.ipv4_mapped.is_link_local or ip.ipv4_mapped.is_reserved
+                ):
+                    return False
+            # Check carrier-grade NAT / shared space (RFC 6598: 100.64.0.0/10)
+            if ip.version == 4 and ip in ipaddress.ip_network("100.64.0.0/10"):
+                return False
+
         return True
     except Exception:
         return False
+
+
 
 class SafeFetchResult:
     def __init__(

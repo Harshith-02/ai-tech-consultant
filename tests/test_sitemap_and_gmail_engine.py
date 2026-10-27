@@ -8,10 +8,11 @@ sys.path.insert(0, str(BASE_DIR))
 sys.path.insert(0, str(BASE_DIR / "task1-knowledge-brain"))
 
 from fastapi.testclient import TestClient
-from api.index import app, AUTONOMY_CONFIG, AUTONOMY_DATA, FEEDBACK_RULES, SENT_EMAILS
+from api.index import app, AUTONOMY_CONFIG, AUTONOMY_DATA, FEEDBACK_RULES, SENT_EMAILS, create_session_jwt
 
 client = TestClient(app)
-client.headers.update({"Authorization": "Bearer lead-consultant-sec-token-2026"})
+session = create_session_jwt(user_id="consultant_lead_01", account_id="acc_default")
+client.headers.update({"Authorization": f"Bearer {session['token']}"})
 
 def test_sitemap_inspection():
     print("\n--- Test 1: Sitemap Inspection & ETA Calculation ---")
@@ -119,16 +120,25 @@ def test_gmail_engine_and_autonomy_learning():
     assert st2["consecutiveUneditedCount"] == 0
     assert len(rev2.json()["learnedRules"]) >= 1
 
-    # Step D: Next email in this category should include the AI Learning note!
+    # Step D: Next email in this category should track the learned rule in internalMetadata, NEVER leaking into suggestedReply!
     em3_res = client.post("/inbox/test-email", json={
         "senderName": "Fiona Gallagher",
         "senderEmail": "fiona@localgrowth.com",
         "subject": "Multilevel category search filter",
         "body": "How do sub-level category search filters work?"
     })
-    draft3 = em3_res.json()["processing"]["draft"]["suggestedReply"]
-    print("Draft 3 incorporates learned rules:", "AI Learning Engine Applied" in draft3)
-    assert "AI Learning Engine Applied" in draft3 or "Adapted using your previous supervisor edit" in draft3
+    proc3 = em3_res.json()["processing"]
+    draft3_obj = proc3["draft"]
+    draft3_reply = draft3_obj["suggestedReply"]
+    internal_meta = draft3_obj.get("internalMetadata", {})
+
+    # Verify learning engine rule is tracked in internal metadata
+    assert proc3.get("learnedRulesCount", 0) >= 1
+    assert internal_meta.get("learnedRuleApplied") is not None
+    # Verify zero leakage into customer-visible suggestedReply
+    assert "AI Learning Engine Applied" not in draft3_reply
+    assert "Adapted using your previous supervisor edit" not in draft3_reply
+    draft3 = draft3_reply
 
     # Step E: Approve unedited 3 times consecutively to unlock AUTONOMY!
     em3_id = em3_res.json()["email"]["id"]

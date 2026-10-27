@@ -57,9 +57,8 @@ def test_production_missing_turso_token_raises():
         "TURSO_DATABASE_URL": "libsql://test-db.turso.io",
         "TURSO_AUTH_TOKEN": ""
     }, clear=False):
-        kvs = KnowledgeVectorStore()
         with pytest.raises(RuntimeError, match="TURSO_AUTH_TOKEN is missing"):
-            kvs._get_connection()
+            KnowledgeVectorStore()
 
 def test_production_no_silent_fallback_on_connection_error():
     """Verify that when Turso connection fails in production, it fails safely with RuntimeError and does NOT silently fall back to /tmp."""
@@ -68,9 +67,8 @@ def test_production_no_silent_fallback_on_connection_error():
         "TURSO_DATABASE_URL": "libsql://invalid-turso-endpoint.turso.io",
         "TURSO_AUTH_TOKEN": "invalid_token_xyz"
     }, clear=False):
-        kvs = KnowledgeVectorStore()
         with pytest.raises(RuntimeError, match="Failed to connect to persistent Turso database"):
-            kvs._get_connection()
+            KnowledgeVectorStore()
 
 def test_storage_status_diagnostics_sanitizes_credentials():
     """Verify GET storage status reports accurate engine and masks credentials."""
