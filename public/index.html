@@ -667,6 +667,22 @@
         <button class="app-modal-close" onclick="closeAccountSettingsModal()" title="Close">✕</button>
       </div>
       <div class="app-modal-body">
+        <!-- Consultant Session & Authentication Card -->
+        <div class="form-group" style="background:rgba(59,130,246,0.08);padding:14px;border-radius:var(--radius-md);border:1px solid rgba(59,130,246,0.25);">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:1.6rem;">🔐</span>
+              <div>
+                <label class="form-label" style="color:#fff;font-size:0.9rem;margin-bottom:2px;">Consultant Session & Authentication</label>
+                <div class="form-hint" id="auth-session-status">Status: Checking session...</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-primary btn-sm" id="btn-auth-toggle-session" onclick="openLoginModal()">🔑 Sign In</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Gmail OAuth 2.0 Account Card -->
         <div class="form-group" style="background:rgba(234,67,53,0.06);padding:14px;border-radius:var(--radius-md);border:1px solid rgba(234,67,53,0.25);">
           <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -804,6 +820,48 @@ Fiona</textarea>
         <button class="btn btn-primary btn-sm" onclick="sendComposedEmail()">Send</button>
         <span style="cursor:pointer;color:var(--text-muted);font-size:0.8rem;" onclick="closeGmailComposeModal()">🗑️ Discard</span>
       </div>
+    </div>
+  <!-- CONSULTANT LOGIN / SESSION AUTHENTICATION MODAL -->
+  <div class="app-modal-backdrop" id="modal-login">
+    <div class="app-modal-dialog" style="max-width:480px;">
+      <div class="app-modal-header">
+        <div>
+          <h3>🔐 Consultant Authentication</h3>
+          <span class="panel-subtitle">Sign in to manage sitemaps, inspect URLs, and trigger crawling</span>
+        </div>
+        <button class="app-modal-close" onclick="closeLoginModal()" title="Close">✕</button>
+      </div>
+      <form onsubmit="submitConsultantLogin(event)">
+        <div class="app-modal-body">
+          <div id="login-error-msg" style="display:none;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);color:#f87171;padding:8px 12px;border-radius:6px;font-size:0.8rem;margin-bottom:12px;"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-email">Consultant Email or Username</label>
+            <input type="text" class="form-input" id="login-email" value="consultant@apex.io" placeholder="consultant@apex.io" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" class="form-input" id="login-password" placeholder="Enter password (e.g. consultant2026)" autocomplete="current-password" />
+            <div class="form-hint">Default consultant credentials: consultant@apex.io / consultant2026</div>
+          </div>
+
+          <div style="display:flex;align-items:center;margin:12px 0;">
+            <div style="flex:1;height:1px;background:var(--border-color);"></div>
+            <span style="padding:0 8px;font-size:0.75rem;color:var(--text-muted);">OR API KEY</span>
+            <div style="flex:1;height:1px;background:var(--border-color);"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-apikey">Direct API Key or Session Bearer Token (Optional)</label>
+            <input type="password" class="form-input" id="login-apikey" placeholder="Paste API Key or Session JWT" />
+          </div>
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeLoginModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm" id="btn-do-login">Sign In & Establish Session</button>
+        </div>
+      </form>
     </div>
   </div>
 

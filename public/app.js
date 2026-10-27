@@ -4,28 +4,257 @@ const API_KB = isLocalMultiPort ? "http://127.0.0.1:8000" : "/api/kb";
 const API_INBOX = isLocalMultiPort ? "http://127.0.0.1:3001" : "/api/inbox";
 const API_SCOPE = isLocalMultiPort ? "http://127.0.0.1:8002" : "/api/scope";
 
-// Global Authenticated Fetch Interceptor
-const getAuthToken = () => localStorage.getItem("auth_token") || "";
+// Global Authenticated Fetch Interceptor & Session Storage
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return "";
+}
+
+function getAuthToken() {
+  return (
+    localStorage.getItem("auth_token") ||
+    localStorage.getItem("token") ||
+    localStorage.getItem("session_token") ||
+    sessionStorage.getItem("auth_token") ||
+    sessionStorage.getItem("token") ||
+    sessionStorage.getItem("session_token") ||
+    getCookie("session_token") ||
+    ""
+  );
+}
+
+function setAuthToken(token, user) {
+  if (token) {
+    localStorage.setItem("auth_token", token);
+    sessionStorage.setItem("auth_token", token);
+  }
+  if (user) {
+    localStorage.setItem("auth_user", JSON.stringify(user));
+  }
+  updateAuthUI(true, user);
+}
+
+function clearAuthToken() {
+  localStorage.removeItem("auth_token");
+  localStorage.removeItem("token");
+  localStorage.removeItem("session_token");
+  localStorage.removeItem("auth_user");
+  sessionStorage.removeItem("auth_token");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("session_token");
+  updateAuthUI(false, null);
+}
+
+function getAuthHeaders(customHeaders = {}) {
+  const headers = { ...customHeaders };
+  const currentToken = getAuthToken();
+  if (currentToken) {
+    if (!headers["Authorization"] && !headers["authorization"]) {
+      headers["Authorization"] = `Bearer ${currentToken}`;
+    }
+    if (!headers["X-Session-Token"] && !headers["x-session-token"]) {
+      headers["X-Session-Token"] = currentToken;
+    }
+  }
+  return headers;
+}
+
 const _origFetch = window.fetch;
 window.fetch = async function(input, init) {
   init = init || {};
   init.headers = init.headers || {};
+  if (!init.credentials) {
+    init.credentials = "same-origin";
+  }
   const currentToken = getAuthToken();
   if (currentToken) {
     if (init.headers instanceof Headers) {
       if (!init.headers.has("Authorization")) {
         init.headers.set("Authorization", `Bearer ${currentToken}`);
       }
+      if (!init.headers.has("X-Session-Token")) {
+        init.headers.set("X-Session-Token", currentToken);
+      }
     } else if (Array.isArray(init.headers)) {
       init.headers.push(["Authorization", `Bearer ${currentToken}`]);
+      init.headers.push(["X-Session-Token", currentToken]);
     } else {
       if (!init.headers["Authorization"]) {
         init.headers["Authorization"] = `Bearer ${currentToken}`;
+      }
+      if (!init.headers["X-Session-Token"]) {
+        init.headers["X-Session-Token"] = currentToken;
       }
     }
   }
   return _origFetch(input, init);
 };
+
+// Consultant Session & Authentication UI State
+async function checkAuthSession() {
+  // Check URL query parameters for token (e.g. ?auth_token=... or ?token=...)
+  const params = new URLSearchParams(window.location.search);
+  const urlToken = params.get("auth_token") || params.get("token");
+  if (urlToken) {
+    setAuthToken(urlToken);
+    params.delete("auth_token");
+    params.delete("token");
+    const cleanUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : "") + window.location.hash;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }
+
+  const token = getAuthToken();
+  if (!token) {
+    updateAuthUI(false, null);
+    return false;
+  }
+
+  try {
+    const res = await _origFetch("/api/auth/me", {
+      headers: getAuthHeaders(),
+      credentials: "same-origin"
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.authenticated && data.user) {
+        updateAuthUI(true, data.user);
+        return true;
+      }
+    }
+    clearAuthToken();
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+function updateAuthUI(isAuthenticated, user) {
+  const userNameText = document.querySelector(".user-name-text");
+  const userRoleBadge = document.querySelector(".user-role-badge");
+  const modalAuthStatus = document.getElementById("auth-session-status");
+  const modalAuthBtn = document.getElementById("btn-auth-toggle-session");
+
+  if (isAuthenticated && user) {
+    if (userNameText) userNameText.textContent = user.email ? user.email.split("@")[0] : "Consultant";
+    if (userRoleBadge) userRoleBadge.innerHTML = `<span style="color:var(--accent-emerald);">●</span> ${escapeHtml(user.role || 'Lead Consultant')} ▾`;
+    if (modalAuthStatus) {
+      modalAuthStatus.innerHTML = `<span style="color:var(--accent-emerald);">✓ Signed In</span> as <strong>${escapeHtml(user.email || 'consultant@apex.io')}</strong> (${escapeHtml(user.role || 'Lead AI Consultant')})`;
+    }
+    if (modalAuthBtn) {
+      modalAuthBtn.textContent = "Sign Out";
+      modalAuthBtn.onclick = logoutConsultantSession;
+      modalAuthBtn.className = "btn btn-secondary btn-sm";
+    }
+  } else {
+    if (userNameText) userNameText.textContent = "Sign In";
+    if (userRoleBadge) userRoleBadge.innerHTML = `<span style="color:#fb7185;">●</span> Not Signed In ▾`;
+    if (modalAuthStatus) {
+      modalAuthStatus.innerHTML = `<span style="color:#fb7185;">⚠️ Not Signed In</span> (Admin actions require consultant session)`;
+    }
+    if (modalAuthBtn) {
+      modalAuthBtn.textContent = "🔑 Sign In";
+      modalAuthBtn.onclick = openLoginModal;
+      modalAuthBtn.className = "btn btn-primary btn-sm";
+    }
+  }
+}
+
+function openLoginModal() {
+  const modal = document.getElementById("modal-login");
+  if (modal) {
+    modal.classList.add("open");
+    const emailInput = document.getElementById("login-email");
+    if (emailInput && !emailInput.value) emailInput.value = "consultant@apex.io";
+    const statusEl = document.getElementById("login-error-msg");
+    if (statusEl) statusEl.style.display = "none";
+  }
+}
+
+function closeLoginModal() {
+  const modal = document.getElementById("modal-login");
+  if (modal) modal.classList.remove("open");
+}
+
+async function submitConsultantLogin(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const emailInput = document.getElementById("login-email");
+  const passInput = document.getElementById("login-password");
+  const apiKeyInput = document.getElementById("login-apikey");
+  const errorMsg = document.getElementById("login-error-msg");
+  const btn = document.getElementById("btn-do-login");
+
+  const email = emailInput ? emailInput.value.trim() : "";
+  const password = passInput ? passInput.value : "";
+  const apiKey = apiKeyInput ? apiKeyInput.value.trim() : "";
+
+  if (!apiKey && (!email || !password)) {
+    if (errorMsg) {
+      errorMsg.textContent = "Please enter email and password, or provide an API Key.";
+      errorMsg.style.display = "block";
+    }
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Signing In...";
+  }
+  if (errorMsg) errorMsg.style.display = "none";
+
+  try {
+    const payload = apiKey ? { api_key: apiKey } : { username: email, password: password };
+    const res = await _origFetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.detail || "Authentication failed.");
+    }
+
+    setAuthToken(data.token, data.user);
+    closeLoginModal();
+
+    // Reload protected data
+    loadConfiguredSitemaps();
+    loadInboxEmails();
+
+    // If sitemaps modal is open with a URL, auto-trigger inspect!
+    const sitemapsModal = document.getElementById("modal-sitemaps");
+    const urlInput = document.getElementById("input-sitemap-urls");
+    if (sitemapsModal && sitemapsModal.classList.contains("open") && urlInput && urlInput.value.trim()) {
+      inspectEnteredSitemap();
+    }
+  } catch (err) {
+    if (errorMsg) {
+      errorMsg.textContent = err.message;
+      errorMsg.style.display = "block";
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Sign In & Establish Session";
+    }
+  }
+}
+
+async function logoutConsultantSession() {
+  try {
+    await _origFetch("/api/auth/logout", {
+      method: "POST",
+      headers: getAuthHeaders(),
+      credentials: "same-origin"
+    });
+  } catch (_) {}
+  clearAuthToken();
+  checkAuthSession();
+}
+
 
 
 let currentSelectedEmail = null;
@@ -707,28 +936,65 @@ async function inspectEnteredSitemap() {
   const sitemapUrl = urlInput ? urlInput.value.trim() : "";
   const pattern = patternInput ? patternInput.value.trim() : null;
 
+  const btn = document.getElementById("btn-inspect-sitemap");
+  const resultsCard = document.getElementById("sitemap-inspection-results");
+  const statusBanner = document.getElementById("modal-crawl-status");
+
   if (!sitemapUrl) {
-    alert("Please enter a sitemap URL to inspect (e.g. https://example.com/sitemap.xml)");
+    if (statusBanner) {
+      statusBanner.innerHTML = `<span style="color:#fb7185;">⚠️ Please enter a sitemap URL to inspect (e.g. https://example.com/sitemap.xml)</span>`;
+    } else {
+      alert("Please enter a sitemap URL to inspect (e.g. https://example.com/sitemap.xml)");
+    }
     return;
   }
 
-  const btn = document.getElementById("btn-inspect-sitemap");
-  const resultsCard = document.getElementById("sitemap-inspection-results");
   if (btn) {
     btn.disabled = true;
     btn.textContent = "🔍 Inspecting...";
+  }
+  if (statusBanner) {
+    statusBanner.innerHTML = `<span style="color:var(--accent-cyan);">⏳ Inspecting sitemap structure & calculating ETA...</span>`;
   }
 
   try {
     const res = await fetch(`${API_KB}/ingestion/inspect`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders({ "Content-Type": "application/json" }),
+      credentials: "same-origin",
       body: JSON.stringify({
         sitemap_url: sitemapUrl,
         url_pattern: pattern || null
       })
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()) || "Failed to inspect"}`);
+
+    if (res.status === 401) {
+      const errJson = await res.json().catch(() => ({}));
+      const detail = errJson.detail || "Authentication required. Please sign in as Lead Consultant.";
+      if (statusBanner) {
+        statusBanner.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;width:100%;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);padding:10px 14px;border-radius:6px;gap:12px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:1.1rem;">🔒</span>
+              <span style="color:#f87171;font-size:0.82rem;"><strong>Authentication Required:</strong> ${escapeHtml(detail)}</span>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openLoginModal()" style="font-size:0.75rem;padding:4px 12px;white-space:nowrap;">Sign In</button>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    if (!res.ok) {
+      const errText = await res.text();
+      let msg = errText;
+      try {
+        const parsed = JSON.parse(errText);
+        if (parsed.detail) msg = parsed.detail;
+      } catch (_) {}
+      throw new Error(`HTTP ${res.status}: ${msg}`);
+    }
+
     const data = await res.json();
 
     if (resultsCard) resultsCard.style.display = "flex";
@@ -766,10 +1032,15 @@ async function inspectEnteredSitemap() {
     const etaText = document.getElementById("inspect-eta-text");
     if (etaText) etaText.textContent = speed.estimated_time_text || "Calculated upon confirmation";
 
-    const statusBanner = document.getElementById("modal-crawl-status");
-    if (statusBanner) statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">✓ Inspected: ${(data.total_urls_found || 0).toLocaleString()} URLs ready for manual confirmation</span>`;
+    if (statusBanner) {
+      statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">✓ Inspected: ${(data.total_urls_found || 0).toLocaleString()} URLs ready for manual confirmation</span>`;
+    }
   } catch (err) {
-    alert(`Could not inspect sitemap: ${err.message}`);
+    if (statusBanner) {
+      statusBanner.innerHTML = `<span style="color:#fb7185;">❌ Could not inspect sitemap: ${escapeHtml(err.message)}</span>`;
+    } else {
+      alert(`Could not inspect sitemap: ${err.message}`);
+    }
   } finally {
     if (btn) {
       btn.disabled = false;
@@ -794,13 +1065,19 @@ async function submitCustomSitemapsIngestion() {
     : [];
 
   if (urlsText && sitemapUrls.length === 0) {
-    alert("Please enter valid HTTP or HTTPS sitemap URLs.");
+    if (statusBanner) {
+      statusBanner.innerHTML = `<span style="color:#fb7185;">⚠️ Please enter valid HTTP or HTTPS sitemap URLs.</span>`;
+    } else {
+      alert("Please enter valid HTTP or HTTPS sitemap URLs.");
+    }
     return;
   }
 
   btn.disabled = true;
   btn.textContent = "⏳ Ingesting...";
-  statusBanner.innerHTML = `<span style="color:var(--accent-amber);">⚡ Dispatching crawler (${sitemapUrls.length || 'default'} sitemaps)...</span>`;
+  if (statusBanner) {
+    statusBanner.innerHTML = `<span style="color:var(--accent-amber);">⚡ Dispatching crawler (${sitemapUrls.length || 'default'} sitemaps)...</span>`;
+  }
 
   try {
     const payload = {
@@ -814,12 +1091,43 @@ async function submitCustomSitemapsIngestion() {
 
     const res = await fetch(`${API_KB}/ingestion/run`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders({ "Content-Type": "application/json" }),
+      credentials: "same-origin",
       body: JSON.stringify(payload)
     });
+
+    if (res.status === 401) {
+      if (statusBanner) {
+        statusBanner.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;width:100%;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);padding:10px 14px;border-radius:6px;gap:12px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:1.1rem;">🔒</span>
+              <span style="color:#f87171;font-size:0.82rem;"><strong>Authentication Required:</strong> Ingestion requires a valid consultant session.</span>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openLoginModal()" style="font-size:0.75rem;padding:4px 12px;white-space:nowrap;">Sign In</button>
+          </div>
+        `;
+      }
+      btn.disabled = false;
+      btn.textContent = "🚀 Confirm & Start Ingestion";
+      return;
+    }
+
+    if (!res.ok) {
+      const errText = await res.text();
+      let msg = errText;
+      try {
+        const parsed = JSON.parse(errText);
+        if (parsed.detail) msg = parsed.detail;
+      } catch (_) {}
+      throw new Error(`HTTP ${res.status}: ${msg}`);
+    }
+
     const data = await res.json();
 
-    statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">✓ Ingestion running: ${data.message}</span>`;
+    if (statusBanner) {
+      statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">✓ Ingestion running: ${data.message}</span>`;
+    }
     
     // Poll status for a few seconds
     let attempts = 0;
@@ -834,14 +1142,18 @@ async function submitCustomSitemapsIngestion() {
           const saved = sData.pages_saved || 0;
           const tp = sData.throughput_pages_per_sec ? `${sData.throughput_pages_per_sec} p/s` : '';
           const eta = sData.estimated_seconds_remaining ? ` | ETA: ${sData.estimated_seconds_remaining}s` : '';
-          statusBanner.innerHTML = `<span style="color:var(--accent-cyan);">🔄 Ingesting: ${fetched}/${queued} fetched, ${saved} persisted into Knowledge Brain (${tp}${eta})</span>`;
+          if (statusBanner) {
+            statusBanner.innerHTML = `<span style="color:var(--accent-cyan);">🔄 Ingesting: ${fetched}/${queued} fetched, ${saved} persisted into Knowledge Brain (${tp}${eta})</span>`;
+          }
         } else {
           clearInterval(interval);
           let summaryMsg = `✓ Ingestion complete! ${sData.active_articles} articles active, ${sData.chunk_count} chunks searchable.`;
           if (sData.pages_failed > 0) {
             summaryMsg += ` (${sData.pages_failed} failed)`;
           }
-          statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">${summaryMsg}</span>`;
+          if (statusBanner) {
+            statusBanner.innerHTML = `<span style="color:var(--accent-emerald);">${summaryMsg}</span>`;
+          }
           btn.disabled = false;
           btn.textContent = "🚀 Confirm & Start Ingestion";
           loadConfiguredSitemaps();
@@ -1886,7 +2198,8 @@ async function approveCurrentProposal() {
 }
 
 // Initial load on startup
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+  await checkAuthSession();
   loadConfiguredSitemaps();
   loadArchivedArticles();
   loadInboxEmails();

@@ -17,7 +17,7 @@ from email.message import EmailMessage
 from urllib.parse import urlencode
 
 import httpx
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Request, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Request, Depends, Response
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -1958,7 +1958,7 @@ class LoginRequest(BaseModel):
     api_key: Optional[str] = None
 
 @auth_router.post("/auth/login")
-async def auth_login(payload: LoginRequest, request: Request):
+async def auth_login(payload: LoginRequest, request: Request, response: Response):
     client_ip = request.client.host if request.client else "unknown"
     if not check_rate_limit(f"login_{client_ip}", 15, 60):
         raise HTTPException(status_code=429, detail="Rate limit exceeded: Too many login attempts. Please wait 60 seconds.")
@@ -1975,6 +1975,15 @@ async def auth_login(payload: LoginRequest, request: Request):
                 account_id="acc_default",
                 email="consultant@apex.io",
                 role="Lead AI Consultant"
+            )
+            response.set_cookie(
+                key="session_token",
+                value=session["token"],
+                max_age=session["expires_in"],
+                httponly=True,
+                secure=is_production(),
+                samesite="lax",
+                path="/"
             )
             return {
                 "status": "authenticated",
@@ -2014,6 +2023,16 @@ async def auth_login(payload: LoginRequest, request: Request):
         role=role
     )
 
+    response.set_cookie(
+        key="session_token",
+        value=session["token"],
+        max_age=session["expires_in"],
+        httponly=True,
+        secure=is_production(),
+        samesite="lax",
+        path="/"
+    )
+
     return {
         "status": "authenticated",
         "token": session["token"],
@@ -2025,9 +2044,10 @@ async def auth_login(payload: LoginRequest, request: Request):
     }
 
 @auth_router.post("/auth/logout")
-async def auth_logout(user: UserIdentity = Depends(require_auth)):
+async def auth_logout(response: Response, user: UserIdentity = Depends(require_auth)):
     if user.jti:
         vector_store.revoke_token(user.jti, account_id=user.account_id, user_id=user.user_id)
+    response.delete_cookie(key="session_token", path="/")
     return {"status": "logged_out", "message": "Session token successfully revoked."}
 
 @auth_router.get("/auth/me")
