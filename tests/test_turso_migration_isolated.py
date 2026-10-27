@@ -739,3 +739,43 @@ def test_phase55_changed_source_database_between_runs(tmp_path):
     assert "Title 1" in err
     assert "Conflicting Source Title" in err
     assert "Migration aborted BEFORE any destination modifications" in err
+
+
+def test_migration_supports_archived_article_version_history(tmp_path):
+    """
+    Verifies that article_version_history records referencing archived_articles
+    (where article_id is NOT in articles table) migrate successfully without foreign-key errors.
+    """
+    src_db = tmp_path / "version_fk_src.db"
+    dest_db = tmp_path / "version_fk_dest.db"
+    dest_url = f"file:{dest_db}"
+
+    KnowledgeVectorStore(db_path=src_db)
+    now_iso = "2026-10-26T12:00:00+00:00"
+
+    with sqlite3.connect(src_db) as conn:
+        # Populate archived article
+        conn.execute("""
+            INSERT INTO archived_articles (id, url, title, category, content_hash, raw_text, sitemap_source, archived_at, account_id)
+            VALUES ('archived_test_01', 'https://example.com/archived-page', 'Old Doc', 'legacy', 'hash_old', 'Old raw text', 'src_test', ?, 'acc_default')
+        """, (now_iso,))
+        # Populate version history pointing to archived_articles(id), which does NOT exist in articles
+        conn.execute("""
+            INSERT INTO article_version_history (id, article_id, url, version, content_hash, raw_text, title, metadata_json, created_at, account_id)
+            VALUES ('ver_test_01', 'archived_test_01', 'https://example.com/archived-page', 1, 'hash_old', 'Old raw text', 'Old Doc', '{}', ?, 'acc_default')
+        """, (now_iso,))
+        conn.commit()
+
+    # Migrate to destination
+    result = migrate_database(str(src_db), dest_url, dry_run=False)
+    assert result["status"] == "success"
+    assert result["dest_counts"]["archived_articles"] == 1
+    assert result["dest_counts"]["article_version_history"] == 1
+
+    # Verify directly on destination
+    client = libsql_client.create_client_sync(dest_url)
+    res = client.execute("SELECT id, article_id FROM article_version_history WHERE id = 'ver_test_01'")
+    assert len(res.rows) == 1
+    assert res.rows[0][1] == "archived_test_01"
+    client.close()
+

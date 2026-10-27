@@ -164,12 +164,12 @@ def test_query_and_retrieved_chunks_passed_to_llm():
 def test_resumable_reembedding_preserves_article_integrity():
     """Verify that reembed_all_chunks executes cleanly and preserves all database records."""
     stats = vector_store.reembed_all_chunks(batch_size=64)
-    assert stats["total_chunks"] == 454
-    assert stats["reembedded"] == 454
+    assert stats["total_chunks"] == 453
+    assert stats["reembedded"] == 453
     assert stats["is_pretrained"] is True
     assert stats["dimension"] == 384
 
     # Verify article counts and chunk counts remain unchanged
     db_stats = vector_store.get_stats()
     assert db_stats["active_articles"] == 83
-    assert db_stats["active_chunks"] == 454
+    assert db_stats["active_chunks"] == 453

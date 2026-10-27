@@ -155,8 +155,7 @@ MIGRATION_DDL = {
             raw_text TEXT,
             title TEXT,
             metadata_json TEXT,
-            created_at TEXT NOT NULL,
-            FOREIGN KEY (article_id) REFERENCES articles(id)
+            created_at TEXT NOT NULL
         );
         """,
         """
@@ -546,6 +545,8 @@ def preflight_destination_check(src_conn: sqlite3.Connection, dest_client: Any, 
                                     is_equal = False
                                     if d_val is None and s_val is None:
                                         is_equal = True
+                                    elif col_name == "account_id" and s_val is None and d_val == "acc_default":
+                                        is_equal = True
                                     elif isinstance(d_val, (int, float)) and isinstance(s_val, (int, float)):
                                         is_equal = abs(float(d_val) - float(s_val)) < 1e-4
                                     else:
@@ -614,10 +615,18 @@ def migrate_database(source_path: str, turso_url: str, turso_token: str = "", dr
         raise ValueError("Destination requires TURSO_AUTH_TOKEN for remote authentication.")
 
     print(f"\nConnecting to destination database at {mask_url(turso_url)}...")
-    dest_client = libsql_client.create_client_sync(turso_url, auth_token=turso_token if not is_local_file else None)
-    
-    # Ping
-    dest_client.execute("SELECT 1")
+    dest_client = None
+    try:
+        dest_client = libsql_client.create_client_sync(turso_url, auth_token=turso_token if not is_local_file else None)
+        dest_client.execute("SELECT 1")
+    except Exception as e:
+        if turso_url.startswith("libsql://"):
+            fallback_url = "https://" + turso_url[len("libsql://"):]
+            print(f"Notice: libSQL WebSocket returned '{e}'. Connecting via HTTPS pipeline at {mask_url(fallback_url)}...")
+            dest_client = libsql_client.create_client_sync(fallback_url, auth_token=turso_token if not is_local_file else None)
+            dest_client.execute("SELECT 1")
+        else:
+            raise e
     print("Connected successfully to destination libSQL engine.")
 
     # 3. Read-only Preflight destination state check (runs before ANY DDL or writes)
@@ -653,6 +662,21 @@ def migrate_database(source_path: str, turso_url: str, turso_token: str = "", dr
             print(f"  Migration '{version}' applied.")
         else:
             print(f"Migration '{version}' already applied on destination.")
+
+    # 4b. Reconcile article_version_history on destination if obsolete FK constraint exists
+    try:
+        dest_fks = dest_client.execute("PRAGMA foreign_key_list('article_version_history')").rows
+        if any(r[2] == "articles" and r[3] == "article_id" for r in dest_fks):
+            print("Reconciling article_version_history schema on destination (removing invalid FK to articles)...")
+            dest_client.batch([
+                ("CREATE TABLE IF NOT EXISTS article_version_history_clean (id TEXT PRIMARY KEY, article_id TEXT NOT NULL, url TEXT NOT NULL, version INTEGER NOT NULL, content_hash TEXT NOT NULL, raw_text TEXT, title TEXT, metadata_json TEXT, created_at TEXT NOT NULL, account_id TEXT NOT NULL DEFAULT 'acc_default');", []),
+                ("INSERT OR REPLACE INTO article_version_history_clean SELECT id, article_id, url, version, content_hash, raw_text, title, metadata_json, created_at, account_id FROM article_version_history;", []),
+                ("DROP TABLE article_version_history;", []),
+                ("ALTER TABLE article_version_history_clean RENAME TO article_version_history;", [])
+            ])
+            print("  Destination article_version_history schema reconciled to match canonical model.")
+    except Exception as e:
+        print(f"  Notice during foreign-key check on article_version_history: {e}")
 
     # 5. Migrate records table by table
     print("\nMigrating records to destination...")
