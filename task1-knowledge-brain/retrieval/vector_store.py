@@ -145,6 +145,8 @@ class KnowledgeVectorStore:
         env_db = os.environ.get("DB_PATH")
         self.db_path = str(db_path or env_db or settings.DB_PATH)
 
+        self._shared_client = None
+
         is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
         if is_prod and not self.is_custom_db_path:
             self._validate_production_config()
@@ -189,6 +191,21 @@ class KnowledgeVectorStore:
             pass
         return conn
 
+    def _get_libsql_client(self):
+        if self._shared_client is None:
+            import libsql_client
+            try:
+                self._shared_client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
+                self._shared_client.execute("SELECT 1")
+            except Exception as ws_err:
+                if self.turso_url and self.turso_url.startswith("libsql://"):
+                    https_url = "https://" + self.turso_url[len("libsql://"):]
+                    self._shared_client = libsql_client.create_client_sync(https_url, auth_token=self.turso_token)
+                    self._shared_client.execute("SELECT 1")
+                else:
+                    raise ws_err
+        return self._shared_client
+
     def _get_connection(self):
         is_prod = bool(os.environ.get("VERCEL") or os.environ.get("ENV") == "production")
 
@@ -199,18 +216,15 @@ class KnowledgeVectorStore:
         if is_prod:
             self._validate_production_config()
             try:
-                import libsql_client
-                client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
-                client.execute("SELECT 1")
+                client = self._get_libsql_client()
                 return LibsqlConnectionAdapter(client)
             except Exception as e:
                 raise RuntimeError(f"Failed to connect to persistent Turso database: {str(e)}")
 
-        # Development / local SQLite mode:
+        # Development / local SQLite mode with optional Turso:
         if self.turso_url and self.turso_token:
             try:
-                import libsql_client
-                client = libsql_client.create_client_sync(self.turso_url, auth_token=self.turso_token)
+                client = self._get_libsql_client()
                 return LibsqlConnectionAdapter(client)
             except Exception:
                 pass
