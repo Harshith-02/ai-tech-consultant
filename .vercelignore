@@ -9,3 +9,6 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+.env*
+tests/
+task1-knowledge-brain/data/knowledge_brain.db
