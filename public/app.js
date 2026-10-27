@@ -1,8 +1,13 @@
-// Support both local multi-service development and cloud / Vercel serverless deployment
-const isLocalMultiPort = window.location.hostname === "127.0.0.1" && window.location.port === "5000";
-const API_KB = isLocalMultiPort ? "http://127.0.0.1:8000" : "/api/kb";
-const API_INBOX = isLocalMultiPort ? "http://127.0.0.1:3001" : "/api/inbox";
-const API_SCOPE = isLocalMultiPort ? "http://127.0.0.1:8002" : "/api/scope";
+// Support both local development (separate frontend dev port or unified backend) and production (cloud / Vercel serverless)
+const isLocalHost = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost";
+// When running locally on a separate frontend port (such as 3000, 5000, 5500), route API calls to FastAPI backend on port 8000
+const isSeparateDevPort = isLocalHost && window.location.port !== "8000" && window.location.port !== "";
+const LOCAL_API_BASE = "http://127.0.0.1:8000";
+
+const API_KB = isSeparateDevPort ? `${LOCAL_API_BASE}/api/kb` : "/api/kb";
+const API_INBOX = isSeparateDevPort ? (window.location.port === "5000" ? "http://127.0.0.1:3001" : `${LOCAL_API_BASE}/api/inbox`) : "/api/inbox";
+const API_SCOPE = isSeparateDevPort ? (window.location.port === "5000" ? "http://127.0.0.1:8002" : `${LOCAL_API_BASE}/api/scope`) : "/api/scope";
+const API_AUTH = isSeparateDevPort ? `${LOCAL_API_BASE}/api` : "/api";
 
 // Global Authenticated Fetch Interceptor & Session Storage
 function getCookie(name) {
@@ -112,16 +117,20 @@ async function checkAuthSession() {
   }
 
   try {
-    const res = await _origFetch("/api/auth/me", {
+    const fetchCreds = isSeparateDevPort ? "include" : "same-origin";
+    const res = await _origFetch(`${API_AUTH}/auth/me`, {
       headers: getAuthHeaders(),
-      credentials: "same-origin"
+      credentials: fetchCreds
     });
     if (res.ok) {
-      const data = await res.json();
-      if (data.authenticated && data.user) {
-        updateAuthUI(true, data.user);
-        return true;
-      }
+      const text = await res.text();
+      try {
+        const data = JSON.parse(text);
+        if (data.authenticated && data.user) {
+          updateAuthUI(true, data.user);
+          return true;
+        }
+      } catch (_) {}
     }
     clearAuthToken();
     return false;
@@ -144,7 +153,7 @@ function updateAuthUI(isAuthenticated, user) {
     }
     if (modalAuthBtn) {
       modalAuthBtn.textContent = "Sign Out";
-      modalAuthBtn.onclick = logoutConsultantSession;
+      modalAuthBtn.onclick = (e) => { if (e && e.preventDefault) e.preventDefault(); logoutConsultantSession(); };
       modalAuthBtn.className = "btn btn-secondary btn-sm";
     }
   } else {
@@ -155,7 +164,7 @@ function updateAuthUI(isAuthenticated, user) {
     }
     if (modalAuthBtn) {
       modalAuthBtn.textContent = "🔑 Sign In";
-      modalAuthBtn.onclick = openLoginModal;
+      modalAuthBtn.onclick = (e) => { if (e && e.preventDefault) e.preventDefault(); openLoginModal(); };
       modalAuthBtn.className = "btn btn-primary btn-sm";
     }
   }
@@ -165,17 +174,36 @@ function openLoginModal() {
   const modal = document.getElementById("modal-login");
   if (modal) {
     modal.classList.add("open");
+    modal.style.display = "flex";
+    modal.style.zIndex = "1200";
+    modal.style.opacity = "1";
+    modal.style.pointerEvents = "auto";
     const emailInput = document.getElementById("login-email");
     if (emailInput && !emailInput.value) emailInput.value = "consultant@apex.io";
     const statusEl = document.getElementById("login-error-msg");
     if (statusEl) statusEl.style.display = "none";
+    setTimeout(() => {
+      if (emailInput) emailInput.focus();
+    }, 60);
+  } else {
+    console.warn("modal-login element not found in DOM");
   }
 }
 
 function closeLoginModal() {
   const modal = document.getElementById("modal-login");
-  if (modal) modal.classList.remove("open");
+  if (modal) {
+    modal.classList.remove("open");
+    modal.style.display = "none";
+    modal.style.opacity = "0";
+    modal.style.pointerEvents = "none";
+  }
 }
+
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.submitConsultantLogin = submitConsultantLogin;
+window.logoutConsultantSession = logoutConsultantSession;
 
 async function submitConsultantLogin(e) {
   if (e && e.preventDefault) e.preventDefault();
@@ -205,16 +233,30 @@ async function submitConsultantLogin(e) {
 
   try {
     const payload = apiKey ? { api_key: apiKey } : { username: email, password: password };
-    const res = await _origFetch("/api/auth/login", {
+    const fetchCreds = isSeparateDevPort ? "include" : "same-origin";
+    const res = await _origFetch(`${API_AUTH}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
+      credentials: fetchCreds,
       body: JSON.stringify(payload)
     });
 
-    const data = await res.json();
+    const resText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(resText);
+    } catch (_) {
+      const contentType = res.headers.get("content-type") || "";
+      if (resText.trim().startsWith("<!DOCTYPE") || resText.includes("<html") || contentType.includes("text/html")) {
+        throw new Error(
+          `Local frontend server on port ${window.location.port || '3000'} returned an HTML fallback instead of JSON (HTTP ${res.status}). Verify FastAPI backend is running on http://127.0.0.1:8000.`
+        );
+      }
+      throw new Error(`Server returned non-JSON response (HTTP ${res.status}): ${resText.slice(0, 140)}`);
+    }
+
     if (!res.ok) {
-      throw new Error(data.detail || "Authentication failed.");
+      throw new Error(data.detail || data.message || "Authentication failed. Please verify credentials.");
     }
 
     setAuthToken(data.token, data.user);
@@ -245,10 +287,11 @@ async function submitConsultantLogin(e) {
 
 async function logoutConsultantSession() {
   try {
-    await _origFetch("/api/auth/logout", {
+    const fetchCreds = isSeparateDevPort ? "include" : "same-origin";
+    await _origFetch(`${API_AUTH}/auth/logout`, {
       method: "POST",
       headers: getAuthHeaders(),
-      credentials: "same-origin"
+      credentials: fetchCreds
     });
   } catch (_) {}
   clearAuthToken();
@@ -2199,6 +2242,27 @@ async function approveCurrentProposal() {
 
 // Initial load on startup
 window.addEventListener("DOMContentLoaded", async () => {
+  // Bind reliable click handlers
+  const authToggleBtn = document.getElementById("btn-auth-toggle-session");
+  if (authToggleBtn) {
+    authToggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const token = getAuthToken();
+      if (token) {
+        logoutConsultantSession();
+      } else {
+        openLoginModal();
+      }
+    });
+  }
+
+  const modalLogin = document.getElementById("modal-login");
+  if (modalLogin) {
+    modalLogin.addEventListener("click", (e) => {
+      if (e.target === modalLogin) closeLoginModal();
+    });
+  }
+
   await checkAuthSession();
   loadConfiguredSitemaps();
   loadArchivedArticles();

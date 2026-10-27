@@ -678,7 +678,7 @@
               </div>
             </div>
             <div style="display:flex;gap:6px;">
-              <button class="btn btn-primary btn-sm" id="btn-auth-toggle-session" onclick="openLoginModal()">🔑 Sign In</button>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-auth-toggle-session" onclick="openLoginModal()" style="cursor:pointer;position:relative;z-index:5;">🔑 Sign In</button>
             </div>
           </div>
         </div>
@@ -821,8 +821,10 @@ Fiona</textarea>
         <span style="cursor:pointer;color:var(--text-muted);font-size:0.8rem;" onclick="closeGmailComposeModal()">🗑️ Discard</span>
       </div>
     </div>
+  </div>
+
   <!-- CONSULTANT LOGIN / SESSION AUTHENTICATION MODAL -->
-  <div class="app-modal-backdrop" id="modal-login">
+  <div class="app-modal-backdrop" id="modal-login" style="z-index: 1200;">
     <div class="app-modal-dialog" style="max-width:480px;">
       <div class="app-modal-header">
         <div>
